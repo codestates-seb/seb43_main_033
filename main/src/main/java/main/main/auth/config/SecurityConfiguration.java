@@ -34,15 +34,6 @@ import java.util.Arrays;
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration implements WebMvcConfigurer {
 
-    private final CustomAuthorityUtils authorityUtils;
-    private final JwtTokenizer jwtTokenizer;
-    private final JwtUtils jwtUtils;
-
-    public SecurityConfiguration(@Lazy CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, JwtUtils jwtUtils) {
-        this.authorityUtils = authorityUtils;
-        this.jwtTokenizer = jwtTokenizer;
-        this.jwtUtils = jwtUtils;
-    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
