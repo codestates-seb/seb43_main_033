@@ -60,8 +60,21 @@ public class UserService {
         return findedUser;
     }
 
-    public void deleteUser(Long userId) {
-        User user = findVerifiedUser(userId);
-        userRepository.delete(user);
+    public void deleteUser(Long userId, long authenticationUserId) {
+        checkVerifiedId(authenticationUserId);
+
+        User findUser = findVerifiedUser(userId);
+        deletePermission(findUser, authenticationUserId);
+        userRepository.delete(findUser);
+    }
+
+    private void checkVerifiedId(long authenticationUserId) {
+        if (authenticationUserId == -1) throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+    }
+
+    public void deletePermission(User user, long authenticationUserId) {
+        if (!user.getUserId().equals(authenticationUserId) && !user.getEmail().equals("admin@gmail.com")) {
+            throw new BusinessLogicException(ExceptionCode.ONLY_AUTHOR);
+        }
     }
 }
