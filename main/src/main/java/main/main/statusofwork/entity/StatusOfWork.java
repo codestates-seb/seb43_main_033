@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
-import main.main.employer.entity.User;
+import main.main.user.entity.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -39,9 +39,11 @@ public class StatusOfWork {
         LATE(0), // 지각
         EARLY_LEAVE(0), // 조퇴
         ABSENCE(0), // 결근
-        OVERTIME(1.5), // 초과 근무
+        EXTENDED_WORK(1.5), // 연장 근로
+        HOLIDAY_WORK(1.5), // 휴일 근로 8시간 이내의 휴일근로: 통상 임금의 50% 이상 가산, 8시간 초과 휴일근로: 통상 임금의 100% 가산
+        NIGHT_DUTY(1.5), // 야간 근로
         PAID_VACATION(1), // 유급 휴가
-        UNPAID_LEAVE(0); // 무급 휴가
+        UNPAID_LEAVE(-1); // 무급 휴가
 
         @Getter
         private double rate;
