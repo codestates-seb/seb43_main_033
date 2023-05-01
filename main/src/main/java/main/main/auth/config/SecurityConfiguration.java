@@ -6,6 +6,7 @@ import main.main.auth.handler.UserAccessDeniedHandler;
 import main.main.auth.handler.UserAuthenticationEntryPoint;
 import main.main.auth.handler.UserAuthenticationFailureHandler;
 import main.main.auth.handler.UserAuthenticationSuccessHandler;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.auth.utils.JwtUtils;
@@ -24,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
@@ -36,7 +38,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     private final JwtTokenizer jwtTokenizer;
     private final JwtUtils jwtUtils;
 
-    public SecurityConfiguration(CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, JwtUtils jwtUtils) {
+    public SecurityConfiguration(@Lazy CustomAuthorityUtils authorityUtils, JwtTokenizer jwtTokenizer, JwtUtils jwtUtils) {
         this.authorityUtils = authorityUtils;
         this.jwtTokenizer = jwtTokenizer;
         this.jwtUtils = jwtUtils;
@@ -99,6 +101,19 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
                     .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new JwtParseInterceptor(jwtUtils()))
+                .addPathPatterns("/users/**")
+                .addPathPatterns("/banks/**")
+                .addPathPatterns("/calculationofsalary")
+                .addPathPatterns("/companys")
+                .addPathPatterns("/laborcontract")
+                .addPathPatterns("/salarystatement")
+                .addPathPatterns("/statusofwork")
+                .addPathPatterns("/userbanks");
     }
 
     @Bean
