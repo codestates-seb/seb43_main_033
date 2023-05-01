@@ -1,4 +1,4 @@
-package main.main.employer.dto;
+package main.main.user.dto;
 
 import lombok.Builder;
 import lombok.Getter;
