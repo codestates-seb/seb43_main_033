@@ -3,10 +3,7 @@ package main.main.user.entity;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +19,13 @@ public class User {
     private String name;
     private String phoneNumber;
     private String email;
+    private String password;
     private String residentNumber;
     private String grade;
     private String address;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
 //    private List<Company> companies = new ArrayList<>();
 //
