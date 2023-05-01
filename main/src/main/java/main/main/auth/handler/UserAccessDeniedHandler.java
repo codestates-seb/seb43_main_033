@@ -14,7 +14,7 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class MemberAccessDeniedHandler implements AccessDeniedHandler {
+public class UserAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         ErrorResponder.sendErorrResponse(response, HttpStatus.FORBIDDEN);

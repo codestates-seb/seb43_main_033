@@ -2,17 +2,16 @@ package main.main.auth.config;
 
 import main.main.auth.filter.JwtAuthenticationFilter;
 import main.main.auth.filter.JwtVerificationFilter;
-import main.main.auth.handler.MemberAccessDeniedHandler;
-import main.main.auth.handler.MemberAuthenticationEntryPoint;
-import main.main.auth.handler.MemberAuthenticationFailureHandler;
-import main.main.auth.handler.MemberAuthenticationSuccessHandler;
+import main.main.auth.handler.UserAccessDeniedHandler;
+import main.main.auth.handler.UserAuthenticationEntryPoint;
+import main.main.auth.handler.UserAuthenticationFailureHandler;
+import main.main.auth.handler.UserAuthenticationSuccessHandler;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.auth.utils.JwtUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -52,8 +51,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .and()
                 .formLogin().disable()
                 .exceptionHandling()
-                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())
-                .accessDeniedHandler(new MemberAccessDeniedHandler())
+                .authenticationEntryPoint(new UserAuthenticationEntryPoint())
+                .accessDeniedHandler(new UserAccessDeniedHandler())
                 .and()
                 .apply(new CustomFilterConfigurer())
                 .and()
@@ -84,8 +83,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);
             jwtAuthenticationFilter.setFilterProcessesUrl("/login");
-            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());
-            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new UserAuthenticationSuccessHandler());
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new UserAuthenticationFailureHandler());
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtUtils, authorityUtils);
 
