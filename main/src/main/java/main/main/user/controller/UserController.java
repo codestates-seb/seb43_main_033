@@ -1,6 +1,7 @@
 package main.main.user.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.user.dto.UserDto;
 import main.main.user.entity.User;
 import main.main.user.mapper.UserMapper;
@@ -40,14 +41,16 @@ public class UserController {
     @PatchMapping("/{user-id}")
     public ResponseEntity patchUser(@Positive @PathVariable("user-id") Long userId,
                                     @Valid @RequestBody UserDto.Patch requestBody) {
+        long authenticationUserId = JwtParseInterceptor.getAutheticatedUserId();
         requestBody.setUserId(userId);
-        userService.updateUser(mapper.resposerPatchToUser(requestBody));
+        userService.updateUser(mapper.resposerPatchToUser(requestBody, authenticationUserId));
         return new ResponseEntity<>(mapper.userPatchToUser(userService.findUser(userId)), HttpStatus.OK);
     }
 
     @DeleteMapping("/{user-id}")
     public ResponseEntity deleteUser(@Positive @PathVariable("user-id") Long userId) {
-        userService.deleteUser(userId);
+        long authenticationUserId = JwtParseInterceptor.getAutheticatedUserId();
+        userService.deleteUser(userId, authenticationUserId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

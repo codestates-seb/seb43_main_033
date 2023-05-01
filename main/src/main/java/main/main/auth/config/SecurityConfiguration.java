@@ -9,8 +9,11 @@ import main.main.auth.handler.UserAuthenticationSuccessHandler;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.auth.utils.JwtUtils;
+import main.main.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -57,6 +60,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("USER")
                         .anyRequest().permitAll());
 
         return http.build();
@@ -69,6 +73,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.addExposedHeader("UserId");
+        configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -93,5 +99,20 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)
                     .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
+    }
+
+    @Bean
+    public CustomAuthorityUtils authorityUtils() {
+        return new CustomAuthorityUtils();
+    }
+
+    @Bean
+    public JwtUtils jwtUtils() {
+        return new JwtUtils(jwtTokenizer());
+    }
+
+    @Bean
+    public JwtTokenizer jwtTokenizer() {
+        return new JwtTokenizer();
     }
 }
