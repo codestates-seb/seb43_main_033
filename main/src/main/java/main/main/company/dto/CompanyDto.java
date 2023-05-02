@@ -35,7 +35,7 @@ public class CompanyDto {
 
         private Long companyId;
         private String companyName;
-        private Long userId;
+        private Long memberId;
         private String companySize;
         private Long businessNumber;
         private String address;
@@ -50,7 +50,7 @@ public class CompanyDto {
 
         private Long companyId;
         private String companyName;
-        private Long userId;
+        private Long memberId;
         private String companySize;
         private Long businessNumber;
         private String address;

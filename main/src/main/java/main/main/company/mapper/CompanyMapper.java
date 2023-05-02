@@ -2,7 +2,7 @@ package main.main.company.mapper;
 
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
-import main.main.user.entity.User;
+import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -13,9 +13,9 @@ public interface CompanyMapper {
 
     default Company companyPostToCompany(CompanyDto.Post requestBody) {
         Company company = new Company();
-        User user = new User();
+        Member member = new Member();
 
-        company.setUser(user);
+        company.setMember(member);
         company.setCompanyName(requestBody.getCompanyName());
         company.setCompanySize(requestBody.getCompanySize());
         company.setBusinessNumber(requestBody.getBusinessNumber());
@@ -27,9 +27,9 @@ public interface CompanyMapper {
 
     default Company companyPatchToCompany(CompanyDto.Patch requestBody) {
         Company company = new Company();
-        User user = new User();
+        Member member = new Member();
 
-        company.setUser(user);
+        company.setMember(member);
         company.setCompanyId(requestBody.getCompanyId());
         company.setCompanySize(requestBody.getCompanySize());
         company.setBusinessNumber(requestBody.getBusinessNumber());
@@ -50,7 +50,7 @@ public interface CompanyMapper {
                 .businessNumber(company.getBusinessNumber())
                 .address(company.getAddress())
                 .information(company.getInformation())
-                .userId(company.getUser().getUserId())
+                .memberId(company.getMember().getMemberId())
                 .build();
     }
 
