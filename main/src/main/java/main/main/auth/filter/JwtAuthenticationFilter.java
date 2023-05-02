@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import main.main.auth.dto.LoginDto;
 import main.main.auth.jwt.JwtTokenizer;
-import main.main.user.entity.User;
+import main.main.user.entity.Member;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -41,10 +41,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        User user = (User) authResult.getPrincipal();
+        Member member = (Member) authResult.getPrincipal();
 
-        String accessToken = delegateAccessToken(user);
-        String refreshToken = delegateRefreshToken(user);
+        String accessToken = delegateAccessToken(member);
+        String refreshToken = delegateRefreshToken(member);
 
         response.setHeader("Authorization", "Bearer " + accessToken);
         response.setHeader("Refresh", refreshToken);
@@ -52,13 +52,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 
-    private String delegateAccessToken(User user) {
+    private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", user.getUserId());
-        claims.put("username", user.getEmail());
-        claims.put("roles", user.getRoles());
+        claims.put("memberId", member.getMemberId());
+        claims.put("membername", member.getEmail());
+        claims.put("roles", member.getRoles());
 
-        String subject = user.getEmail();
+        String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
@@ -68,8 +68,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         return accessToken;
     }
 
-    private String delegateRefreshToken(User user) {
-        String subject = user.getEmail();
+    private String delegateRefreshToken(Member member) {
+        String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
 
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());

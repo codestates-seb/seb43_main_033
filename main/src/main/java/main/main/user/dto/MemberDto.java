@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-public class UserDto {
+public class MemberDto {
 
     @Getter
     @Setter
@@ -21,7 +21,7 @@ public class UserDto {
     @Getter
     @Setter
     public static class Patch {
-        private Long userId;
+        private Long memberId;
         private Long companyId;
         private String name;
         private String phoneNumber;
@@ -34,7 +34,7 @@ public class UserDto {
     @Getter
     @Builder
     public static class Response {
-        private Long userId;
+        private Long memberId;
         private String name;
         private String phoneNumber;
         private String email;

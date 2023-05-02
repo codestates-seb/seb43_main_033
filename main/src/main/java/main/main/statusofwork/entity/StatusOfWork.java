@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
-import main.main.user.entity.User;
+import main.main.user.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -23,7 +23,7 @@ public class StatusOfWork {
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
-    private User user;
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "CALCULATION_OF_SALARY_ID")

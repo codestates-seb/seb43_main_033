@@ -18,30 +18,30 @@ import java.util.Map;
 public class JwtParseInterceptor implements HandlerInterceptor {
 
     private final JwtUtils jwtUtils;
-    private static final ThreadLocal<Long> authenticatedUserId = new ThreadLocal<>();
+    private static final ThreadLocal<Long> authenticatedMemberId = new ThreadLocal<>();
 
     public JwtParseInterceptor(JwtUtils jwtUtils) {
         this.jwtUtils = jwtUtils;
     }
 
-    public static long getAutheticatedUserId() {
-        return authenticatedUserId.get();
+    public static long getAutheticatedMemberId() {
+        return authenticatedMemberId.get();
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         try {
             Map<String, Object> claims = jwtUtils.getJwsClaimsFromRequest(request);
-            Object userId = claims.get("userId");
+            Object userId = claims.get("memberId");
             if (userId != null) {
-                authenticatedUserId.set(Long.valueOf(userId.toString()));
+                authenticatedMemberId.set(Long.valueOf(userId.toString()));
                 return true;
             } else {
                 ErrorResponder.sendErorrResponse(response, HttpStatus.UNAUTHORIZED);
                 return false;
             }
         } catch (Exception e) {
-            authenticatedUserId.set(-1L);
+            authenticatedMemberId.set(-1L);
             return true;
         }
     }
@@ -49,6 +49,6 @@ public class JwtParseInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            @Nullable ModelAndView modelAndView) throws Exception {
-        authenticatedUserId.remove();
+        authenticatedMemberId.remove();
     }
 }

@@ -10,7 +10,6 @@ import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.auth.utils.JwtUtils;
-import main.main.user.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -53,7 +52,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.DELETE, "/users/**").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("MEMBER")
                         .anyRequest().permitAll());
 
         return http.build();
@@ -66,7 +65,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.addExposedHeader("UserId");
+        configuration.addExposedHeader("MemberId");
         configuration.addExposedHeader("Authorization");
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -97,7 +96,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtParseInterceptor(jwtUtils()))
-                .addPathPatterns("/users/**")
+                .addPathPatterns("/members/**")
                 .addPathPatterns("/banks/**")
                 .addPathPatterns("/calculationofsalary")
                 .addPathPatterns("/companys")
