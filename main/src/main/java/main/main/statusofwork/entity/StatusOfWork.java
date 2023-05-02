@@ -33,23 +33,26 @@ public class StatusOfWork {
 
     private LocalDateTime finishTime;
 
-    private String note;
+    private note note;
 
     public enum note {
-        LATE(0), // 지각
-        EARLY_LEAVE(0), // 조퇴
-        ABSENCE(0), // 결근
-        EXTENDED_WORK(1.5), // 연장 근로
-        HOLIDAY_WORK(1.5), // 휴일 근로 8시간 이내의 휴일근로: 통상 임금의 50% 이상 가산, 8시간 초과 휴일근로: 통상 임금의 100% 가산
-        NIGHT_DUTY(1.5), // 야간 근로
-        PAID_VACATION(1), // 유급 휴가
-        UNPAID_LEAVE(-1); // 무급 휴가
+        지각(0, "지각"), // 지각
+        조퇴(0, "조퇴"), // 조퇴
+        결근(0, "결근"), // 결근
+        연장근로(1.5, "연장 근로"), // 연장 근로
+        휴일근로(1.5, "휴일 근로"), // 휴일 근로 8시간 이내의 휴일근로: 통상 임금의 50% 이상 가산, 8시간 초과 휴일근로: 통상 임금의 100% 가산
+        야간근로(1.5, "야간 근로"), // 야간 근로
+        유급휴가(0, "유급 휴가"), // 유급 휴가
+        무급휴가(-1, "무급 휴가"); // 무급 휴가
 
         @Getter
         private double rate;
+        @Getter
+        private String status;
 
-        note(double rate) {
+        note(double rate, String status) {
             this.rate = rate;
+            this.status = status;
         }
     }
 }
