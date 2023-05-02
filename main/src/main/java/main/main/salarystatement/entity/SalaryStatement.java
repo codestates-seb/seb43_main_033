@@ -51,9 +51,11 @@ public class SalaryStatement {
 
     private int holidayWorkAllowanceBasis;
 
+    private double unpaidLeave; // 무급휴가
+
     private double salary;
     public void setSalary() {
-        this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance;
+        this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance + unpaidLeave;
     }
 
     private double incomeTax;

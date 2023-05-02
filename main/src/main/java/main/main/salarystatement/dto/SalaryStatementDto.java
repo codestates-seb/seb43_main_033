@@ -33,6 +33,7 @@ public class SalaryStatementDto {
         private int nightWorkAllowanceBasis;
         private double holidayWorkAllowance;
         private int holidayWorkAllowanceBasis;
+        private double unpaidLeave;
         private double salary;
         private double incomeTax;
         private double nationalCoalition;
