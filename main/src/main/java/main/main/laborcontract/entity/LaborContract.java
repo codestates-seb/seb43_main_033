@@ -7,6 +7,7 @@ import main.main.member.entity.Member;
 import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Getter
@@ -29,7 +30,11 @@ public class LaborContract {
     @JoinColumn(name = "SALARY_STATEMENT_ID")
     private SalaryStatement salaryStatement;
 
-    private long basicSalary;
+    private LocalDateTime startOfContract;
+
+    private LocalDateTime endOfContract;
+
+    private double basicSalary;
 
     private LocalTime startTime;
 
