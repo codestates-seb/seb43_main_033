@@ -5,6 +5,9 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.repository.MemberRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -76,5 +79,9 @@ public class MemberService {
         if (!member.getMemberId().equals(authenticationUserId) && !member.getEmail().equals("admin@gmail.com")) {
             throw new BusinessLogicException(ExceptionCode.ONLY_AUTHOR);
         }
+    }
+
+    public Page<Member> findMembers(int page, int size) {
+        return memberRepository.findAll(PageRequest.of(page, size, Sort.by("memberId").descending()));
     }
 }
