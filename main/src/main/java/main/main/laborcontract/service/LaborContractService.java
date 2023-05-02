@@ -11,6 +11,7 @@ import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -47,6 +48,14 @@ public class LaborContractService {
 
     public LaborContract findLaborContract(long laborContractId) {
         return findVerifiedContract(laborContractId);
+    }
+
+    public LaborContract findLaborContractForSalaryStatement(Member member, Company company, int year, int month) {
+        LocalDateTime thisMonth = LocalDateTime.of(year, month, 1, 0, 0);
+        Optional<LaborContract> optionalLaborContract = laborContractRepository.findLaborContractByMemberAndCompanyAndEndOfContractAfter(member, company, thisMonth);
+        LaborContract laborContract = optionalLaborContract.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LABORCONTRACT_FOR_SALARY_NOT_FOUND));
+
+        return  laborContract;
     }
 
     public void deleteLaborContract(long laborContractId) {
