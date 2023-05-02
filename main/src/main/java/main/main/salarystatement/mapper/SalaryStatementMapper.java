@@ -39,6 +39,7 @@ public interface SalaryStatementMapper {
                 .nightWorkAllowanceBasis(salaryStatement.getNightWorkAllowanceBasis())
                 .holidayWorkAllowance(salaryStatement.getHolidayWorkAllowance())
                 .holidayWorkAllowanceBasis(salaryStatement.getHolidayWorkAllowanceBasis())
+                .unpaidLeave(salaryStatement.getUnpaidLeave())
                 .salary(salaryStatement.getSalary())
                 .incomeTax(salaryStatement.getIncomeTax())
                 .nationalCoalition(salaryStatement.getNationalCoalition())

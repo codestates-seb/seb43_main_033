@@ -45,6 +45,7 @@ public class SalaryStatementService {
         int nightWorkAllowanceBasis = 0;
         double holidayWorkAllowance = 0;
         int holidayWorkAllowanceBasis = 0;
+        double unpaidLeave = 0;
 
         for (StatusOfWork statusOfWork : statusOfWorks) {
             switch (statusOfWork.getNote()) {
@@ -63,6 +64,8 @@ public class SalaryStatementService {
                     holidayWorkAllowanceBasis += time;
                     holidayWorkAllowance = holidayWorkAllowance + (statusOfWork.getNote().getRate() * hourlyWage * time);
                     break;
+                case 무급휴가:
+                    unpaidLeave = unpaidLeave + (statusOfWork.getNote().getRate() * hourlyWage * 8);
             }
         }
 
@@ -77,6 +80,7 @@ public class SalaryStatementService {
         salaryStatement.setNightWorkAllowanceBasis(nightWorkAllowanceBasis);
         salaryStatement.setHolidayWorkAllowance(holidayWorkAllowance);
         salaryStatement.setHolidayWorkAllowanceBasis(holidayWorkAllowanceBasis);
+        salaryStatement.setUnpaidLeave(unpaidLeave);
         salaryStatement.setSalary();
 
         double taxBase = (basicSalary - (basicSalary * 0.0873)) * 12;
