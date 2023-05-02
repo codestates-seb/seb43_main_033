@@ -9,7 +9,9 @@ public enum ExceptionCode {
     QUESTION_NOT_FOUND(404, "Question not found"),
     TAG_NOT_FOUND(404, "Tag not found"),
     ONLY_AUTHOR(403, "You don't have permission"),
-    UNAUTHORIZED(401,  "Unauthorized");
+    UNAUTHORIZED(401,  "Unauthorized"),
+
+    COMPANY_NOT_FOUND(404, "Company not found");
 
     @Getter
     private int status;
