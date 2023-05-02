@@ -11,9 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,9 +32,15 @@ public class MemberController {
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = mapper.memberPostToMember(requestBody);
 
-        memberService.createMember(member);
+        Member createdMember = memberService.createMember(member);
+        URI location = UriComponentsBuilder
+                .newInstance()
+                .path(MEMBER_DEFAULT_URL + "{member-id}")
+                .buildAndExpand(createdMember.getMemberId())
+                .toUri();
 
-        return new ResponseEntity(HttpStatus.OK);
+        return ResponseEntity.created(location).build();
+
 
     }
 

@@ -12,6 +12,7 @@ public class MemberDto {
         private String name;
         private String phoneNumber;
         private String email;
+        private String password;
         private String residentNumber;
         private String grade;
         private String address;
@@ -20,12 +21,14 @@ public class MemberDto {
 
     @Getter
     @Setter
+    @Builder
     public static class Patch {
         private Long memberId;
         private Long companyId;
         private String name;
         private String phoneNumber;
         private String email;
+        private String password;
         private String residentNumber;
         private String grade;
         private String address;
