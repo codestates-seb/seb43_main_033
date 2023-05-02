@@ -19,11 +19,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -33,6 +36,7 @@ import java.util.Arrays;
 @EnableWebSecurity(debug = true)
 public class SecurityConfiguration implements WebMvcConfigurer {
 
+    private final long MAX_AGE_SECS = 3600;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,6 +56,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
+                        .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("MEMBER")
+                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("MEMBER")
                         .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("MEMBER")
                         .anyRequest().permitAll());
 
@@ -62,6 +68,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
 
+        configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
@@ -93,6 +100,18 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         }
     }
 
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:8080")
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .exposedHeaders("Authorization")
+                .maxAge(MAX_AGE_SECS);
+    }
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new JwtParseInterceptor(jwtUtils()))
@@ -103,7 +122,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/laborcontract")
                 .addPathPatterns("/salarystatement")
                 .addPathPatterns("/statusofwork")
-                .addPathPatterns("/userbanks");
+                .addPathPatterns("/memberbanks");
     }
 
     @Bean
@@ -119,5 +138,10 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     @Bean
     public JwtTokenizer jwtTokenizer() {
         return new JwtTokenizer();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
