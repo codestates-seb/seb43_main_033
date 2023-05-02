@@ -17,11 +17,11 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-@RequestMapping("/company")
+@RequestMapping("/companies")
 @RestController
 @RequiredArgsConstructor
 public class CompanyController {
-    private final static String COMPANY_DEFAULT_URL = "/company";
+    private final static String COMPANY_DEFAULT_URL = "/companies";
     private final CompanyService companyService;
     private final CompanyMapper companyMapper;
 
@@ -32,7 +32,7 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{company-id}")
+    @PatchMapping("/{companies-id}")
     public ResponseEntity patchCompany(@Positive @PathVariable("company-id") long companyId,
                                        @Valid @RequestBody CompanyDto.Patch requestBody) {
 
@@ -44,7 +44,7 @@ public class CompanyController {
                 .companyToCompanyResponse(companyService.findCompany(companyId)), HttpStatus.OK);
     }
 
-    @GetMapping("/{company-id}")
+    @GetMapping("/{companies-id}")
     public ResponseEntity getCompany(@PathVariable("company-id") @Positive long companyId) {
         Company company = companyService.findCompany(companyId);
 
@@ -60,7 +60,7 @@ public class CompanyController {
         return new ResponseEntity<>(new ListPageResponseDto<>(companyMapper.companiesToCompanyResponses(companies),pageCompanies), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{company-id}")
+    @DeleteMapping("/{companies-id}")
     public ResponseEntity deleteCompany(@Positive @PathVariable("company-id") long companyId) {
         companyService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
