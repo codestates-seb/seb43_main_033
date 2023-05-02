@@ -15,7 +15,7 @@ public class MemberBank {
     private Long memberBankId;
     private Long memberId;
     private Long bankId;
-    private Long accountNubmer;
+    private Long accountNumber;
 
 
 }
