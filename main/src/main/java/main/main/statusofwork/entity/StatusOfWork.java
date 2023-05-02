@@ -2,9 +2,9 @@ package main.main.statusofwork.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
 import main.main.member.entity.Member;
+import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -26,8 +26,8 @@ public class StatusOfWork {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "CALCULATION_OF_SALARY_ID")
-    private CalculationOfSalary calculationOfSalary;
+    @JoinColumn(name = "SALARY_STATEMENT_ID")
+    private SalaryStatement salaryStatement;
 
     private LocalDateTime startTime;
 
