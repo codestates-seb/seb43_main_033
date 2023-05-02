@@ -2,9 +2,9 @@ package main.main.salarystatement.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
 import main.main.memberbank.entity.MemberBank;
+import main.main.statusofwork.entity.StatusOfWork;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,10 +30,12 @@ public class SalaryStatement {
 
     private boolean paymentStatus;
 
-    @OneToMany(mappedBy = "salaryStatement")
-    private List<CalculationOfSalary> calculationOfSalaries = new ArrayList<>();
+    private long hourlyWage;
 
-    public void addCalculationOfSalary(CalculationOfSalary calculationOfSalary) {
-        this.calculationOfSalaries.add(calculationOfSalary);
+    @OneToMany(mappedBy = "salaryStatement")
+    private List<StatusOfWork> statusOfWorks = new ArrayList<>();
+
+    public void addCalculationOfSalary(StatusOfWork statusOfWork) {
+        this.statusOfWorks.add(statusOfWork);
     }
 }
