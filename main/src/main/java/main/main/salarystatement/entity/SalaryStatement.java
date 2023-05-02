@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
-import main.main.userbank.entity.UserBank;
+import main.main.memberbank.entity.MemberBank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -23,8 +23,8 @@ public class SalaryStatement {
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "USER_BANK_ID")
-    private UserBank userBank;
+    @JoinColumn(name = "MEMBER_BANK_ID")
+    private MemberBank memberBank;
 
     private long salary;
 
