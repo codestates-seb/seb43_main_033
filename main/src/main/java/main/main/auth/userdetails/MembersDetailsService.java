@@ -3,8 +3,8 @@ package main.main.auth.userdetails;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
-import main.main.user.entity.User;
-import main.main.user.repository.UserRepository;
+import main.main.user.entity.Member;
+import main.main.user.repository.MemberRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,29 +15,29 @@ import java.util.Collection;
 import java.util.Optional;
 
 @Component
-public class UsersDetailsService implements UserDetailsService {
-    private final UserRepository userRepository;
+public class MembersDetailsService implements UserDetailsService {
+    private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
 
-    public UsersDetailsService(UserRepository userRepository, CustomAuthorityUtils authorityUtils) {
-        this.userRepository = userRepository;
+    public MembersDetailsService(MemberRepository memberRepository, CustomAuthorityUtils authorityUtils) {
+        this.memberRepository = memberRepository;
         this.authorityUtils = authorityUtils;
     }
 
     @Override
-    public UsersDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> optionalMember = userRepository.findByEmail(username);
-        User finduser = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+    public MemberDetails loadUserByUsername(String membername) throws UsernameNotFoundException {
+        Optional<Member> optionalMember = memberRepository.findByEmail(membername);
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
-        return new UsersDetails(finduser);
+        return new MemberDetails(findMember);
     }
 
-    private final class UsersDetails extends User implements UserDetails {
-        UsersDetails(User user) {
-            setUserId(user.getUserId());
-            setEmail(user.getEmail());
-            setPassword(user.getPassword());
-            setRoles(user.getRoles());
+    private final class MemberDetails extends Member implements UserDetails {
+        MemberDetails(Member member) {
+            setMemberId(member.getMemberId());
+            setEmail(member.getEmail());
+            setPassword(member.getPassword());
+            setRoles(member.getRoles());
         }
 
         @Override

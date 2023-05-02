@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
 import main.main.salarystatement.entity.SalaryStatement;
-import main.main.user.entity.User;
+import main.main.user.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,8 +18,8 @@ public class LaborContract {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "COMPANY_ID")

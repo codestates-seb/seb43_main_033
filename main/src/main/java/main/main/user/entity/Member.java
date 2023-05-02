@@ -10,11 +10,11 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-public class User {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long memberId;
 
     private String name;
     private String phoneNumber;
