@@ -29,4 +29,11 @@ public class SalaryStatementController {
 
         return new ResponseEntity<>(salaryStatementMapper.salaryStatementToResponse(salaryStatement), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{salarystatement-id}")
+    public ResponseEntity deleteSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
+        salaryStatementService.deleteSalaryStatement(salaryStatementId);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
