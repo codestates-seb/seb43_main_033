@@ -1,4 +1,4 @@
-package main.main.userbank.entity;
+package main.main.memberbank.entity;
 
 import lombok.Getter;
 
@@ -9,11 +9,11 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-public class UserBank {
+public class MemberBank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private Long userId;
+    private Long memberBankId;
+    private Long memberId;
     private Long bankId;
     private Long accountNumer;
 

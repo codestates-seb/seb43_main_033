@@ -1,23 +1,23 @@
-package main.main.userbank.dto;
+package main.main.memberbank.dto;
 
 
 import lombok.Getter;
 import lombok.Setter;
 
-public class UserBankDto {
+public class MemberBankDto {
 @Getter
 @Setter
 public static class Post {
 
-    private Long userId;
+    private Long memberId;
     private Long bankId;
     private Long accountNumber;
 }
 @Getter
 @Setter
 public static class Patch {
-    private Long userBankId;
-    private Long userId;
+    private Long memberBankId;
+    private Long memberId;
     private Long bankId;
     private Long accountNumber;
 }
@@ -25,8 +25,8 @@ public static class Patch {
 @Setter
 public static class Response {
 
-    private Long userBankId;
-    private Long userId;
+    private Long memberBankId;
+    private Long memberId;
     private Long bankId;
     private Long accountNumber;
 
