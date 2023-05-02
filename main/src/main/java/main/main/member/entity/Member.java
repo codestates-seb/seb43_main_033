@@ -1,7 +1,7 @@
 package main.main.member.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import main.main.company.entity.Company;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -10,6 +10,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Member {
 
     @Id
@@ -27,10 +30,7 @@ public class Member {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-//    private List<Company> companies = new ArrayList<>();
-//
-//    public void addCompany (Company company) {
-//        this.companies.add(company);
-//    }
+    @ManyToOne
+    private Company company;
 
 }

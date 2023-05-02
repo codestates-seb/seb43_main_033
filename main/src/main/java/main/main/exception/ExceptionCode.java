@@ -3,8 +3,8 @@ package main.main.exception;
 import lombok.Getter;
 
 public enum ExceptionCode {
-    MEMBER_NOT_FOUND(404, "Member not found"),
-    MEMBER_RESIDENTNUMBER_EXISTS(409, "residentNumber exists"),
+    MEMBER_NOT_FOUND(404, "회원을 찾을 수 없습니다"),
+    MEMBER_EMAIL_EXISTS(409, "이메일이 이미 있습니다"),
     ANSWER_NOT_FOUND(404, "Answer not found"),
     QUESTION_NOT_FOUND(404, "Question not found"),
     TAG_NOT_FOUND(404, "Tag not found"),
