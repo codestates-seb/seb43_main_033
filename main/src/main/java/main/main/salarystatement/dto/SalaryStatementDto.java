@@ -34,5 +34,10 @@ public class SalaryStatementDto {
         private double holidayWorkAllowance;
         private int holidayWorkAllowanceBasis;
         private double salary;
+        private double incomeTax;
+        private double nationalCoalition;
+        private double healthInsurance;
+        private double employmentInsurance;
+        private double totalSalary;
     }
 }

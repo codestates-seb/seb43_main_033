@@ -52,9 +52,21 @@ public class SalaryStatement {
     private int holidayWorkAllowanceBasis;
 
     private double salary;
-
     public void setSalary() {
         this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance;
+    }
+
+    private double incomeTax;
+
+    private double nationalCoalition; // 국민 연금
+
+    private double healthInsurance; // 건강 보험
+
+    private double employmentInsurance; // 고용 보험
+
+    private double totalSalary;
+    public void setTotalSalary() {
+        this.totalSalary = salary - incomeTax - nationalCoalition - healthInsurance - employmentInsurance;
     }
 
     private boolean paymentStatus;
