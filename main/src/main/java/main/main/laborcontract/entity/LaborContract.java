@@ -3,11 +3,11 @@ package main.main.laborcontract.entity;
 import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
-import main.main.salarystatement.entity.SalaryStatement;
 import main.main.member.entity.Member;
+import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Getter
 @Setter
@@ -31,9 +31,9 @@ public class LaborContract {
 
     private long basicSalary;
 
-    private LocalDateTime startTime;
+    private LocalTime startTime;
 
-    private LocalDateTime finishTime;
+    private LocalTime finishTime;
 
     private String information;
 

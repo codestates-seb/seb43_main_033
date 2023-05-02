@@ -10,7 +10,7 @@ public enum ExceptionCode {
     TAG_NOT_FOUND(404, "Tag not found"),
     ONLY_AUTHOR(403, "You don't have permission"),
     UNAUTHORIZED(401,  "Unauthorized"),
-
+    LABORCONTRACT_NOT_FOUND(404, "근로 계약서를 찾을 수 없습니다."),
     COMPANY_NOT_FOUND(404, "Company not found");
 
     @Getter
