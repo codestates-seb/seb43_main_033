@@ -86,6 +86,10 @@ public class SalaryStatementService {
         return  findVerifiedSalaryStatement(salaryStatementId);
     }
 
+    public void deleteSalaryStatement(long salaryStatementId) {
+        salaryStatementRepository.delete(findVerifiedSalaryStatement(salaryStatementId));
+    }
+
     private SalaryStatement findVerifiedSalaryStatement(long salaryStatementId) {
         Optional<SalaryStatement> optionalSalaryStatement = salaryStatementRepository.findById(salaryStatementId);
         SalaryStatement salaryStatement = optionalSalaryStatement.orElseThrow(() -> new BusinessLogicException(ExceptionCode.SALARYSTATEMENT_NOT_FOUND));
