@@ -17,6 +17,8 @@ public interface LaborContractMapper {
         laborContract.setMember(member);
         laborContract.setCompany(company);
         laborContract.setBasicSalary(requestBody.getBasicSalary());
+        laborContract.setStartOfContract(requestBody.getStartOfContract());
+        laborContract.setEndOfContract(requestBody.getEndOfContract());
         laborContract.setStartTime(requestBody.getStartTime());
         laborContract.setFinishTime(requestBody.getFinishTime());
         laborContract.setInformation(requestBody.getInformation());
