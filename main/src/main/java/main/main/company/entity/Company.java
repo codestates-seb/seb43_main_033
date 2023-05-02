@@ -2,7 +2,7 @@ package main.main.company.entity;
 
 import lombok.Getter;
 import lombok.Setter;
-import main.main.user.entity.User;
+import main.main.member.entity.Member;
 
 import javax.persistence.*;
 
@@ -21,6 +21,6 @@ public class Company {
 
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "USER_ID")
-    private User user;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 }
