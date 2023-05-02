@@ -1,7 +1,7 @@
-package main.main.user.mapper;
+package main.main.member.mapper;
 
-import main.main.user.dto.MemberDto;
-import main.main.user.entity.Member;
+import main.main.member.dto.MemberDto;
+import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

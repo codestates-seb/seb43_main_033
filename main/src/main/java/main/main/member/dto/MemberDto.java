@@ -1,4 +1,4 @@
-package main.main.user.dto;
+package main.main.member.dto;
 
 import lombok.Builder;
 import lombok.Getter;

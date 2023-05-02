@@ -1,10 +1,10 @@
-package main.main.user.service;
+package main.main.member.service;
 
 import lombok.RequiredArgsConstructor;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
-import main.main.user.entity.Member;
-import main.main.user.repository.MemberRepository;
+import main.main.member.entity.Member;
+import main.main.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package main.main.user.entity;
+package main.main.member.entity;
 
 import lombok.Getter;
 import lombok.Setter;

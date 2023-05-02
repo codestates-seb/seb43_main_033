@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.calculationofsalary.entity.CalculationOfSalary;
 import main.main.company.entity.Company;
-import main.main.user.entity.Member;
+import main.main.member.entity.Member;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

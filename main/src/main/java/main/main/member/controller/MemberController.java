@@ -1,11 +1,11 @@
-package main.main.user.controller;
+package main.main.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
-import main.main.user.dto.MemberDto;
-import main.main.user.entity.Member;
-import main.main.user.mapper.MemberMapper;
-import main.main.user.service.MemberService;
+import main.main.member.dto.MemberDto;
+import main.main.member.entity.Member;
+import main.main.member.mapper.MemberMapper;
+import main.main.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

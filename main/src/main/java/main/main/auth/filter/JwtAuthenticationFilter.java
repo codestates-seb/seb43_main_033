@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import main.main.auth.dto.LoginDto;
 import main.main.auth.jwt.JwtTokenizer;
-import main.main.user.entity.Member;
+import main.main.member.entity.Member;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
