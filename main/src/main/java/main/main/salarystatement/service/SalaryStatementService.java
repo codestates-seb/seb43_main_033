@@ -36,7 +36,8 @@ public class SalaryStatementService {
         Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
         LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
-        double hourlyWage = laborContract.getBasicSalary() / 209L;
+        double basicSalary = laborContract.getBasicSalary();
+        double hourlyWage = basicSalary / 209L;
         int time;
         double overtimePay = 0;
         int overtimePayBasis = 0;
@@ -69,7 +70,7 @@ public class SalaryStatementService {
         salaryStatement.setCompany(company);
         salaryStatement.setStatusOfWorks(statusOfWorks);
         salaryStatement.setHourlyWage(hourlyWage);
-        salaryStatement.setBasePay(laborContract.getBasicSalary());
+        salaryStatement.setBasePay(basicSalary);
         salaryStatement.setOvertimePay(overtimePay);
         salaryStatement.setOvertimePayBasis(overtimePayBasis);
         salaryStatement.setNightWorkAllowance(nightWorkAllowance);
@@ -77,6 +78,32 @@ public class SalaryStatementService {
         salaryStatement.setHolidayWorkAllowance(holidayWorkAllowance);
         salaryStatement.setHolidayWorkAllowanceBasis(holidayWorkAllowanceBasis);
         salaryStatement.setSalary();
+
+        double taxBase = (basicSalary - (basicSalary * 0.0873)) * 12;
+        double incomeTex;
+        if (taxBase <= 14000000) {
+            incomeTex = (taxBase * 0.06) / 12;
+        } else if (taxBase <= 50000000) {
+            incomeTex = (840000 + ((taxBase - 14000000) * 0.15)) / 12;
+        } else if (taxBase <= 88000000) {
+            incomeTex = (6240000 + ((taxBase - 50000000) * 0.24)) / 12;
+        } else if (taxBase <= 150000000) {
+            incomeTex = (15360000 + ((taxBase - 88000000) * 0.35)) / 12;
+        } else if (taxBase <= 300000000) {
+            incomeTex = (37060000 + ((taxBase - 150000000) * 0.38)) / 12;
+        } else if (taxBase <= 500000000) {
+            incomeTex = (94060000 + ((taxBase - 300000000) * 0.4)) / 12;
+        } else if (taxBase <= 1000000000) {
+            incomeTex = (174060000 + ((taxBase - 50000000) * 0.42)) / 12;
+        } else {
+            incomeTex = (384060000 + ((taxBase - 1000000000) * 0.45)) / 12;
+        }
+
+        salaryStatement.setIncomeTax(incomeTex);
+        salaryStatement.setNationalCoalition(basicSalary * 0.045);
+        salaryStatement.setHealthInsurance(basicSalary * 0.0343);
+        salaryStatement.setEmploymentInsurance(basicSalary * 0.008);
+        salaryStatement.setTotalSalary();
 
         SalaryStatement savedSalaryStatement = salaryStatementRepository.save(salaryStatement);
         statusOfWorks.stream().forEach(statusOfWork -> statusOfWork.setSalaryStatement(savedSalaryStatement));
