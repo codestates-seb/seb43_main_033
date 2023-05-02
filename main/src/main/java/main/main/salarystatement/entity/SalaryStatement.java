@@ -3,6 +3,7 @@ package main.main.salarystatement.entity;
 import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
+import main.main.member.entity.Member;
 import main.main.memberbank.entity.MemberBank;
 import main.main.statusofwork.entity.StatusOfWork;
 
@@ -26,7 +27,35 @@ public class SalaryStatement {
     @JoinColumn(name = "MEMBER_BANK_ID")
     private MemberBank memberBank;
 
-    private long salary;
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    private int year;
+
+    private int month;
+
+    private double hourlyWage;
+
+    private double basePay; // 기본급
+
+    private double overtimePay; // 연장근로수당
+
+    private int overtimePayBasis;
+
+    private double nightWorkAllowance; // 야간근로수당
+
+    private int nightWorkAllowanceBasis;
+
+    private double holidayWorkAllowance; // 휴일근로수당
+
+    private int holidayWorkAllowanceBasis;
+
+    private double salary;
+
+    public void setSalary() {
+        this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance;
+    }
 
     private boolean paymentStatus;
 
