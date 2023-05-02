@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public class LaborContractDto {
@@ -13,6 +14,8 @@ public class LaborContractDto {
         private long memberId;
         private long companyId;
         private long basicSalary;
+        private LocalDateTime startOfContract;
+        private LocalDateTime endOfContract;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
@@ -21,7 +24,7 @@ public class LaborContractDto {
     @Getter
     @Setter
     public static class Patch {
-        private long basicSalary;
+        private double basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
@@ -32,7 +35,7 @@ public class LaborContractDto {
     public static class Response {
         private String memberName;
         private String companyName;
-        private long basicSalary;
+        private double basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
