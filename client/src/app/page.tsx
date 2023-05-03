@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google'
 import { Container } from 'postcss'
 import ManagerHome from "./ManagerHome";
 import Header from "../layouts/Header";
-import Footer from "../layouts/Footer/Footer";
+// import Footer from "../layouts/Footer/Footer";
 import Navi from "../layouts/Navi";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -20,7 +20,7 @@ export default function Home() {
       <ManagerHome />
       
       </main>
-      <Footer />    
+      {/* <Footer />     */}
     </div>
   )
 }
