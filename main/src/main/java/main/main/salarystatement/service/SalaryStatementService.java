@@ -6,6 +6,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
 import main.main.exception.BusinessLogicException;
@@ -18,14 +19,21 @@ import main.main.salarystatement.entity.SalaryStatement;
 import main.main.salarystatement.repository.SalaryStatementRepository;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.service.StatusOfWorkService;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SalaryStatementService {
@@ -34,6 +42,8 @@ public class SalaryStatementService {
     private final CompanyService companyService;
     private final StatusOfWorkService statusOfWorkService;
     private final LaborContractService laborContractService;
+    private final JavaMailSender javaMailSender;
+    private final SpringTemplateEngine templateEngine;
 
     public void createSalaryStatement(SalaryStatement salaryStatement) {
         Member member = memberService.findMember(salaryStatement.getMember().getMemberId());
@@ -132,8 +142,7 @@ public class SalaryStatementService {
         return  salaryStatement;
     }
 
-    public ByteArrayOutputStream makePdf(long salaryStatementId) throws Exception {
-        SalaryStatement salaryStatement = findVerifiedSalaryStatement(salaryStatementId);
+    public ByteArrayOutputStream makePdf(SalaryStatement salaryStatement) throws Exception {
         DecimalFormat formatter = new DecimalFormat("###,###");
         // Define the PDF document
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -556,5 +565,31 @@ public class SalaryStatementService {
         document.close();
 
         return baos;
+    }
+
+    public void sendEmail(long salaryStatementId) {
+        SalaryStatement salaryStatement = findVerifiedSalaryStatement(salaryStatementId);
+        String year = String.valueOf(salaryStatement.getYear());
+        String month = String.valueOf(salaryStatement.getMonth());
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        try {
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+            mimeMessageHelper.setTo(salaryStatement.getMember().getEmail());
+            mimeMessageHelper.setSubject( year + "년 " + month + "월 급여 명세서");
+            mimeMessageHelper.setText(setContext(year, month,"email"), true);
+            javaMailSender.send(mimeMessage);
+
+            log.info("Success");
+        } catch (MessagingException e) {
+            log.info("fail");
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String setContext(String year, String month, String type) {
+        Context context = new Context();
+        context.setVariable("year", year);
+        context.setVariable("month", month);
+        return templateEngine.process(type, context);
     }
 }

@@ -20,7 +20,6 @@ import java.io.ByteArrayOutputStream;
 public class SalaryStatementController {
     private final SalaryStatementService salaryStatementService;
     private final SalaryStatementMapper salaryStatementMapper;
-    private final MemberService memberService;
 
     @PostMapping
     public ResponseEntity postSalaryStatement(@RequestBody SalaryStatementDto.Post requestBody) {
@@ -44,14 +43,22 @@ public class SalaryStatementController {
     }
 
     @GetMapping("/{salarystatement-id}/payslip")
-    public ResponseEntity<byte[]> generatePayslip(@PathVariable("salarystatement-id") long salaaryStatementId ) throws Exception {
-        ByteArrayOutputStream baos = salaryStatementService.makePdf(salaaryStatementId);
+    public ResponseEntity<byte[]> generatePayslip(@PathVariable("salarystatement-id") long salaryStatementId ) throws Exception {
+        SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId);
+        ByteArrayOutputStream baos = salaryStatementService.makePdf(salaryStatement);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("payslip.pdf", "payslip.pdf");
+        headers.setContentDispositionFormData(salaryStatement.getYear() + "/" + salaryStatement.getMonth() + ".pdf", salaryStatement.getYear() + "/" + salaryStatement.getMonth() + ".pdf");
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
 
         return new ResponseEntity<>(baos.toByteArray(), headers, HttpStatus.OK);
+    }
+
+    @PostMapping("/{salarystatement-id}/payslip")
+    public ResponseEntity sendSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
+        salaryStatementService.sendEmail(salaryStatementId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
