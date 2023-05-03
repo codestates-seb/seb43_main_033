@@ -13,7 +13,7 @@ public enum ExceptionCode {
     LABORCONTRACT_FOR_SALARY_NOT_FOUND(404, "해당 기간에 유효한 근로 계약서를 찾을 수 없습니다."),
     LABORCONTRACT_NOT_FOUND(404, "근로 계약서를 찾을 수 없습니다."),
     SALARYSTATEMENT_NOT_FOUND(404, "급여 명세서를 찾을 수 없습니다."),
-    COMPANY_NOT_FOUND(404, "Company not found");
+    BANK_NOT_FOUND(404, "찾는 은행이 없습니다.");
 
     @Getter
     private int status;
