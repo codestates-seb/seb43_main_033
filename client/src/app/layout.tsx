@@ -1,5 +1,5 @@
-import "./globals.css";
-import { Inter } from "next/font/google";
+import './globals.css'
+import { Inter } from 'next/font/google'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +17,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <header className="bg-white h-28 drop-shadow-lg w-screen z-1 top-0 fixed"></header>
-        {children}
+        <div className="flex flex-row">
+          <aside className="p-4 border-r-2 border-solid border-stone-300 w-60 h-screen">
+          </aside>
+          <div className="flex-grow">{children}</div>
+        </div>
       </body>
     </html>
   );
