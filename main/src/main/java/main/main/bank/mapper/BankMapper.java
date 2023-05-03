@@ -13,18 +13,5 @@ public interface BankMapper {
                 .bankName(bank.getBankGroup().getBankName())
                 .build();
     }
-
-//    default BankDto.ResponseForList banksToBanksResponse(Bank.BankGroup bankGroup) {
-//        return BankDto.ResponseForList.builder()
-//                .bankName(bankGroup.getBankName())
-//                .build();
-
-    }
-
-//    default List<BankDto.ResponseForList> banksForList(List<Bank> bankList) {
-//        return bankList.stream()
-//                .map( -> bankToBankResponse())
-//                .collect(Collectors.toList());
-//    }
-
+}
 

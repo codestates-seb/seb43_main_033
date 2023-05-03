@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.bank.dto.BankDto;
 import main.main.bank.entity.Bank;
 import main.main.bank.mapper.BankMapper;
-import main.main.bank.repository.BankRepository;
 import main.main.bank.service.BankService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +37,5 @@ public class BankController {
         return new ResponseEntity<>(bankMapper.bankToBankResponse(bank),HttpStatus.OK);
 
     }
-
 
 }

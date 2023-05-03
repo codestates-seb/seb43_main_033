@@ -23,6 +23,7 @@ public class Bank {
     @Enumerated(EnumType.STRING)
     @Getter
     private BankGroup bankGroup;
+
     @Getter
     @RequiredArgsConstructor
     public enum BankGroup {
@@ -41,34 +42,11 @@ public class Bank {
         }
 
         @JsonValue
-        public String getBankName() { return bankName; }
+        public String getBankName() {
+            return bankName;
+        }
 
-
-    @OneToMany(mappedBy = "bank")
-    private List<BankGroup> bankList = new ArrayList<>();
-
-//        @OneToMany(mappedBy = "bank")
-//        private List<MemberBank> bankList = new ArrayList<>();
-
-
-
-//    public void addBankList (BankGroup bankGroup) {
-//        this.bankList.add(bankGroup);
-//    }
-
+        @OneToMany(mappedBy = "bank")
+        private List<BankGroup> bankList = new ArrayList<>();
     }
-//    @OneToMany(mappedBy = "bank")
-//    private List<MemberBank> bankList = new ArrayList<>();
-//    public void addMemberBank(MemberBank memberBank) {
-//        this.bankList.add(memberBank);
-//        if(!memberBank.getBank().getBankGroup().equals(this)) {
-//            memberBank.getBank().setBankGroup(this.getBankGroup());
-//        }
-//    }
 }
-
-
-//    public boolean hasBankName(String bank) {
-//        return bankName != null && bankName.equals(bank);
-//
-//    }
