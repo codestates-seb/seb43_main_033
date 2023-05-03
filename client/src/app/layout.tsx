@@ -16,9 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="bg-white h-28 drop-shadow-lg w-screen z-1 top-0 fixed"></header>
+        <header className="bg-white h-28 drop-shadow-lg w-screen z-20 top-0 fixed"></header>
         {children}
       </body>
+      햣
     </html>
   );
 }
