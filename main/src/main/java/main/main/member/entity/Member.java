@@ -2,6 +2,7 @@ package main.main.member.entity;
 
 import lombok.*;
 import main.main.company.entity.Company;
+import main.main.memberbank.entity.MemberBank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -32,5 +33,8 @@ public class Member {
 
     @ManyToOne
     private Company company;
+
+    @OneToMany
+    private List<MemberBank> memberBanks = new ArrayList<>();
 
 }
