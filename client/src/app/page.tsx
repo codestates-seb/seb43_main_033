@@ -1,25 +1,26 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import { Container } from 'postcss'
-import ManagerHome from './ManagerHome'
+import ManagerHome from "./ManagerHome";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer/Footer";
+import Navi from "../layouts/Navi";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   return (
     <div>
-      <header className="bg-white h-28 drop-shadow-lg w-screen z-10 top-0 fixed justify-center">
-        <div className='bg-emerald-400 h-8 flex justify-end align-middle'>
-          <div className='px-5'>로그인</div>
-          <div className='px-5'>회원가입</div>
-        </div>
-      </header>
+      <Header />
       <main className="flex pt-28">
-        <aside className="border border-solid border-black h-screen">
-          안녕
-        </aside>
-        <ManagerHome />
+      {/* <aside className="p-4 border-r-2 border-solid border-stone-300 w-60 h-screen">
+        안녕
+      </aside> */}
+      <Navi />
+      <ManagerHome />
+      
       </main>
+      <Footer />    
     </div>
   )
 }
