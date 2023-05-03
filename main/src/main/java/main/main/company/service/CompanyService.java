@@ -35,7 +35,7 @@ public class CompanyService {
         return findVerifiedCompany(companyId);
     }
 
-    public Company findVerifiedCompany(long companyId) {
+    private Company findVerifiedCompany(long companyId) {
         Optional<Company> optionalCompany = companyRepository.findById(companyId);
         Company findedCompany = optionalCompany.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND));
         return findedCompany;
