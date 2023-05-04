@@ -1,10 +1,20 @@
 package main.main.helper;
 
 import main.main.auth.jwt.JwtTokenizer;
+import main.main.bank.dto.BankDto;
+import main.main.bank.entity.Bank;
+import main.main.company.dto.CompanyDto;
+import main.main.company.entity.Company;
 import main.main.laborcontract.dto.LaborContractDto;
+import main.main.memberbank.dto.MemberBankDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.entity.StatusOfWork;
+
 import org.springframework.http.HttpMethod;
 
 import java.time.LocalDateTime;
@@ -187,6 +197,125 @@ public class StubData {
                     .bankId(1L)
                     .bankName("국민")
                     .accountNumber("111-111111-11-11")
+                    .build();
+        }
+    }
+
+
+    public static class MockCompany {
+        private static Map<HttpMethod, Object> stubRequestBody;
+        static {
+
+            CompanyDto.Post post = new CompanyDto.Post();
+            post.setCompanyName("회사명");
+            post.setCompanySize("회사 규모");
+            post.setBusinessNumber(1L);
+            post.setAddress("회사 주소");
+            post.setInformation("회사 정보");
+
+            CompanyDto.Patch patch = new CompanyDto.Patch();
+            patch.setCompanyId(1L);
+            patch.setCompanyName("회사명");
+            patch.setCompanySize("회사 규모");
+            patch.setBusinessNumber(1L);
+            patch.setAddress("회사 주소");
+            patch.setInformation("회사 정보");
+
+            stubRequestBody = new HashMap<>();
+            stubRequestBody.put(HttpMethod.POST, post);
+            stubRequestBody.put(HttpMethod.PATCH, patch);
+        }
+
+        public static Object getRequestBody(HttpMethod method) { return stubRequestBody.get(method); }
+
+        public static Page<Company> getCompaniesByPage() {
+            Company company1 = new Company();
+            Company company2 = new Company();
+
+            return new PageImpl<>(List.of(company1, company2), PageRequest.of(0, 5, Sort.by("companyId").descending()),2);
+
+        }
+
+        public static CompanyDto.Response getCompanyResponse() {
+            return CompanyDto.Response.builder()
+                    .companyId(1L)
+                    .companyName("회사명")
+                    .memberId(1L)
+                    .companySize("회사 규모")
+                    .businessNumber(1L)
+                    .address("회사 주소")
+                    .information("회사 정보")
+                    .build();
+        }
+
+        public static List<CompanyDto.Response> getCompanyResponseForList() {
+            return List.of(
+                    CompanyDto.Response.builder()
+                            .companyId(1L)
+                            .companyName("회사명")
+                            .memberId(1L)
+                            .companySize("회사 규모")
+                            .businessNumber(1L)
+                            .address("회사 주소")
+                            .information("회사 정보")
+                            .build(),
+                    CompanyDto.Response.builder()
+                            .companyId(2L)
+                            .companyName("회사명")
+                            .memberId(2L)
+                            .companySize("회사 규모")
+                            .businessNumber(2L)
+                            .address("회사 주소")
+                            .information("회사 정보")
+                            .build()
+            );
+        }
+    }
+
+
+    public static class MockMemberBank {
+        private static Map<HttpMethod, Object> stubRequestBody;
+        static {
+
+            MemberBankDto.Post post = new MemberBankDto.Post();
+            post.setMemberId(1L);
+            post.setBankId(1L);
+            post.setAccountNumber("회원 계좌 번호");
+
+            MemberBankDto.Patch patch = new MemberBankDto.Patch();
+            patch.setMemberBankId(1L);
+            patch.setMemberId(1L);
+            patch.setBankId(1L);
+            patch.setAccountNumber("회원 계좌 번호");
+
+            stubRequestBody = new HashMap<>();
+            stubRequestBody.put(HttpMethod.POST, post);
+            stubRequestBody.put(HttpMethod.PATCH, patch);
+        }
+
+        public static Object getRequestBody(HttpMethod method) { return stubRequestBody.get(method); }
+
+
+        public static MemberBankDto.Response getMemberBankResponse() {
+            return MemberBankDto.Response.builder()
+                    .memberBankId(1L)
+                    .memberId(1L)
+                    .bankId(1L)
+                    .bankName("회원 계좌 은행명")
+                    .accountNumber("회원 계좌 번호")
+                    .build();
+        }
+    }
+
+
+    public static class MockBank {
+
+
+
+        public static BankDto.Response getBankResponse() {
+            return BankDto.Response.builder()
+                    .bankId(1L)
+                    .bankName("회원 계좌 은행명")
                     .build();
         }
     }
