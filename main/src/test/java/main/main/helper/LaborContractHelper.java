@@ -8,7 +8,7 @@ import java.util.List;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
 public interface LaborContractHelper extends ControllerHelper {
-    String LABORCONTRACT_DEFAULT_URL = "/laborcontract";
+    String LABORCONTRACT_DEFAULT_URL = "/laborcontracts";
     String LABORCONTRACT_RESOURCE_ID = "/{laborcontract-id}";
     String LABORCONTRACT_RESOURCE_URI = LABORCONTRACT_DEFAULT_URL + LABORCONTRACT_RESOURCE_ID;
 
