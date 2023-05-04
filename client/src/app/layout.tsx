@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
+import ManagerHome from "./ManagerHome";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +17,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <header className="bg-white h-28 drop-shadow-lg w-screen z-1 top-0 fixed"></header>
-        <div className="flex flex-row">
-          <aside className="p-4 border-r-2 border-solid border-stone-300 w-60 h-screen"></aside>
-          <div className="flex-grow">{children}</div>
+        <header className="bg-white h-28 drop-shadow-lg w-full z-20 top-0 fixed"></header>
+        <div className="flex flex-row flex-wrap mt-28 ">
+          <aside className="p-4 border-r-2 border-solid border-stone-300 w-60 h-screen">
+            안녕
+          </aside>
+          <ManagerHome />
         </div>
+        <div className="flex-grow"></div>
       </body>
     </html>
   );
