@@ -4,7 +4,7 @@ import Logo from "./components/logo"
 export default function Header() {
 
     return (
-        <header className="bg-white h-28 drop-shadow-lg w-screen top-0 fixed justify-center">
+        <header className="bg-white h-28 drop-shadow-lg w-screen top-0 fixed ">
             <div className='bg-emerald-400 h-8 flex justify-end align-middle'>
                 <button className='px-5 '>로그인</button>
                 <button className='px-5'>회원가입</button>

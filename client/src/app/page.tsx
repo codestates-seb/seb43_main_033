@@ -12,8 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   return (
     <main className="flex pt-28">
-    <Link href="/worker">worker</Link>
-    <h1>home</h1>
+    asdasd
     </main>
   );
 }

@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function Home() {
       return (
-        <div className="flex bottom-0 absolute border-t-2 w-full">
+        <div className="flex bottom-0 border-t-2 w-screen ">
         <div className="flex h-80 box-border pt-12 pr-0 pb-0 pl-0 flex-auto w-full mx-20 gap-20">
         <div className="flex mb-24">
           <Logo />
@@ -11,7 +11,7 @@ export default function Home() {
         <nav className=" flex">
           <div className="box-border pr-12 flex-auto ">
             <h5 className="mb-8">
-              <a className="text-xs">우리의 급여</a>
+              <a className="text-xs"><Link href="/">우리의 급여</Link></a>
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
