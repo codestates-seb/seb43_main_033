@@ -12,7 +12,7 @@ public interface SalaryStatementHelper extends ControllerHelper {
     String SALARYSTATEMENT_RESOURCE_ID = "/{salarystatement-id}";
     String SALARYSTATEMENT_RESOURCE_URI = SALARYSTATEMENT_DEFAULT_URL + SALARYSTATEMENT_RESOURCE_ID;
 
-    default List<ParameterDescriptor> getMemberRequestPathParameterDescriptor() {
+    default List<ParameterDescriptor> getRequestPathParameterDescriptor() {
         return Arrays.asList(parameterWithName("salarystatement-id").description("급여명세서 식별 번호"));
     }
 }
