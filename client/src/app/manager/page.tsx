@@ -9,9 +9,7 @@ export default function Manager() {
       <article className="bg-white p-6 border border-solid border-black h-screen/4 w-full">
         관리자 전용 페이지
         
-      </article>
-      <Link href="/mystaff">나의 직원들 </Link>
-      <Link href="/paystub">급여 명세서 작성 </Link>
+      </article>    
     </main>
     </div>
   )
