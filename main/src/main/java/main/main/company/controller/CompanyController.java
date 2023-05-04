@@ -11,8 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
@@ -32,7 +30,7 @@ public class CompanyController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{companies-id}")
+    @PatchMapping("/{company-id}")
     public ResponseEntity patchCompany(@Positive @PathVariable("company-id") long companyId,
                                        @Valid @RequestBody CompanyDto.Patch requestBody) {
 
@@ -44,7 +42,7 @@ public class CompanyController {
                 .companyToCompanyResponse(companyService.findCompany(companyId)), HttpStatus.OK);
     }
 
-    @GetMapping("/{companies-id}")
+    @GetMapping("/{company-id}")
     public ResponseEntity getCompany(@PathVariable("company-id") @Positive long companyId) {
         Company company = companyService.findCompany(companyId);
 
@@ -60,7 +58,7 @@ public class CompanyController {
         return new ResponseEntity<>(new ListPageResponseDto<>(companyMapper.companiesToCompanyResponses(companies),pageCompanies), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{companies-id}")
+    @DeleteMapping("/{company-id}")
     public ResponseEntity deleteCompany(@Positive @PathVariable("company-id") long companyId) {
         companyService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
