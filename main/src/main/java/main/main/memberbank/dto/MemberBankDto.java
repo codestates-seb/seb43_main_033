@@ -12,8 +12,7 @@ public static class Post {
 
     private Long memberId;
     private Long bankId;
-    private String bankName;
-    private Long accountNumber;
+    private String accountNumber;
 }
 @Getter
 @Setter
@@ -21,8 +20,7 @@ public static class Patch {
     private Long memberBankId;
     private Long memberId;
     private Long bankId;
-    private String bankName;
-    private Long accountNumber;
+    private String accountNumber;
 }
 @Getter
 @Setter
@@ -33,7 +31,7 @@ public static class Response {
     private Long memberId;
     private Long bankId;
     private String bankName;
-    private Long accountNumber;
+    private String accountNumber;
 
 }
 
