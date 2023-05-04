@@ -6,6 +6,7 @@ import StaffSelect from '../components/StaffSelect';
 import StaffSelectModal from '../components/StaffSelectModal';
 import PaystubName from '../components/PaystubName';
 import PaystubInput from '../components/PaystubInput';
+// import Navi from "../Navi"
 
 const Paystub = () => {
 
@@ -19,6 +20,7 @@ const Paystub = () => {
 //  const [isChecked, setIsChecked] = useState<boolean>(false);
   return (
     <div>
+      {/* <Navi /> */}
       <GreenTop>직원선택</GreenTop>
       <div className="bg-white p-3 m-5 flex justify-between">
       <StaffSelect>홍길동</StaffSelect>

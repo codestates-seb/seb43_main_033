@@ -3,12 +3,14 @@ import { useState } from 'react';
 import Bigsquare from '../components/Bigsquare';
 import ListBox from '../components/ListBox';
 import MyStaffModal from '../components/MyStaffModal';
+import Navi from "../Navi"
 
 export default function Mystaff() {
 
   const [showModal, setShowModal] = useState(false); 
   return (
     <div className="flex flex-col ">
+      <Navi />
       <div className="flex justify-end pb-3">
         <h1 className="pr-10">우리 회사의 근무시간 : 09:00~18:00</h1>
         <h1 className="mr-8">오늘의 근무상황</h1>
