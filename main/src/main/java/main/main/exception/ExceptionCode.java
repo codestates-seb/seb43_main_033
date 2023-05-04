@@ -16,6 +16,7 @@ public enum ExceptionCode {
     BANK_NOT_FOUND(404, "찾는 은행이 없습니다."),
     COMPANY_NOT_FOUND(404, "찾는 회사가 없습니다."),
     MEMBERBANK_NOT_FOUND(404, "계좌정보를 찾을 수 없습니다.");
+
     @Getter
     private int status;
     @Getter

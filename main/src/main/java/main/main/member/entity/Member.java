@@ -5,6 +5,7 @@ import main.main.company.entity.Company;
 import main.main.member.dto.MemberDto;
 import main.main.member.dto.Position;
 import main.main.salarystatement.entity.SalaryStatement;
+import main.main.memberbank.entity.MemberBank;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -42,5 +43,8 @@ public class Member {
     public void addSalaryStatement(SalaryStatement salaryStatement) {
         this.salaryStatements.add(salaryStatement);
     }
+
+    @OneToMany
+    private List<MemberBank> memberBanks = new ArrayList<>();
 
 }
