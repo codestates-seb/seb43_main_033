@@ -85,6 +85,7 @@ public class SalaryStatementService {
 
         salaryStatement.setMember(member);
         salaryStatement.setCompany(company);
+        salaryStatement.setMemberBank(member.getMemberBanks().get(0));
         salaryStatement.setStatusOfWorks(statusOfWorks);
         salaryStatement.setHourlyWage(hourlyWage);
         salaryStatement.setBasePay(basicSalary);
@@ -233,7 +234,7 @@ public class SalaryStatementService {
         cell10.setColspan(5);
         cell10.setBorderColor(BaseColor.WHITE);
         cell10.setHorizontalAlignment(Element.ALIGN_CENTER);
-        cell10.setPadding(10);
+        cell10.setPadding(2);
         table.addCell(cell10);
 
         PdfPCell cell11 = new PdfPCell(new Phrase("세부 내역", objFont));
@@ -476,7 +477,7 @@ public class SalaryStatementService {
         cell49.setColspan(5);
         cell49.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell49.setBorderColor(BaseColor.WHITE);
-        cell49.setPadding(10);
+        cell49.setPadding(2);
         table.addCell(cell49);
 
         PdfPCell cell50 = new PdfPCell(new Phrase("계산 방법", objFont));
@@ -560,6 +561,26 @@ public class SalaryStatementService {
         cell62.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell62.setPadding(10);
         table.addCell(cell62);
+
+        PdfPCell cell63 = new PdfPCell(new Phrase(" ", objFont));
+        cell63.setColspan(5);
+        cell63.setBorderColor(BaseColor.WHITE);
+        cell63.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell63.setPadding(2);
+        table.addCell(cell63);
+
+        PdfPCell cell64 = new PdfPCell(new Phrase("지급 정보", objFont));
+        cell64.setColspan(5);
+        cell64.setGrayFill(0.9f);
+        cell64.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell64.setPadding(9);
+        table.addCell(cell64);
+
+        PdfPCell cell65 = new PdfPCell(new Phrase(salaryStatement.getMemberBank().getBank().getBankGroup().getBankName() + " " + salaryStatement.getMemberBank().getAccountNumber() + " / 예금주: " + salaryStatement.getMember().getName(), objFont));
+        cell65.setColspan(5);
+        cell65.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell65.setPadding(9);
+        table.addCell(cell65);
 
         document.add(table);
         document.close();
