@@ -8,7 +8,7 @@ import java.util.List;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 
 public interface SalaryStatementHelper extends ControllerHelper {
-    String SALARYSTATEMENT_DEFAULT_URL = "/salarystatement";
+    String SALARYSTATEMENT_DEFAULT_URL = "/salarystatements";
     String SALARYSTATEMENT_RESOURCE_ID = "/{salarystatement-id}";
     String SALARYSTATEMENT_RESOURCE_URI = SALARYSTATEMENT_DEFAULT_URL + SALARYSTATEMENT_RESOURCE_ID;
 
