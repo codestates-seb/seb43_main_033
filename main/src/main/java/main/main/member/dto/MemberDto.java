@@ -3,6 +3,10 @@ package main.main.member.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.member.entity.Member;
+
+import java.nio.file.SimpleFileVisitor;
+import java.util.List;
 
 public class MemberDto {
 
@@ -32,6 +36,7 @@ public class MemberDto {
         private String residentNumber;
         private String grade;
         private String address;
+        private String position;
     }
 
     @Getter
@@ -44,7 +49,7 @@ public class MemberDto {
         private String residentNumber;
         private String grade;
         private String address;
-
+        private String position;
+        private List<String> roles;
     }
-
 }

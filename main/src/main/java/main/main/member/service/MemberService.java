@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
+import main.main.member.dto.Position;
 import main.main.member.entity.Member;
 import main.main.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -11,9 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,6 +42,8 @@ public class MemberService {
                 .ifPresent(address -> findedMember.setAddress(member.getAddress()));
         Optional.ofNullable(member.getGrade())
                 .ifPresent(grade -> findedMember.setGrade(member.getGrade()));
+        Optional.ofNullable(member.getPosition())
+                .ifPresent(position -> findedMember.setPosition(member.getPosition()));
 
         return memberRepository.save(findedMember);
     }
@@ -96,4 +100,54 @@ public class MemberService {
     public Page<Member> findMembers(int page, int size) {
         return memberRepository.findAll(PageRequest.of(page, size, Sort.by("memberId").descending()));
     }
+
+    private void uploadingPermission(Member member, long authenticationMemberId) {
+        if (!member.getMemberId().equals(authenticationMemberId) && !member.getEmail().equals("admin@gmail.com")) {
+            throw new BusinessLogicException(ExceptionCode.ONLY_AUTHOR);
+        }
+    }
+
+    public Boolean uploading(MultipartFile file, long memberId, long authenticationMemberId, String url) {
+
+        checkVerifiedId(authenticationMemberId);
+        Member findedMember = findVerifiedMember(memberId);
+        uploadingPermission(findedMember, authenticationMemberId);
+
+        Boolean result = Boolean.TRUE;
+
+        String dir = Long.toString(memberId);
+        String extension = Optional.ofNullable(file)
+                .map(MultipartFile::getOriginalFilename)
+                .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
+                .orElse("default_extension");
+
+        String newFileName = dir + extension;
+
+        try {
+            //사업자등록증 폴더안에 memberId로 된 폴더에 이미지를 저장
+            File folder = new File("img" + File.separator + "사업자등록증" + File.separator + dir);
+            File[] files = folder.listFiles();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            } else if (files != null) {
+                for (File file1 : files) {
+                    file1.delete();
+                }
+            }
+            File destination = new File( folder.getAbsolutePath() , newFileName);
+
+            file.transferTo(destination);
+
+            result = Boolean.FALSE;
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
+    }
+
+    public List<Member> getMembersByPosition(Position position) {
+        return memberRepository.findByPosition(position);
+    }
+
 }

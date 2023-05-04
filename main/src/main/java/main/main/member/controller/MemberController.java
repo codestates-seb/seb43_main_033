@@ -4,19 +4,29 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.dto.ListPageResponseDto;
 import main.main.member.dto.MemberDto;
+import main.main.member.dto.Position;
 import main.main.member.entity.Member;
 import main.main.member.mapper.MemberMapper;
 import main.main.member.service.MemberService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.apache.commons.io.IOUtils;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/members")
@@ -54,7 +64,18 @@ public class MemberController {
                                     @Valid @RequestBody MemberDto.Patch requestBody) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         requestBody.setMemberId(memberId);
-        memberService.updateMember(mapper.responserPatchToMember(requestBody, authenticationMemberId));
+//        memberService.updateMember(mapper.responserPatchToMember(requestBody, authenticationMemberId));
+
+        Member member = mapper.responserPatchToMember(requestBody, authenticationMemberId);
+
+        Position position = member.getPosition();
+        if (position == null) {
+            position = Position.STAFF;
+        }
+
+        member.setRoles(Arrays.asList(position.getRole()));
+
+        memberService.updateMember(member);
         return new ResponseEntity<>(mapper.memberPatchToMember(memberService.findMember(memberId)), HttpStatus.OK);
     }
 
@@ -75,4 +96,45 @@ public class MemberController {
                 mapper.membersToMemberResponses(members), pageMembers)
                 , HttpStatus.OK);
     }
+
+    @PostMapping(path = "/upload/{member-id}")
+    public ResponseEntity postImageUpload(@PathVariable("member-id") Long memberId,
+                                          @RequestPart(required = false) MultipartFile file){
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        String dir = Long.toString(memberId);
+
+        memberService.uploading(file, memberId, authenticationMemberId, dir);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/image/{member-id}")
+    public ResponseEntity<byte[]> getProfileImage(@PathVariable("member-id") long memberId) throws IOException {
+        String dir = Long.toString(memberId);
+        String fileExtension = ".png";
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream( "img" + "/" + "사업자등록증" + "/" + dir + "/" + dir + ".jpeg");
+        } catch (Exception e) {
+            inputStream = new FileInputStream( "img" + "/" + "사업자등록증" + "/" + dir + "/" + dir + ".png");
+        } finally {
+            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+            inputStream.close();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            if (".png".equals(fileExtension)) {
+                httpHeaders.setContentType(MediaType.IMAGE_PNG);
+            } else if (".jpeg".equals(fileExtension)) {
+                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+            } return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/position/{position}")
+    public ResponseEntity<List<Member>> getMembersByPosition(@PathVariable String position) {
+        Position pos = Position.valueOf(position);
+        List<Member> members = memberService.getMembersByPosition(pos);
+        return ResponseEntity.ok(members);
+    }
+
+
 }
