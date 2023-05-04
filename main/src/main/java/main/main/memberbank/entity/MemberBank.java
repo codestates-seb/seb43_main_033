@@ -16,7 +16,7 @@ public class MemberBank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberBankId;
-    private Long accountNumber;
+    private String accountNumber;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "MEMBER_ID")
@@ -26,4 +26,10 @@ public class MemberBank {
     @JoinColumn(name = "BANK_ID")
     private Bank bank;
 
+    public void setMember(Member member) {
+        this.member = member;
+        if(!member.getMemberBanks().contains(this)) {
+            member.getMemberBanks().add(this);
+        }
+    }
 }
