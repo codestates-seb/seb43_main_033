@@ -1,11 +1,14 @@
 package main.main.helper;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.headers.HeaderDescriptor;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
@@ -95,7 +98,11 @@ public interface ControllerHelper<T> {
     }
 
     default String toJsonContent(T t) {
-        Gson gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
+        gsonBuilder.registerTypeAdapter(LocalTime.class, new LocalTimeSerializer());
+
+        Gson gson = gsonBuilder.setPrettyPrinting().create();
         String content = gson.toJson(t);
         return content;
     }
