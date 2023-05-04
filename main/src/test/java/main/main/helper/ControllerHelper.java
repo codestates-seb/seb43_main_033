@@ -22,10 +22,18 @@ public interface ControllerHelper<T> {
         );
     }
     default RequestBuilder postRequestBuilder(String url, String content) {
-        return  post(url)
+        return post(url)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content);
+    }
+
+    default RequestBuilder postRequestBuilder(String url, long resourceId, String content) {
+        return post(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content);
+
     }
 
     default RequestBuilder postRequestBuilder(String url,
