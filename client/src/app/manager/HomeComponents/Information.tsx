@@ -5,7 +5,7 @@ export default function Information() {
     classified: "기업분류 예시",
     mainActivity: "주요산업 예시",
     representitive: "대표자명 예시",
-    workersCount: "직원 수 에시",
+    workersCount: "직원 수 예시",
   };
   return (
     <article className="flex flex-col flex-wrap min-h-32 bg-white p-6 mb-5 rounded drop-shadow">
