@@ -29,7 +29,7 @@ interface SalaryData {
 // }
 
 // export default async function paystub() {
-//   // const data = await getData();
+//   const data = await getData();
 //   return (
 //     <main>
 //       <Paystubs data={dummydata}></Paystubs>
@@ -37,7 +37,7 @@ interface SalaryData {
 //   );
 // }
 
-export default function Paystubs() {
+export default function PaystubPreview() {
   const data: SalaryData = {
     companyName: "난쟁컴퍼니",
     memberName: "난쟁이",
