@@ -40,5 +40,8 @@ public class SalaryStatementDto {
         private double healthInsurance;
         private double employmentInsurance;
         private double totalSalary;
+        private long bankId;
+        private String bankName;
+        private String accountNumber;
     }
 }
