@@ -3,14 +3,13 @@ package main.main.helper;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.laborcontract.entity.LaborContract;
+import main.main.statusofwork.dto.StatusOfWorkDto;
+import main.main.statusofwork.entity.StatusOfWork;
 import org.springframework.http.HttpMethod;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class StubData {
     public static class MockSecurity {
@@ -71,6 +70,77 @@ public class StubData {
                     .finishTime(LocalTime.MIDNIGHT)
                     .information("근로계약서 정보").build();
         }
+    }
 
+    public static class MockStatusOfWork {
+        private static Map<HttpMethod, Object> stubRequestBody;
+        static {
+            LocalDateTime time = LocalDateTime.now();
+
+            StatusOfWorkDto.Post post = new StatusOfWorkDto.Post();
+            post.setCompanyId(1L);
+            post.setMemberId(1L);
+            post.setStartTime(time);
+            post.setFinishTime(time);
+            post.setNote(StatusOfWork.note.지각);
+
+            StatusOfWorkDto.Patch patch = new StatusOfWorkDto.Patch();
+            patch.setStartTime(time);
+            patch.setFinishTime(time);
+            patch.setNote(StatusOfWork.note.결근);
+
+            stubRequestBody = new HashMap<>();
+            stubRequestBody.put(HttpMethod.POST, post);
+            stubRequestBody.put(HttpMethod.PATCH, patch);
+        }
+
+        public static Object getRequestBody(HttpMethod method) {
+            return stubRequestBody.get(method);
+        }
+
+        public static List<StatusOfWork> getStatusOfWorkList() {
+            return List.of(
+                    new StatusOfWork(),
+                    new StatusOfWork()
+            );
+        }
+
+        public static StatusOfWorkDto.Response getResponseBody() {
+            LocalDateTime time = LocalDateTime.now();
+
+            return StatusOfWorkDto.Response.builder()
+                    .id(1L)
+                    .memberId(1L)
+                    .memberName("직원 이름")
+                    .companyId(1L)
+                    .companyName("회사 이름")
+                    .startTime(time)
+                    .finishTime(time)
+                    .note("지각").build();
+        }
+
+        public static List<StatusOfWorkDto.Response> getMultiResponseBody() {
+            LocalDateTime time = LocalDateTime.now();
+
+            return List.of(
+                    StatusOfWorkDto.Response.builder()
+                    .id(1L)
+                    .memberId(1L)
+                    .memberName("직원 이름")
+                    .companyId(1L)
+                    .companyName("회사 이름")
+                    .startTime(time)
+                    .finishTime(time)
+                    .note("지각").build(),
+                    StatusOfWorkDto.Response.builder()
+                    .id(2L)
+                    .memberId(1L)
+                    .memberName("직원 이름")
+                    .companyId(1L)
+                    .companyName("회사 이름")
+                    .startTime(time)
+                    .finishTime(time)
+                    .note("지각").build());
+        }
     }
 }
