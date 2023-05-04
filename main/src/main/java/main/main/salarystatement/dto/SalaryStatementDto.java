@@ -9,7 +9,6 @@ public class SalaryStatementDto {
     @Setter
     public static class Post {
         private long companyId;
-        private long memberBankId;
         private long memberId;
         private int year;
         private int month;

@@ -2,7 +2,6 @@ package main.main.helper;
 
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.laborcontract.dto.LaborContractDto;
-import main.main.laborcontract.entity.LaborContract;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.entity.StatusOfWork;
@@ -147,11 +146,8 @@ public class StubData {
     public static class MockSalaryStatement {
         private static Map<HttpMethod, Object> stubRequestBody;
         static {
-            LocalDateTime time = LocalDateTime.now();
-
             SalaryStatementDto.Post post = new SalaryStatementDto.Post();
             post.setCompanyId(1L);
-            post.setMemberBankId(1L);
             post.setMemberId(1L);
             post.setYear(2023);
             post.setMonth(1);
