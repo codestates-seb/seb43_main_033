@@ -1,7 +1,8 @@
-import './globals.css'
-import { Inter } from 'next/font/google'
-import Header from './Header'
-import Footer from './Footer'
+import "./globals.css";
+import { Inter } from "next/font/google";
+import Header from "./Header";
+import ManagerHome from "./ManagerHome";
+import Footer from "./Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -11,22 +12,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html > 
-    
-              
+    <html>
       <div>
-        <Header /> 
-      <body className={inter.className}>
-        <header className="bg-white h-28 drop-shadow-lg w-screen z-1 top-0 fixed"></header>
-        
-        <div className="flex">
-          
-          <div className="flex mt-28" >{children}</div>
-        </div>
-      </body>
+        <Header />
+        <body className={inter.className}>
+          <header className="bg-white h-28 drop-shadow-lg w-full z-10 top-0 fixed"></header>
+          <div className="flex">
+            <div className="flex mt-28">{children}</div>
+          </div>
+          <div className="flex-grow"></div>
+        </body>
       </div>
       <Footer />
-      
     </html>
   );
 }
