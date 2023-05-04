@@ -1,7 +1,7 @@
-import Modal from "./HomeComponents/Modal";
-import TopInformation from "./HomeComponents/TopInformation";
-import MiddleInformation from "./HomeComponents/MiddleInformation";
-import BottomInformation from "./HomeComponents/BottomInformation";
+import Modal from "../components/HomeComponents/Modal";
+import TopInformation from "../components/HomeComponents/TopInformation";
+import MiddleInformation from "../components/HomeComponents/MiddleInformation";
+import BottomInformation from "../components/HomeComponents/BottomInformation";
 
 export default function ManagerHome() {
   return (
