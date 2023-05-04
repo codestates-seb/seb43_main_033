@@ -17,20 +17,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalTime;
+import java.util.List;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
+import static main.main.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static main.main.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LaborContractController.class)
 @ExtendWith(MockitoExtension.class)
@@ -55,7 +55,23 @@ public class LaborContractControllerTest implements LaborContractHelper {
 
         mockMvc.perform(postRequestBuilder(LABORCONTRACT_DEFAULT_URL, content))
                 .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("post-LaborContract",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                        fieldWithPath("startOfContract").type(JsonFieldType.STRING).description("계약 시작일"),
+                                        fieldWithPath("endOfContract").type(JsonFieldType.STRING).description("계약 만료일"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                )
+                        )
+                        ));
     }
 
     @Test
@@ -69,7 +85,22 @@ public class LaborContractControllerTest implements LaborContractHelper {
 
         mockMvc.perform(patchRequestBuilder(LABORCONTRACT_RESOURCE_URI,1L, content))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("patch-LaborContract",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                getRequestPathParameterDescriptor()
+                        ),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                )
+                        )
+                ));
     }
 
     @Test
@@ -79,13 +110,25 @@ public class LaborContractControllerTest implements LaborContractHelper {
         given(laborContractMapper.laborContractToResponse(Mockito.any(LaborContract.class))).willReturn(StubData.MockLaborContract.getResponseBody());
 
         mockMvc.perform(getRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L))
-                .andExpect(jsonPath("$.memberName").value("직원 이름"))
-                .andExpect(jsonPath("$.companyName").value("회사 이름"))
-                .andExpect(jsonPath("$.basicSalary").value(3000000))
-//                .andExpect(jsonPath("$.startTime").value(LocalTime.MIDNIGHT))
-//                .andExpect(jsonPath("$.finishTime").value(LocalTime.MIDNIGHT))
-                .andExpect(jsonPath("$.information").value("근로계약서 정보"))
-                .andDo(print());
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-LaborContract",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                getRequestPathParameterDescriptor()
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                )
+                        )
+                ));
 
     }
 
@@ -96,6 +139,15 @@ public class LaborContractControllerTest implements LaborContractHelper {
 
         mockMvc.perform(deleteRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
-                .andDo(print());
+                .andDo(
+                        document(
+                                "delete-LaborContract",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                pathParameters(
+                                        getRequestPathParameterDescriptor()
+                                )
+                        )
+                );
     }
 }

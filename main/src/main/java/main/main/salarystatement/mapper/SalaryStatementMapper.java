@@ -45,6 +45,9 @@ public interface SalaryStatementMapper {
                 .nationalCoalition(salaryStatement.getNationalCoalition())
                 .healthInsurance(salaryStatement.getHealthInsurance())
                 .employmentInsurance(salaryStatement.getEmploymentInsurance())
-                .totalSalary(salaryStatement.getTotalSalary()).build();
+                .totalSalary(salaryStatement.getTotalSalary())
+                .bankId(salaryStatement.getMemberBank().getBank().getBankId())
+                .bankName(salaryStatement.getMemberBank().getBank().getBankGroup().getBankName())
+                .accountNumber(salaryStatement.getMemberBank().getAccountNumber()).build();
     }
 }

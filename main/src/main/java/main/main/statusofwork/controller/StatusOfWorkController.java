@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.websocket.server.PathParam;
 import java.util.List;
 
 @RestController
@@ -34,9 +33,10 @@ public class StatusOfWorkController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month) {
-        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, 1L);
+    @GetMapping("/{member-id}")
+    public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month,
+                                          @PathVariable("member-id") long memberId) {
+        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, memberId);
 
         return new ResponseEntity<>(statusOfWorkMapper.statusOfWorksToResponses(statusOfWorks), HttpStatus.OK);
     }

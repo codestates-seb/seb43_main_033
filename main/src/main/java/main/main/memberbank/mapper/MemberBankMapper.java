@@ -32,6 +32,9 @@ public interface MemberBankMapper {
         Member member = new Member();
         Bank bank = new Bank();
 
+        member.setMemberId(requestBody.getMemberId());
+        bank.setBankId(requestBody.getBankId());
+
         memberBank.setMember(member);
         memberBank.setBank(bank);
         memberBank.setMemberBankId(requestBody.getMemberBankId());
