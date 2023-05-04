@@ -17,9 +17,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 import static main.main.utils.ApiDocumentUtils.getRequestPreProcessor;
@@ -27,8 +33,9 @@ import static main.main.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,29 +56,39 @@ public class LaborContractControllerTest implements LaborContractHelper {
     public void postLaborContractTest() throws Exception {
         LaborContractDto.Post post = (LaborContractDto.Post) StubData.MockLaborContract.getRequestBody(HttpMethod.POST);
         String content = toJsonContent(post);
+        MockMultipartFile jsonFile = new MockMultipartFile("requestPart", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.pdf", "application/pdf", " ".getBytes());
 
         given(laborContractMapper.postToLaborContract(Mockito.any(LaborContractDto.Post.class))).willReturn(new LaborContract());
-        doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class));
+        doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
 
-        mockMvc.perform(postRequestBuilder(LABORCONTRACT_DEFAULT_URL, content))
+        mockMvc.perform(multipart(LABORCONTRACT_DEFAULT_URL)
+                        .file(jsonFile)
+                        .file(pdfFile)
+                        .contentType("multipart/form-data")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8"))
                 .andExpect(status().isCreated())
                 .andDo(print())
                 .andDo(document("post-LaborContract",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
-                                        fieldWithPath("startOfContract").type(JsonFieldType.STRING).description("계약 시작일"),
-                                        fieldWithPath("endOfContract").type(JsonFieldType.STRING).description("계약 만료일"),
-                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
-                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
-                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
-                                )
-                        )
-                        ));
+                        requestParts(
+                                partWithName("requestPart").description("내용"),
+                                partWithName("file").description("PDF 파일")
+                        ),
+                        requestPartFields(
+                                "requestPart",
+                                    fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                    fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                    fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                    fieldWithPath("startOfContract").type(JsonFieldType.STRING).description("계약 시작일"),
+                                    fieldWithPath("endOfContract").type(JsonFieldType.STRING).description("계약 만료일"),
+                                    fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                    fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                    fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                        ))
+                );
     }
 
     @Test
@@ -79,28 +96,39 @@ public class LaborContractControllerTest implements LaborContractHelper {
     public void patchLaborContractTest() throws Exception {
         LaborContractDto.Patch patch = (LaborContractDto.Patch) StubData.MockLaborContract.getRequestBody(HttpMethod.PATCH);
         String content = toJsonContent(patch);
+        MockMultipartFile jsonFile = new MockMultipartFile("requestPart", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
+        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.pdf", "application/pdf", " ".getBytes());
 
         given(laborContractMapper.patchToLaborContract(Mockito.any(LaborContractDto.Patch.class))).willReturn(new LaborContract());
-        doNothing().when(laborContractService).updateLaborContract(Mockito.anyLong(),Mockito.any(LaborContract.class));
+        doNothing().when(laborContractService).updateLaborContract(Mockito.anyLong(), Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
 
-        mockMvc.perform(patchRequestBuilder(LABORCONTRACT_RESOURCE_URI,1L, content))
+        mockMvc.perform(multipartPutBuilder("/laborcontracts/{laborcontarct-id}", 1L)
+                .file(jsonFile)
+                .file(pdfFile)
+                .contentType("multipart/form-data")
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andDo(document("patch-LaborContract",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
-                        pathParameters(
-                                getRequestPathParameterDescriptor()
+//                        pathParameters(  // 요청을 강제로 바꿨더니 파라미터를 인식을 못함
+//                                getRequestPathParameterDescriptor()
+//                        ),
+                        requestParts(
+                                partWithName("requestPart").description("내용"),
+                                partWithName("file").description("PDF 파일")
                         ),
-                        requestFields(
-                                List.of(
+                        requestPartFields(
+                                "requestPart",
                                         fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
                                         fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
                                         fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
                                         fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
                                 )
                         )
-                ));
+                );
     }
 
     @Test
@@ -149,5 +177,15 @@ public class LaborContractControllerTest implements LaborContractHelper {
                                 )
                         )
                 );
+    }
+
+    // multipart 가 post 로 고정되어 있어 Patch 로 바꿔줌
+    private MockMultipartHttpServletRequestBuilder multipartPutBuilder(final String url, long id) {
+        final MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url, id);
+        builder.with(request1 -> {
+            request1.setMethod(HttpMethod.PATCH.name());
+            return request1;
+        });
+        return builder;
     }
 }
