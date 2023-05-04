@@ -32,6 +32,7 @@ public interface MemberMapper {
                 .residentNumber(member.getResidentNumber())
                 .grade(member.getGrade())
                 .address(member.getAddress())
+                .roles(member.getRoles())
                 .build();
     }
 }
