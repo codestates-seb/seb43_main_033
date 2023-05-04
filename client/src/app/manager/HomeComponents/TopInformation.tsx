@@ -1,4 +1,4 @@
-export default function Information() {
+export default function TopInformation() {
   const data = {
     image: "",
     corporateName: "법인명 예시",
