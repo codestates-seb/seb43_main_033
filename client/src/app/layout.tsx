@@ -21,7 +21,7 @@ export default function RootLayout({
         
         <div className="flex">
           
-          <div className="flex">{children}</div>
+          <div className="flex mt-28" >{children}</div>
         </div>
       </body>
       </div>
