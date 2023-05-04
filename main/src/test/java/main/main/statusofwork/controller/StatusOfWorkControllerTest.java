@@ -18,10 +18,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.List;
+
+import static main.main.utils.ApiDocumentUtils.getRequestPreProcessor;
+import static main.main.utils.ApiDocumentUtils.getResponsePreProcessor;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.BDDMockito.given;
@@ -56,7 +61,20 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
 
         mockMvc.perform(postRequestBuilder(STATUSOFWORK_DEFAULT_URL, content))
                 .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("post-StatusOfWork",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                        fieldWithPath("note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
+                                )
+                        )
+                ));
     }
 
     @Test
@@ -70,7 +88,21 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
 
         mockMvc.perform(patchRequestBuilder(STATUSOFWORK_RESOURCE_URI, 1L, content))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("patch-StatusOfWork",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                getRequestPathParameterDescriptor()
+                        ),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                        fieldWithPath("note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
+                                )
+                        )
+                ));
     }
 
     @Test
@@ -88,7 +120,29 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
 
         mockMvc.perform(getRequestBuilderWithParams(STATUSOFWORK_RESOURCE_URI, 1L, params))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("get-StatusOfWork",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestParameters(
+                                List.of(
+                                        parameterWithName("year").description("해당 년도"),
+                                        parameterWithName("month").description("해당 월")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("특이사항 식별 번호"),
+                                        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("[].startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                        fieldWithPath("[].finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                        fieldWithPath("[].note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
+                                )
+                        )
+                ));
     }
 
     @Test
@@ -98,6 +152,16 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
 
         mockMvc.perform(deleteRequestBuilder(STATUSOFWORK_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
-                .andDo(print());
+                .andDo(print())
+                .andDo(
+                        document(
+                                "delete-StatusOfWork",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                pathParameters(
+                                        getRequestPathParameterDescriptor()
+                                )
+                        )
+                );
     }
 }

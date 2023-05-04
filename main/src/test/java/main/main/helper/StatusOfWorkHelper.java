@@ -12,7 +12,7 @@ public interface StatusOfWorkHelper extends ControllerHelper {
     String STATUSOFWORK_RESOURCE_ID = "/{statusofwork-id}";
     String STATUSOFWORK_RESOURCE_URI = STATUSOFWORK_DEFAULT_URL + STATUSOFWORK_RESOURCE_ID;
 
-    default List<ParameterDescriptor> getMemberRequestPathParameterDescriptor() {
+    default List<ParameterDescriptor> getRequestPathParameterDescriptor() {
         return Arrays.asList(parameterWithName("statusofwork-id").description("특이사항 식별 번호"));
     }
 }
