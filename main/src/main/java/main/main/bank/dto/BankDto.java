@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.bank.entity.Bank;
 
-import java.util.List;
-
 @Getter
 public class BankDto {
 
@@ -15,9 +13,7 @@ public class BankDto {
     @Setter
     public static class Post {
 
-//        private Long bankId;
-//        private String bankName;
-        private Bank.BankGroup bankGroup;
+    private Bank.BankGroup bankGroup;
 
     }
 
@@ -27,13 +23,4 @@ public class BankDto {
     private Long bankId;
     private String bankName;
     }
-
-//
-//    @Getter
-//    @Builder
-//    public static  class ResponseForList {
-//        private Long bankId;
-//        private String bankName;
-//        private List<Response> bankList;
-//    }
 }
