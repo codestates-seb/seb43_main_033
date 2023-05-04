@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Inter } from "next/font/google";
 import { Container } from "postcss";
-import ManagerHome from "./ManagerHome";
+import ManagerHome from "./manager/ManagerHome";
 import Header from "./Header";
 // import Footer from "../layouts/Footer/Footer";
 import Navi from "./Navi";
