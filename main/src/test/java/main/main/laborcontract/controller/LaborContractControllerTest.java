@@ -57,7 +57,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
         LaborContractDto.Post post = (LaborContractDto.Post) StubData.MockLaborContract.getRequestBody(HttpMethod.POST);
         String content = toJsonContent(post);
         MockMultipartFile jsonFile = new MockMultipartFile("requestPart", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.pdf", "application/pdf", " ".getBytes());
+        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.png", "image/png", " ".getBytes());
 
         given(laborContractMapper.postToLaborContract(Mockito.any(LaborContractDto.Post.class))).willReturn(new LaborContract());
         doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
@@ -75,7 +75,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
                         getResponsePreProcessor(),
                         requestParts(
                                 partWithName("requestPart").description("내용"),
-                                partWithName("file").description("PDF 파일")
+                                partWithName("file").description("PNG 파일")
                         ),
                         requestPartFields(
                                 "requestPart",
@@ -97,7 +97,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
         LaborContractDto.Patch patch = (LaborContractDto.Patch) StubData.MockLaborContract.getRequestBody(HttpMethod.PATCH);
         String content = toJsonContent(patch);
         MockMultipartFile jsonFile = new MockMultipartFile("requestPart", "", "application/json", content.getBytes(StandardCharsets.UTF_8));
-        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.pdf", "application/pdf", " ".getBytes());
+        MockMultipartFile pdfFile = new MockMultipartFile("file", "test.png", "image/png", " ".getBytes());
 
         given(laborContractMapper.patchToLaborContract(Mockito.any(LaborContractDto.Patch.class))).willReturn(new LaborContract());
         doNothing().when(laborContractService).updateLaborContract(Mockito.anyLong(), Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
@@ -118,7 +118,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
 //                        ),
                         requestParts(
                                 partWithName("requestPart").description("내용"),
-                                partWithName("file").description("PDF 파일")
+                                partWithName("file").description("PNG 파일")
                         ),
                         requestPartFields(
                                 "requestPart",

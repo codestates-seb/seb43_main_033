@@ -52,12 +52,12 @@ public class LaborContractController {
     @GetMapping("/{laborcontract-id}/file")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable("laborcontract-id") long laborContractId) throws IOException {
         String dir = Long.toString(laborContractId);
-        InputStream inputStream = new FileInputStream( "img" + File.separator + "근로계약서" + File.separator + dir + File.separator + dir + ".pdf");
+        InputStream inputStream = new FileInputStream( "img" + File.separator + "근로계약서" + File.separator + dir + File.separator + dir + ".png");
         byte[] imageByteArray = IOUtils.toByteArray(inputStream);
         inputStream.close();
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_PDF);
+        httpHeaders.setContentType(MediaType.IMAGE_PNG);
         return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
     }
 
