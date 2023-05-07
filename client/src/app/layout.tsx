@@ -18,12 +18,12 @@ export default function RootLayout({
         <body className={inter.className}>
           <header className="bg-white h-28 drop-shadow-lg w-full z-10 top-0 fixed"></header>
           <div className="flex">
-            <div className="flex mt-28">{children}</div>
+            <div className="flex mt-28 w-full">{children}</div>
           </div>
           <div className="flex-grow"></div>
         </body>
-      </div>
-      <Footer />
+        <Footer />
+      </div>      
     </html>
   );
 }

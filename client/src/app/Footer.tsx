@@ -3,7 +3,7 @@ import Link from "next/link"
 
 export default function Home() {
       return (
-        <div className="flex bottom-0 border-t-2 w-screen ">
+        <div className=" bottom-0 border-t-2 w-screen justify-center grid">
         <div className="flex h-80 box-border pt-12 pr-0 pb-0 pl-0 flex-auto w-full mx-20 gap-20">
         <div className="flex mb-24">
           <Logo />

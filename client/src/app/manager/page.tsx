@@ -1,6 +1,6 @@
-import Modal from "../HomeComponents/Modal";
-import Information from "../HomeComponents/Information";
+import Link from "next/link"
 import Navi from "../Navi"
+import Information from "../components/HomeComponents/TopInformation"
 
 
 export default function ManagerHome() {
