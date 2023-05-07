@@ -7,6 +7,7 @@ import StaffSelectModal from "../components/StaffSelectModal";
 import PaystubName from "../components/PaystubName";
 import PaystubInput from "../components/PaystubInput";
 import PaystubPreview from "../components/PaystubPreview";
+import WorkingStatus from "../components/WorkingStatus";
 // import Navi from "../Navi"
 
 const Paystub = () => {
@@ -69,32 +70,7 @@ const Paystub = () => {
         </div>
       </div> */}
       <GreenTop>공제내역</GreenTop>
-      <div className="bg-white p-3 m-5 flex-col ">
-        <div className="flex">
-          <PaystubName>소득세</PaystubName>
-          <PaystubInput></PaystubInput>
-        </div>
-
-        <div className="flex">
-          <PaystubName>지방소득세</PaystubName>
-          <PaystubInput></PaystubInput>
-        </div>
-
-        <div className="flex">
-          <PaystubName>국민연금</PaystubName>
-          <PaystubInput></PaystubInput>
-        </div>
-
-        <div className="flex">
-          <PaystubName>고용보험</PaystubName>
-          <PaystubInput></PaystubInput>
-        </div>
-
-        <div className="flex">
-          <PaystubName>건강보험</PaystubName>
-          <PaystubInput></PaystubInput>
-        </div>
-      </div>
+      <WorkingStatus></WorkingStatus>
     </div>
   );
 };
