@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 
 import { data } from "autoprefixer";
 import axios from "axios";
@@ -7,7 +7,7 @@ import SignupFrom from "../components/SignupForm";
 
 export default function singup() {
   return (
-    <main>
+    <main className="flex justify-center">
       <SignupFrom></SignupFrom>
     </main>
   );
