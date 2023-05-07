@@ -63,7 +63,8 @@ export default function login() {
       });
   };
   return (
-    <main key="login" className="w-full h-full flex justify-center">
+    <div className="w-screen h-screen">
+    <main key="login" className="flex justify-center">
       <div className="flex justify-center">
         <input
           placeholder="email"
@@ -76,5 +77,6 @@ export default function login() {
         <button onClick={handleClick}>submit</button>
       </div>
     </main>
+    </div>
   );
 }

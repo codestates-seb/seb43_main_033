@@ -16,9 +16,9 @@ export default function RootLayout({
       <div>
         <Header />
         <body className={inter.className}>
-          <header className="bg-white h-28 drop-shadow-lg w-full z-10 top-0 fixed"></header>
+          <header className="bg-white h-28 drop-shadow-lg w-screen z-10 top-0 fixed"></header>
           <div className="flex">
-            <div className="flex mt-28 w-full">{children}</div>
+            <div className="flex mt-28 w-screen">{children}</div>
           </div>
           <div className="flex-grow"></div>
         </body>
