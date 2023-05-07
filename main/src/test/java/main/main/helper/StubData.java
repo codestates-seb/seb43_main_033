@@ -49,7 +49,7 @@ public class StubData {
             LaborContractDto.Post post = new LaborContractDto.Post();
             post.setMemberId(1L);
             post.setCompanyId(1L);
-            post.setBasicSalary(3000000L);
+            post.setBasicSalary(3000000);
             post.setStartOfContract(time);
             post.setEndOfContract(time);
             post.setStartTime(LocalTime.MIDNIGHT);
