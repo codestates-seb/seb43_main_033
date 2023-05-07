@@ -35,38 +35,38 @@ public class SalaryStatement {
 
     private int month;
 
-    private double hourlyWage;
+    private int hourlyWage;
 
-    private double basePay; // 기본급
+    private int basePay; // 기본급
 
-    private double overtimePay; // 연장근로수당
+    private int overtimePay; // 연장근로수당
 
     private int overtimePayBasis;
 
-    private double nightWorkAllowance; // 야간근로수당
+    private int nightWorkAllowance; // 야간근로수당
 
     private int nightWorkAllowanceBasis;
 
-    private double holidayWorkAllowance; // 휴일근로수당
+    private int holidayWorkAllowance; // 휴일근로수당
 
     private int holidayWorkAllowanceBasis;
 
-    private double unpaidLeave; // 무급휴가
+    private int unpaidLeave; // 무급휴가
 
-    private double salary;
+    private int salary;
     public void setSalary() {
         this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance + unpaidLeave;
     }
 
-    private double incomeTax;
+    private int incomeTax;
 
-    private double nationalCoalition; // 국민 연금
+    private int nationalCoalition; // 국민 연금
 
-    private double healthInsurance; // 건강 보험
+    private int healthInsurance; // 건강 보험
 
-    private double employmentInsurance; // 고용 보험
+    private int employmentInsurance; // 고용 보험
 
-    private double totalSalary;
+    private int totalSalary;
     public void setTotalSalary() {
         this.totalSalary = salary - incomeTax - nationalCoalition - healthInsurance - employmentInsurance;
     }

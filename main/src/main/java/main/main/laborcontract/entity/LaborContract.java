@@ -34,7 +34,7 @@ public class LaborContract {
 
     private LocalDateTime endOfContract;
 
-    private double basicSalary;
+    private int basicSalary;
 
     private LocalTime startTime;
 

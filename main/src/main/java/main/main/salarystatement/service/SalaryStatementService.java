@@ -50,36 +50,36 @@ public class SalaryStatementService {
         Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
         LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
-        double basicSalary = laborContract.getBasicSalary();
-        double hourlyWage = basicSalary / 209L;
+        int basicSalary = laborContract.getBasicSalary();
+        int hourlyWage = basicSalary / 209;
         int time;
-        double overtimePay = 0;
+        int overtimePay = 0;
         int overtimePayBasis = 0;
-        double nightWorkAllowance = 0;
+        int nightWorkAllowance = 0;
         int nightWorkAllowanceBasis = 0;
-        double holidayWorkAllowance = 0;
+        int holidayWorkAllowance = 0;
         int holidayWorkAllowanceBasis = 0;
-        double unpaidLeave = 0;
+        int unpaidLeave = 0;
 
         for (StatusOfWork statusOfWork : statusOfWorks) {
             switch (statusOfWork.getNote()) {
                 case 연장근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     overtimePayBasis += time;
-                    overtimePay = overtimePay + (statusOfWork.getNote().getRate() * hourlyWage * time);
+                    overtimePay = overtimePay + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
                     break;
                 case 야간근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     nightWorkAllowanceBasis += time;
-                    nightWorkAllowance = nightWorkAllowance + (statusOfWork.getNote().getRate() * hourlyWage * time);
+                    nightWorkAllowance = nightWorkAllowance + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
                     break;
                 case 휴일근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     holidayWorkAllowanceBasis += time;
-                    holidayWorkAllowance = holidayWorkAllowance + (statusOfWork.getNote().getRate() * hourlyWage * time);
+                    holidayWorkAllowance = holidayWorkAllowance + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
                     break;
                 case 무급휴가:
-                    unpaidLeave = unpaidLeave + (statusOfWork.getNote().getRate() * hourlyWage * 8);
+                    unpaidLeave = unpaidLeave + (int)(statusOfWork.getNote().getRate() * hourlyWage * 8);
             }
         }
 
@@ -98,30 +98,30 @@ public class SalaryStatementService {
         salaryStatement.setUnpaidLeave(unpaidLeave);
         salaryStatement.setSalary();
 
-        double taxBase = (basicSalary - (basicSalary * 0.0873)) * 12;
-        double incomeTex;
+        int taxBase = (int) (basicSalary - (basicSalary * 0.0873)) * 12;
+        int incomeTex;
         if (taxBase <= 14000000) {
-            incomeTex = (taxBase * 0.06) / 12;
+            incomeTex = (int) (taxBase * 0.06) / 12;
         } else if (taxBase <= 50000000) {
-            incomeTex = (840000 + ((taxBase - 14000000) * 0.15)) / 12;
+            incomeTex = (840000 + (int) ((taxBase - 14000000) * 0.15)) / 12;
         } else if (taxBase <= 88000000) {
-            incomeTex = (6240000 + ((taxBase - 50000000) * 0.24)) / 12;
+            incomeTex = (6240000 + (int) ((taxBase - 50000000) * 0.24)) / 12;
         } else if (taxBase <= 150000000) {
-            incomeTex = (15360000 + ((taxBase - 88000000) * 0.35)) / 12;
+            incomeTex = (15360000 + (int) ((taxBase - 88000000) * 0.35)) / 12;
         } else if (taxBase <= 300000000) {
-            incomeTex = (37060000 + ((taxBase - 150000000) * 0.38)) / 12;
+            incomeTex = (37060000 + (int) ((taxBase - 150000000) * 0.38)) / 12;
         } else if (taxBase <= 500000000) {
-            incomeTex = (94060000 + ((taxBase - 300000000) * 0.4)) / 12;
+            incomeTex = (94060000 + (int) ((taxBase - 300000000) * 0.4)) / 12;
         } else if (taxBase <= 1000000000) {
-            incomeTex = (174060000 + ((taxBase - 50000000) * 0.42)) / 12;
+            incomeTex = (174060000 + (int) ((taxBase - 50000000) * 0.42)) / 12;
         } else {
-            incomeTex = (384060000 + ((taxBase - 1000000000) * 0.45)) / 12;
+            incomeTex = (384060000 + (int) ((taxBase - 1000000000) * 0.45)) / 12;
         }
 
         salaryStatement.setIncomeTax(incomeTex);
-        salaryStatement.setNationalCoalition(basicSalary * 0.045);
-        salaryStatement.setHealthInsurance(basicSalary * 0.0343);
-        salaryStatement.setEmploymentInsurance(basicSalary * 0.008);
+        salaryStatement.setNationalCoalition((int) (basicSalary * 0.045));
+        salaryStatement.setHealthInsurance((int) (basicSalary * 0.0343));
+        salaryStatement.setEmploymentInsurance((int) (basicSalary * 0.008));
         salaryStatement.setTotalSalary();
 
         SalaryStatement savedSalaryStatement = salaryStatementRepository.save(salaryStatement);
@@ -158,21 +158,21 @@ public class SalaryStatementService {
         document.open();
 
         // Add the employee details
-        int hourlyWage = (int) salaryStatement.getHourlyWage();
-        int basePay = (int) salaryStatement.getBasePay();
-        int overtimePay = (int) salaryStatement.getOvertimePay();
+        int hourlyWage = salaryStatement.getHourlyWage();
+        int basePay = salaryStatement.getBasePay();
+        int overtimePay = salaryStatement.getOvertimePay();
         int overtimePayBasis = salaryStatement.getOvertimePayBasis();
-        int nightWorkAllowance = (int) salaryStatement.getNightWorkAllowance();
+        int nightWorkAllowance = salaryStatement.getNightWorkAllowance();
         int nightWorkAllowanceBasis = salaryStatement.getNightWorkAllowanceBasis();
-        int holidayWorkAllowance = (int) salaryStatement.getHolidayWorkAllowance();
+        int holidayWorkAllowance = salaryStatement.getHolidayWorkAllowance();
         int holidayWorkAllowanceBasis = salaryStatement.getHolidayWorkAllowanceBasis();
-        int unpaidLeave = (int) salaryStatement.getUnpaidLeave();
-        int salary = (int) salaryStatement.getSalary();
-        int incomeTax = (int) salaryStatement.getIncomeTax();
-        int nationalCoalition = (int) salaryStatement.getNationalCoalition();
-        int healthInsurance = (int) salaryStatement.getHealthInsurance();
-        int employmentInsurance = (int) salaryStatement.getEmploymentInsurance();
-        int totalSalary = (int) salaryStatement.getTotalSalary();
+        int unpaidLeave = salaryStatement.getUnpaidLeave();
+        int salary = salaryStatement.getSalary();
+        int incomeTax = salaryStatement.getIncomeTax();
+        int nationalCoalition = salaryStatement.getNationalCoalition();
+        int healthInsurance = salaryStatement.getHealthInsurance();
+        int employmentInsurance = salaryStatement.getEmploymentInsurance();
+        int totalSalary = salaryStatement.getTotalSalary();
 
         PdfPTable table = new PdfPTable(5);	// 컬럼 갯수 지정.
         table.setWidthPercentage(100);	// Table 의 폭 %로 조절 가능.
