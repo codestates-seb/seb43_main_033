@@ -8,7 +8,7 @@ export default function Logo() {
                       <span className="material-symbols-outlined ">
                       <span className="material-symbols-outlined absolute text-xs text-yellow-300">paid</span> 
                          feed
-                      <span className="text-blue-400">우리의급여</span>
+                      <span className="text-blue-400">우리의급여</span>                      
                   </span>
               </Link> 
           </button>                                   
