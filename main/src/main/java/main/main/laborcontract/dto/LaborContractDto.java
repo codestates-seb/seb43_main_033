@@ -13,7 +13,7 @@ public class LaborContractDto {
     public static class Post {
         private long memberId;
         private long companyId;
-        private long basicSalary;
+        private int basicSalary;
         private LocalDateTime startOfContract;
         private LocalDateTime endOfContract;
         private LocalTime startTime;
@@ -24,7 +24,7 @@ public class LaborContractDto {
     @Getter
     @Setter
     public static class Patch {
-        private double basicSalary;
+        private int basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
@@ -35,7 +35,7 @@ public class LaborContractDto {
     public static class Response {
         private String memberName;
         private String companyName;
-        private double basicSalary;
+        private int basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
