@@ -30,7 +30,6 @@ public interface MemberMapper {
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
                 .residentNumber(member.getResidentNumber())
-                .grade(member.getGrade())
                 .address(member.getAddress())
                 .roles(member.getRoles())
                 .build();

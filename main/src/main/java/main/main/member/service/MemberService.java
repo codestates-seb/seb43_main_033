@@ -40,8 +40,6 @@ public class MemberService {
                 .ifPresent(residentNumber -> findedMember.setResidentNumber(member.getResidentNumber()));
         Optional.ofNullable(member.getAddress())
                 .ifPresent(address -> findedMember.setAddress(member.getAddress()));
-        Optional.ofNullable(member.getGrade())
-                .ifPresent(grade -> findedMember.setGrade(member.getGrade()));
         Optional.ofNullable(member.getPosition())
                 .ifPresent(position -> findedMember.setPosition(member.getPosition()));
 
