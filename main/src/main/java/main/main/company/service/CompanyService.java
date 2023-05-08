@@ -6,11 +6,14 @@ import main.main.company.entity.Company;
 import main.main.company.repository.CompanyRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
+import main.main.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Optional;
 
 @Service
@@ -63,5 +66,45 @@ public class CompanyService {
         Company findedCompany = findVerifiedCompany(companyId);
         companyRepository.delete(findedCompany);
     }
+
+    public Boolean uploading(MultipartFile file, long companyId, String url) {
+
+        Boolean result = Boolean.TRUE;
+
+        String dir = Long.toString(companyId);
+        String extension = getExtension(file);
+
+        String newFileName = dir + extension;
+
+
+        try {
+            File folder = new File("img" + File.separator + "회사 대표 이미지" + File.separator + dir);
+            File[] files = folder.listFiles();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            } else if (files != null) {
+                for (File file1 : files) {
+                    file1.delete();
+                }
+            }
+            File destination = new File( folder.getAbsolutePath() , newFileName);
+            file.transferTo(destination);
+            result = Boolean.FALSE;
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return result;
+        }
+    }
+
+    public String getExtension(MultipartFile file) {
+        return Optional.ofNullable(file)
+                .map(MultipartFile::getOriginalFilename)
+                .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
+                .orElse("default_extension");
+
+    }
+
 }
 
