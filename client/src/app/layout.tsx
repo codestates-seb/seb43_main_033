@@ -1,7 +1,7 @@
 import "./globals.css";
 import { Inter } from "next/font/google";
 import Header from "./Header";
-import ManagerHome from "./manager/ManagerHome";
+import ManagerHome from "./manager/page";
 import Footer from "./Footer";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,14 +16,14 @@ export default function RootLayout({
       <div>
         <Header />
         <body className={inter.className}>
-          <header className="bg-white h-28 drop-shadow-lg w-full z-10 top-0 fixed"></header>
+          <header className="bg-white h-28 drop-shadow-lg w-screen z-10 top-0 fixed"></header>
           <div className="flex">
-            <div className="flex mt-28">{children}</div>
+            <div className="flex mt-28 w-screen">{children}</div>
           </div>
           <div className="flex-grow"></div>
         </body>
-      </div>
-      <Footer />
+        <Footer />
+      </div>      
     </html>
   );
 }

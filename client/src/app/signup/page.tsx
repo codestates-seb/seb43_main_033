@@ -45,7 +45,7 @@ export default function singup() {
       .catch((err) => console.log(err));
   };
   return (
-    <main>
+    <main className="w-screen h-screen">
       <div>
         <input
           placeholder="name"
