@@ -85,11 +85,14 @@ public class StubData {
                     .information("근로계약서 정보").build();
         }
 
-        public static byte[] getImage() throws IOException {
+        public static HashMap<byte[], String> getImage() throws IOException {
             InputStream inputStream = new FileInputStream("mock/image.png");
             byte[] imageByteArray = IOUtils.toByteArray(inputStream);
             inputStream.close();
-            return imageByteArray;
+
+            HashMap<byte[], String> imageMap = new HashMap<>();
+            imageMap.put(imageByteArray, "png");
+            return imageMap;
         }
     }
 

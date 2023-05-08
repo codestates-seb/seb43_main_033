@@ -5,7 +5,6 @@ import main.main.laborcontract.dto.LaborContractDto;
 import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.mapper.LaborContractMapper;
 import main.main.laborcontract.service.LaborContractService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,10 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/laborcontracts")
@@ -51,10 +48,11 @@ public class LaborContractController {
 
     @GetMapping("/{laborcontract-id}/file")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable("laborcontract-id") long laborContractId) throws IOException {
-        byte[] imageByteArray = laborContractService.getImage(laborContractId);
+        HashMap<byte[], String> image = laborContractService.getImage(laborContractId);
+        byte[] imageByteArray = image.keySet().iterator().next();
+        String imageType = image.get(imageByteArray);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.IMAGE_PNG);
+        HttpHeaders httpHeaders = getContentType(imageType);
         return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
     }
 
@@ -63,5 +61,17 @@ public class LaborContractController {
         laborContractService.deleteLaborContract(laborContractId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    private static HttpHeaders getContentType(String imageType) {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        if (imageType.equals("png")) {
+            httpHeaders.setContentType(MediaType.IMAGE_PNG);
+        } else if (imageType.equals("pdf")) {
+            httpHeaders.setContentType(MediaType.APPLICATION_PDF);
+        } else if (imageType.equals("jpeg") || imageType.equals("jpg")) {
+            httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+        }
+        return httpHeaders;
     }
 }

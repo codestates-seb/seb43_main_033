@@ -18,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Service
@@ -74,13 +75,30 @@ public class LaborContractService {
         laborContractRepository.delete(findVerifiedContract(laborContractId));
     }
 
-    public byte[] getImage(long laborContractId) throws IOException {
+    public HashMap<byte[], String> getImage(long laborContractId) throws IOException {
         String dir = Long.toString(laborContractId);
-        InputStream inputStream = new FileInputStream( "img" + File.separator + "근로계약서" + File.separator + dir + File.separator + dir + ".png");
+        File folder = new File("img" + File.separator + "근로계약서" + File.separator + dir);
+        File[] files = folder.listFiles();
+        String extension = "";
+        for (File file : files) {
+            if (file.isFile()) {
+                String fileName = file.getName();
+                int dotIndex = fileName.lastIndexOf('.');
+                if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
+                    extension = fileName.substring(dotIndex + 1);
+                    break;
+                }
+            }
+        }
+        File imageFile = new File(folder, dir + "." + extension);
+        InputStream inputStream = new FileInputStream(imageFile);
         byte[] imageByteArray = IOUtils.toByteArray(inputStream);
         inputStream.close();
 
-        return  imageByteArray;
+        HashMap<byte[], String> result = new HashMap<>();
+        result.put(imageByteArray, extension);
+
+        return result;
     }
 
     private LaborContract findVerifiedContract(long laborContractId) {
