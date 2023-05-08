@@ -21,14 +21,13 @@ public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long memberId;
-
     private String name;
     private String phoneNumber;
     private String email;
     private String password;
     private String residentNumber;
-    private String grade;
     private String address;
     @Enumerated(EnumType.STRING)
     private Position position;
