@@ -1,8 +1,30 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-function Modal(props) {
+function Modal(props: any): React.ReactElement {
+  type props = {
+    setData: Dispatch<
+      SetStateAction<{
+        image: string;
+        companyName: string;
+        companySize: string;
+        businessNumber: string;
+        address: string;
+        information: string;
+      }>
+    >;
+    data: {
+      image: string;
+      companyName: string;
+      companySize: string;
+      businessNumber: string;
+      address: string;
+      information: string;
+    };
+    patchInfo: () => void;
+  };
+
   const { setData, data, patchInfo } = props;
   const [inputs, setInputs] = useState({
     image: "",
