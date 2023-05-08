@@ -3,12 +3,16 @@ package main.main.memberbank.service;
 import lombok.RequiredArgsConstructor;
 import main.main.bank.entity.Bank;
 import main.main.bank.service.BankService;
+import main.main.company.entity.Company;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.memberbank.entity.MemberBank;
 import main.main.memberbank.repository.MemberBankRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -35,6 +39,11 @@ public class MemberBankService {
 
     public MemberBank findMemberBank(long memberBankId) {
         return findVerifiedMemberBank(memberBankId);
+    }
+
+
+    public Page<MemberBank> findMemberBanks(int page, int size) {
+        return memberBankRepository.findAll(PageRequest.of(page, size, Sort.by("memberBankId").ascending()));
     }
 
     private MemberBank findVerifiedMemberBank(long memberBankId) {

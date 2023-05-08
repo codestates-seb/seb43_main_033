@@ -35,4 +35,16 @@ public static class Response {
 
 }
 
+    @Getter
+    @Setter
+    @Builder
+    public static class ResponseForList {
+
+        private Long memberBankId;
+        private Long memberId;
+        private Long bankId;
+        private String bankName;
+        private String accountNumber;
+
+    }
 }

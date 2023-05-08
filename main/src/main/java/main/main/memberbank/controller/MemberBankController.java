@@ -2,16 +2,20 @@ package main.main.memberbank.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import main.main.company.entity.Company;
+import main.main.dto.ListPageResponseDto;
 import main.main.memberbank.dto.MemberBankDto;
 import main.main.memberbank.entity.MemberBank;
 import main.main.memberbank.mapper.MemberBankMapper;
 import main.main.memberbank.service.MemberBankService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RequestMapping("/memberbanks")
 @RestController
@@ -43,6 +47,15 @@ public class MemberBankController {
         MemberBank memberBank = memberBankService.findMemberBank(memberBankId);
 
         return new ResponseEntity<>(memberBankMapper.memberBankToMemberBankResponse(memberBank), HttpStatus.OK);
+    }
+
+
+    @GetMapping
+    public ResponseEntity getMemberBanks(@Positive @RequestParam int page, @RequestParam int size) {
+        Page<MemberBank> pageMemberBanks = memberBankService.findMemberBanks(page - 1, size);
+        List<MemberBank> memberBanks = pageMemberBanks.getContent();
+
+        return new ResponseEntity<>(new ListPageResponseDto<>(memberBankMapper.memberBanksToMemberBanksResponse(memberBanks),pageMemberBanks), HttpStatus.OK);
     }
 
     @DeleteMapping("/{memberbank-id}")
