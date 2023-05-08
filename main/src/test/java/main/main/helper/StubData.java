@@ -2,7 +2,6 @@ package main.main.helper;
 
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.bank.dto.BankDto;
-import main.main.bank.entity.Bank;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import main.main.laborcontract.dto.LaborContractDto;
@@ -17,6 +16,7 @@ import main.main.statusofwork.entity.StatusOfWork;
 
 import org.springframework.http.HttpMethod;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -49,7 +49,7 @@ public class StubData {
             LaborContractDto.Post post = new LaborContractDto.Post();
             post.setMemberId(1L);
             post.setCompanyId(1L);
-            post.setBasicSalary(3000000);
+            post.setBasicSalary(BigDecimal.valueOf(3000000));
             post.setStartOfContract(time);
             post.setEndOfContract(time);
             post.setStartTime(LocalTime.MIDNIGHT);
@@ -57,7 +57,7 @@ public class StubData {
             post.setInformation("근로계약서 정보");
 
             LaborContractDto.Patch patch = new LaborContractDto.Patch();
-            patch.setBasicSalary(3200000);
+            patch.setBasicSalary(BigDecimal.valueOf(3200000));
             patch.setStartTime(LocalTime.MIDNIGHT);
             patch.setFinishTime(LocalTime.MIDNIGHT);
             patch.setInformation("수정된 근로계약서 정보");
@@ -75,7 +75,7 @@ public class StubData {
             return LaborContractDto.Response.builder()
                     .memberName("직원 이름")
                     .companyName("회사 이름")
-                    .basicSalary(3000000)
+                    .basicSalary(BigDecimal.valueOf(3000000))
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
                     .information("근로계약서 정보").build();
@@ -179,21 +179,21 @@ public class StubData {
                     .memberName("직원 이름")
                     .year(2023)
                     .month(1)
-                    .hourlyWage(10000)
-                    .basePay(2090000)
-                    .overtimePay(0)
+                    .hourlyWage(BigDecimal.valueOf(10000))
+                    .basePay(BigDecimal.valueOf(2090000))
+                    .overtimePay(BigDecimal.valueOf(0))
                     .overtimePayBasis(0)
-                    .nightWorkAllowance(0)
+                    .nightWorkAllowance(BigDecimal.valueOf(0))
                     .nightWorkAllowanceBasis(0)
-                    .holidayWorkAllowance(0)
+                    .holidayWorkAllowance(BigDecimal.valueOf(0))
                     .holidayWorkAllowanceBasis(0)
-                    .unpaidLeave(0)
-                    .salary(2090000)
-                    .incomeTax(10000)
-                    .nationalCoalition(10000)
-                    .healthInsurance(10000)
-                    .employmentInsurance(10000)
-                    .totalSalary(2050000)
+                    .unpaidLeave(BigDecimal.valueOf(0))
+                    .salary(BigDecimal.valueOf(2090000))
+                    .incomeTax(BigDecimal.valueOf(10000))
+                    .nationalCoalition(BigDecimal.valueOf(10000))
+                    .healthInsurance(BigDecimal.valueOf(10000))
+                    .employmentInsurance(BigDecimal.valueOf(10000))
+                    .totalSalary(BigDecimal.valueOf(2050000))
                     .bankId(1L)
                     .bankName("국민")
                     .accountNumber("111-111111-11-11")
