@@ -9,10 +9,14 @@ import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.repository.LaborContractRepository;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -68,6 +72,15 @@ public class LaborContractService {
 
     public void deleteLaborContract(long laborContractId) {
         laborContractRepository.delete(findVerifiedContract(laborContractId));
+    }
+
+    public byte[] getImage(long laborContractId) throws IOException {
+        String dir = Long.toString(laborContractId);
+        InputStream inputStream = new FileInputStream( "img" + File.separator + "근로계약서" + File.separator + dir + File.separator + dir + ".png");
+        byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+        inputStream.close();
+
+        return  imageByteArray;
     }
 
     private LaborContract findVerifiedContract(long laborContractId) {

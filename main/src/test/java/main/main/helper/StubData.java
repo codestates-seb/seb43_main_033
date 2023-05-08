@@ -6,6 +6,7 @@ import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.memberbank.dto.MemberBankDto;
+import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,9 @@ import main.main.statusofwork.entity.StatusOfWork;
 
 import org.springframework.http.HttpMethod;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -79,6 +83,13 @@ public class StubData {
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
                     .information("근로계약서 정보").build();
+        }
+
+        public static byte[] getImage() throws IOException {
+            InputStream inputStream = new FileInputStream("mock/image.png");
+            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+            inputStream.close();
+            return imageByteArray;
         }
     }
 
