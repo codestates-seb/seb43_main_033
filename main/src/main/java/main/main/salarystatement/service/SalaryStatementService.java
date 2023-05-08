@@ -28,6 +28,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -50,36 +51,36 @@ public class SalaryStatementService {
         Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
         LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
-        int basicSalary = laborContract.getBasicSalary();
-        int hourlyWage = basicSalary / 209;
+        BigDecimal basicSalary = laborContract.getBasicSalary();
+        BigDecimal hourlyWage = basicSalary.divide(BigDecimal.valueOf(209));
         int time;
-        int overtimePay = 0;
+        BigDecimal overtimePay = BigDecimal.ZERO;
         int overtimePayBasis = 0;
-        int nightWorkAllowance = 0;
+        BigDecimal nightWorkAllowance = BigDecimal.ZERO;
         int nightWorkAllowanceBasis = 0;
-        int holidayWorkAllowance = 0;
+        BigDecimal holidayWorkAllowance = BigDecimal.ZERO;
         int holidayWorkAllowanceBasis = 0;
-        int unpaidLeave = 0;
+        BigDecimal unpaidLeave = BigDecimal.ZERO;
 
         for (StatusOfWork statusOfWork : statusOfWorks) {
             switch (statusOfWork.getNote()) {
                 case 연장근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     overtimePayBasis += time;
-                    overtimePay = overtimePay + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
+                    overtimePay = overtimePay.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
                     break;
                 case 야간근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     nightWorkAllowanceBasis += time;
-                    nightWorkAllowance = nightWorkAllowance + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
+                    nightWorkAllowance = nightWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
                     break;
                 case 휴일근로:
                     time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
                     holidayWorkAllowanceBasis += time;
-                    holidayWorkAllowance = holidayWorkAllowance + (int)(statusOfWork.getNote().getRate() * hourlyWage * time);
+                    holidayWorkAllowance = holidayWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
                     break;
                 case 무급휴가:
-                    unpaidLeave = unpaidLeave + (int)(statusOfWork.getNote().getRate() * hourlyWage * 8);
+                    unpaidLeave = unpaidLeave.add(hourlyWage.multiply(BigDecimal.valueOf(8)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
             }
         }
 
@@ -98,30 +99,30 @@ public class SalaryStatementService {
         salaryStatement.setUnpaidLeave(unpaidLeave);
         salaryStatement.setSalary();
 
-        int taxBase = (int) (basicSalary - (basicSalary * 0.0873)) * 12;
-        int incomeTex;
-        if (taxBase <= 14000000) {
-            incomeTex = (int) (taxBase * 0.06) / 12;
-        } else if (taxBase <= 50000000) {
-            incomeTex = (840000 + (int) ((taxBase - 14000000) * 0.15)) / 12;
-        } else if (taxBase <= 88000000) {
-            incomeTex = (6240000 + (int) ((taxBase - 50000000) * 0.24)) / 12;
-        } else if (taxBase <= 150000000) {
-            incomeTex = (15360000 + (int) ((taxBase - 88000000) * 0.35)) / 12;
-        } else if (taxBase <= 300000000) {
-            incomeTex = (37060000 + (int) ((taxBase - 150000000) * 0.38)) / 12;
-        } else if (taxBase <= 500000000) {
-            incomeTex = (94060000 + (int) ((taxBase - 300000000) * 0.4)) / 12;
-        } else if (taxBase <= 1000000000) {
-            incomeTex = (174060000 + (int) ((taxBase - 50000000) * 0.42)) / 12;
+        BigDecimal taxBase = basicSalary.subtract(basicSalary.multiply(BigDecimal.valueOf(0.0873))).multiply(BigDecimal.valueOf(12));
+        BigDecimal incomeTex;
+        if (taxBase.compareTo(BigDecimal.valueOf(14000000)) < 1 ) {
+            incomeTex = taxBase.multiply(BigDecimal.valueOf(0.06)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(50000000)) < 1) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(14000000)).multiply(BigDecimal.valueOf(0.15)).add(BigDecimal.valueOf(840000)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(88000000)) < 1 ) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.24)).add(BigDecimal.valueOf(6240000)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(150000000)) <  1) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(88000000)).multiply(BigDecimal.valueOf(0.35)).add(BigDecimal.valueOf(15360000)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(300000000)) < 1) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(150000000)).multiply(BigDecimal.valueOf(0.38)).add(BigDecimal.valueOf(37060000)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(500000000)) < 1) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(300000000)).multiply(BigDecimal.valueOf(0.4)).add(BigDecimal.valueOf(94060000)).divide(BigDecimal.valueOf(12));
+        } else if (taxBase.compareTo(BigDecimal.valueOf(1000000000)) < 1) {
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.42)).add(BigDecimal.valueOf(174060000)).divide(BigDecimal.valueOf(12));
         } else {
-            incomeTex = (384060000 + (int) ((taxBase - 1000000000) * 0.45)) / 12;
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(1000000000)).multiply(BigDecimal.valueOf(0.45)).add(BigDecimal.valueOf(384060000)).divide(BigDecimal.valueOf(12));
         }
 
         salaryStatement.setIncomeTax(incomeTex);
-        salaryStatement.setNationalCoalition((int) (basicSalary * 0.045));
-        salaryStatement.setHealthInsurance((int) (basicSalary * 0.0343));
-        salaryStatement.setEmploymentInsurance((int) (basicSalary * 0.008));
+        salaryStatement.setNationalCoalition(basicSalary.multiply(BigDecimal.valueOf(0.045)));
+        salaryStatement.setHealthInsurance(basicSalary.multiply(BigDecimal.valueOf(0.0343)));
+        salaryStatement.setEmploymentInsurance(basicSalary.multiply(BigDecimal.valueOf(0.008)));
         salaryStatement.setTotalSalary();
 
         SalaryStatement savedSalaryStatement = salaryStatementRepository.save(salaryStatement);
@@ -158,21 +159,21 @@ public class SalaryStatementService {
         document.open();
 
         // Add the employee details
-        int hourlyWage = salaryStatement.getHourlyWage();
-        int basePay = salaryStatement.getBasePay();
-        int overtimePay = salaryStatement.getOvertimePay();
+        BigDecimal hourlyWage = salaryStatement.getHourlyWage();
+        BigDecimal basePay = salaryStatement.getBasePay();
+        BigDecimal overtimePay = salaryStatement.getOvertimePay();
         int overtimePayBasis = salaryStatement.getOvertimePayBasis();
-        int nightWorkAllowance = salaryStatement.getNightWorkAllowance();
+        BigDecimal nightWorkAllowance = salaryStatement.getNightWorkAllowance();
         int nightWorkAllowanceBasis = salaryStatement.getNightWorkAllowanceBasis();
-        int holidayWorkAllowance = salaryStatement.getHolidayWorkAllowance();
+        BigDecimal holidayWorkAllowance = salaryStatement.getHolidayWorkAllowance();
         int holidayWorkAllowanceBasis = salaryStatement.getHolidayWorkAllowanceBasis();
-        int unpaidLeave = salaryStatement.getUnpaidLeave();
-        int salary = salaryStatement.getSalary();
-        int incomeTax = salaryStatement.getIncomeTax();
-        int nationalCoalition = salaryStatement.getNationalCoalition();
-        int healthInsurance = salaryStatement.getHealthInsurance();
-        int employmentInsurance = salaryStatement.getEmploymentInsurance();
-        int totalSalary = salaryStatement.getTotalSalary();
+        BigDecimal unpaidLeave = salaryStatement.getUnpaidLeave();
+        BigDecimal salary = salaryStatement.getSalary();
+        BigDecimal incomeTax = salaryStatement.getIncomeTax();
+        BigDecimal nationalCoalition = salaryStatement.getNationalCoalition();
+        BigDecimal healthInsurance = salaryStatement.getHealthInsurance();
+        BigDecimal employmentInsurance = salaryStatement.getEmploymentInsurance();
+        BigDecimal totalSalary = salaryStatement.getTotalSalary();
 
         PdfPTable table = new PdfPTable(5);	// 컬럼 갯수 지정.
         table.setWidthPercentage(100);	// Table 의 폭 %로 조절 가능.
@@ -448,7 +449,7 @@ public class SalaryStatementService {
         cell44.setPadding(10);
         table.addCell(cell44);
 
-        PdfPCell cell45 = new PdfPCell(new Phrase(formatter.format(salary - totalSalary), objFont));
+        PdfPCell cell45 = new PdfPCell(new Phrase(formatter.format(salary.subtract(totalSalary)), objFont));
         cell45.setColspan(1);
         cell45.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell45.setPadding(10);
