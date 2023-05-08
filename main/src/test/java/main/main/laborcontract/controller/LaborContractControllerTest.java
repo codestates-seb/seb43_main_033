@@ -161,6 +161,24 @@ public class LaborContractControllerTest implements LaborContractHelper {
     }
 
     @Test
+    @DisplayName("LaborContract Image Get Test")
+    public void getLaborContractImageTest() throws Exception {
+        given(laborContractService.getImage(Mockito.anyLong())).willReturn(StubData.MockLaborContract.getImage());
+
+        mockMvc.perform(getImageRequestBuilder(LABORCONTRACT_IMAGE_URI, 1L))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-LaborContract_IMAGE",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                getRequestPathParameterDescriptor()
+                        )
+                ));
+
+    }
+
+    @Test
     @DisplayName("LaborContract Delete Test")
     public void deleteLaborContractTest() throws Exception {
         doNothing().when(laborContractService).deleteLaborContract(Mockito.anyLong());
