@@ -5,6 +5,7 @@ type ModalProps = {
   onClose: () => void;
 };
 
+
 export default function StaffSelectModal({ children, onClose }: ModalProps) {
   if (!Array.isArray(children)) {
     return null;
