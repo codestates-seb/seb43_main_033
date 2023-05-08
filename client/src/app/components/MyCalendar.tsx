@@ -87,7 +87,7 @@ const MyCalendar = () => {
         <button className="float-right font-bold" onClick={() => setDialogIsOpen(false)} >X</button>
         </DialogTitle>
         <DialogContent>
-         <WorkRecordTable date={selectedDate} />
+         <WorkRecordTable date={selectedDate} workRecordId={0} />
         {/* <WorkRecordTable date={selectedDate} updateEvents={updateEvents} />*/}
         </DialogContent>
       </Dialog>
