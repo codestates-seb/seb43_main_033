@@ -79,6 +79,13 @@ public interface ControllerHelper<T> {
                 .accept(MediaType.APPLICATION_JSON);
     }
 
+    default RequestBuilder getImageRequestBuilder(String url, long resourceId) {
+        return get(url, resourceId)
+                .accept(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8");
+    }
+
+
     default RequestBuilder getRequestBuilderWithParams(String url, long resourceId, MultiValueMap<String, String> params) {
         return get(url, resourceId)
                 .params(params)
