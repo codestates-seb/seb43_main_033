@@ -19,7 +19,7 @@ export default function BottomModal(props: BottomModalProps) {
   };
 
   return (
-    <article className="flex flex-col flex-wrap p-2 items-center w-1/2 h-2/5 z-10 top-1/2 inset-x-1/2 fixed -translate-y-1/2 -translate-x-1/2 bg-emerald-400 rounded drop-shadow-2xl">
+    <article className="flex flex-col flex-wrap p-2 items-center w-1/2 min-h-8 z-10 top-1/2 inset-x-1/2 fixed -translate-y-1/2 -translate-x-1/2 bg-emerald-400 rounded drop-shadow-2xl">
       <button
         className="flex flex-nowrap justify-center items-center fixed right-0 top-0 w-5 h-5 bg-black rounded-sm"
         onClick={handleOnBottomModal}

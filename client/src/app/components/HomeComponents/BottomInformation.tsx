@@ -3,7 +3,7 @@ import { useState } from "react";
 import BottomModal from "./BottomModal";
 
 export default function BottomInformation() {
-  const [isBottomModal, setIsBottomModal] = useState(false);
+  const [isBottomModal, setIsBottomModal] = useState<boolean>(false);
   const [bottomList, setBottomList] = useState([
     {
       key: 1683469475954,
