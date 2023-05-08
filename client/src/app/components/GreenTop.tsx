@@ -6,7 +6,7 @@ type BoxProps = {
 
 export default function Greenheader({ children }: BoxProps) {
   return (
-    <div className="bg-green-100 p-2 m-5 flex justify-between">
+    <div className="bg-green-100 w-full p-2 m-5 flex justify-between">
       {children}
     </div>
   );
