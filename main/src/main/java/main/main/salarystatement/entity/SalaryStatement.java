@@ -8,6 +8,7 @@ import main.main.memberbank.entity.MemberBank;
 import main.main.statusofwork.entity.StatusOfWork;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,40 +36,40 @@ public class SalaryStatement {
 
     private int month;
 
-    private int hourlyWage;
+    private BigDecimal hourlyWage;
 
-    private int basePay; // 기본급
+    private BigDecimal basePay; // 기본급
 
-    private int overtimePay; // 연장근로수당
+    private BigDecimal overtimePay; // 연장근로수당
 
     private int overtimePayBasis;
 
-    private int nightWorkAllowance; // 야간근로수당
+    private BigDecimal nightWorkAllowance; // 야간근로수당
 
     private int nightWorkAllowanceBasis;
 
-    private int holidayWorkAllowance; // 휴일근로수당
+    private BigDecimal holidayWorkAllowance; // 휴일근로수당
 
     private int holidayWorkAllowanceBasis;
 
-    private int unpaidLeave; // 무급휴가
+    private BigDecimal unpaidLeave; // 무급휴가
 
-    private int salary;
+    private BigDecimal salary;
     public void setSalary() {
-        this.salary += basePay + overtimePay + nightWorkAllowance + holidayWorkAllowance + unpaidLeave;
+        this.salary.add(basePay).add(overtimePay).add(nightWorkAllowance).add(holidayWorkAllowance).add(unpaidLeave);
     }
 
-    private int incomeTax;
+    private BigDecimal incomeTax;
 
-    private int nationalCoalition; // 국민 연금
+    private BigDecimal nationalCoalition; // 국민 연금
 
-    private int healthInsurance; // 건강 보험
+    private BigDecimal healthInsurance; // 건강 보험
 
-    private int employmentInsurance; // 고용 보험
+    private BigDecimal employmentInsurance; // 고용 보험
 
-    private int totalSalary;
+    private BigDecimal totalSalary;
     public void setTotalSalary() {
-        this.totalSalary = salary - incomeTax - nationalCoalition - healthInsurance - employmentInsurance;
+        this.totalSalary.subtract(salary).subtract(incomeTax).subtract(nationalCoalition).subtract(healthInsurance).subtract(employmentInsurance);
     }
 
     private boolean paymentStatus;

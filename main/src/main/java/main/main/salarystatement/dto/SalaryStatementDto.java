@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 public class SalaryStatementDto {
     @Getter
     @Setter
@@ -24,21 +26,21 @@ public class SalaryStatementDto {
         private String memberName;
         private int year;
         private int month;
-        private int hourlyWage;
-        private int basePay;
-        private int overtimePay;
+        private BigDecimal hourlyWage;
+        private BigDecimal basePay;
+        private BigDecimal overtimePay;
         private int overtimePayBasis;
-        private int nightWorkAllowance;
+        private BigDecimal nightWorkAllowance;
         private int nightWorkAllowanceBasis;
-        private int holidayWorkAllowance;
+        private BigDecimal holidayWorkAllowance;
         private int holidayWorkAllowanceBasis;
-        private int unpaidLeave;
-        private int salary;
-        private int incomeTax;
-        private int nationalCoalition;
-        private int healthInsurance;
-        private int employmentInsurance;
-        private int totalSalary;
+        private BigDecimal unpaidLeave;
+        private BigDecimal salary;
+        private BigDecimal incomeTax;
+        private BigDecimal nationalCoalition;
+        private BigDecimal healthInsurance;
+        private BigDecimal employmentInsurance;
+        private BigDecimal totalSalary;
         private long bankId;
         private String bankName;
         private String accountNumber;

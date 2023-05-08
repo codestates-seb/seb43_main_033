@@ -7,6 +7,7 @@ import main.main.member.entity.Member;
 import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -34,7 +35,7 @@ public class LaborContract {
 
     private LocalDateTime endOfContract;
 
-    private int basicSalary;
+    private BigDecimal basicSalary;
 
     private LocalTime startTime;
 
