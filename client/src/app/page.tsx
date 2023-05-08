@@ -38,7 +38,7 @@ export default function Home() {
         
         </div>
         <span className='w-1/4 box-border rounded bg-blue-400'>‘나의 직원들’ 을 통해 근무간의 특이사항 확인가능!
-        <span className="material-symbols-outlined text-rose-800 absolute bottom-[15%] left-[38%]">left_click</span>
+        <span className="material-symbols-outlined text-rose-800 absolute bottom-[15%] left-[40%]">left_click</span>
         </span>
       </div>
     </div>
