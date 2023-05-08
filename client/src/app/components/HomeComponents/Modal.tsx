@@ -12,6 +12,7 @@ function Modal(props) {
     address: "",
     information: "",
   });
+  useEffect(() => setInputs({ ...data }), [data]);
   useEffect(() => console.log(inputs), [inputs]);
   const handleOnChange = (e) => {
     console.log(e.target.name);
@@ -34,8 +35,8 @@ function Modal(props) {
   return (
     <article className="flex flex-col flex-wrap p-2 items-center w-1/2 h-3/5 z-10 top-1/2 inset-x-1/2 fixed -translate-y-1/2 -translate-x-1/2 bg-emerald-400 rounded drop-shadow-2xl">
       <button
-        onClick={patchInfo}
         className="flex flex-nowrap justify-center items-center fixed right-0 top-0 w-5 h-5 bg-black rounded-sm"
+        onClick={patchInfo}
       ></button>
       <div className="flex flex-1 justify-center items-center font-semibold text-white mb-3">
         <span className="justify-center items-center font-semibold text-2xl">
@@ -46,41 +47,46 @@ function Modal(props) {
         <div className="flex items-center mb-1 ">
           <span className="w-28">회사명:</span>
           <input
-            className="flex-1 bg-stone-200 border border-slate-600 rounded-sm"
+            className="flex-1 pl-2 bg-stone-200 border border-slate-600 rounded-sm "
             onChange={handleOnChange}
+            value={inputs.companyName}
             name="companyName"
           />
         </div>
         <div className="flex items-center mb-1">
           <span className="w-28">기업분류:</span>
           <input
-            className="flex-1 bg-stone-200 border border-slate-600 rounded-sm"
+            className="flex-1 pl-2 bg-stone-200 border border-slate-600 rounded-sm"
             onChange={handleOnChange}
+            value={inputs.companySize}
             name="companySize"
           />
         </div>
-        <div className="flex items-center mb-1">
+        <div className="flex  items-center mb-1">
           <span className="w-28">사업자 등록번호:</span>
           <input
-            className="flex-1 bg-stone-200 border border-slate-600 rounded-sm"
+            className="flex-1 pl-2 bg-stone-200 border border-slate-600 rounded-sm"
             onChange={handleOnChange}
+            value={inputs.businessNumber}
             name="businessNumber"
           />
         </div>
         <div className="flex items-center mb-1">
           <span className="w-28">주소명:</span>
           <input
-            className="flex-1 bg-stone-200 border border-slate-600 rounded-sm"
+            className="flex-1 pl-2 bg-stone-200 border border-slate-600 rounded-sm"
             onChange={handleOnChange}
+            value={inputs.address}
             name="address"
           />
         </div>
         <div className="flex mb-1">
           <span className="w-28">기업 정보:</span>
           <input
-            className="flex-1 bg-stone-200 border border-slate-600 rounded-sm min-h-24"
+            className="flex-1 pl-2 bg-stone-200 border border-slate-600 rounded-sm min-h-24"
             type="text"
             onChange={handleOnChange}
+            value={inputs.information}
             name="information"
           />
         </div>
