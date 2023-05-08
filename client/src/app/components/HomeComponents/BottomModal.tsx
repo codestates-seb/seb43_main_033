@@ -1,19 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 
-export default function BottomModal(props) {
+interface BottomModalProps {
+  handleOnBottomModal: () => void;
+  bottomList: { key: number; input: string }[];
+  setBottomList: Dispatch<SetStateAction<{ key: number; input: string }[]>>;
+}
+
+export default function BottomModal(props: BottomModalProps) {
   const { handleOnBottomModal, bottomList, setBottomList } = props;
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState<string>("");
 
   const handleOnSubmit = () => {
-    setBottomList([
-      ...bottomList,
-      {
-        key: Date.now(),
-        input: value,
-      },
-    ]);
+    setBottomList([...bottomList, { key: Date.now(), input: value }]);
     setValue("");
     handleOnBottomModal();
   };
@@ -33,6 +33,7 @@ export default function BottomModal(props) {
         <input
           type="text"
           className="border border-black border-solid rounded-sm break-words w-full resize-none overflow-auto"
+          value={value}
           onChange={(e) => setValue(e.target.value)}
         />
         <div className="flex items-center justify-center mt-4 ">
