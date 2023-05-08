@@ -7,12 +7,17 @@ module.exports = {
   ],
   theme: {
     minHeight: {
+      24: "6rem",
+      28: "7rem",
       32: "8rem",
     },
     extend: {
       backgroundImage: {
         flex: {
           2: "2 1 auto",
+        },
+        spacing: {
+          '0%': '0%',          
         },
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
