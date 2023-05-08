@@ -6,7 +6,14 @@ export default function MiddleInformation() {
           <span className="">저번 달 급여내역</span>
         </div>
         <div className="flex flex-col p-2 bg-stone-100 min-h-32 rounded">
-          <span>안녕</span>
+          <div className="flex">
+            <label className="w-20">안녕</label>
+            <span>asdaas</span>
+          </div>
+          <div className="flex">
+            <label className="w-20">안녕</label>
+            <span>asdaas</span>
+          </div>
         </div>
       </section>
       <section className="flex-1 flex-col p-4">
@@ -14,8 +21,14 @@ export default function MiddleInformation() {
           <span className="">이번 달 급여내역</span>
         </div>
         <div className="flex flex-col p-2 bg-stone-100 min-h-32 rounded">
-          <span>안녕</span>
-          <span>안녕</span>
+          <div className="flex">
+            <label className="w-20">안녕</label>
+            <span>asdaas</span>
+          </div>
+          <div className="flex">
+            <label className="w-20">안녕</label>
+            <span>asdaas</span>
+          </div>
         </div>
       </section>
     </article>
