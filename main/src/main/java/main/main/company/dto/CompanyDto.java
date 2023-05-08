@@ -11,7 +11,7 @@ public class CompanyDto {
 
         private String companyName;
         private String companySize;
-        private Long businessNumber;
+        private String businessNumber;
         private String address;
         private String information;
     }
@@ -23,7 +23,7 @@ public class CompanyDto {
         private Long companyId;
         private String companyName;
         private String companySize;
-        private Long businessNumber;
+        private String businessNumber;
         private String address;
         private String information;
     }
@@ -35,9 +35,8 @@ public class CompanyDto {
 
         private Long companyId;
         private String companyName;
-        private Long memberId;
         private String companySize;
-        private Long businessNumber;
+        private String businessNumber;
         private String address;
         private String information;
     }
@@ -50,9 +49,8 @@ public class CompanyDto {
 
         private Long companyId;
         private String companyName;
-        private Long memberId;
         private String companySize;
-        private Long businessNumber;
+        private String businessNumber;
         private String address;
         private String information;
     }

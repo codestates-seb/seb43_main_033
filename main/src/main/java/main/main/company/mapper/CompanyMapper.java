@@ -2,7 +2,6 @@ package main.main.company.mapper;
 
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
-import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
 
 import java.util.List;
@@ -13,9 +12,7 @@ public interface CompanyMapper {
 
     default Company companyPostToCompany(CompanyDto.Post requestBody) {
         Company company = new Company();
-        Member member = new Member();
 
-        company.setMember(member);
         company.setCompanyName(requestBody.getCompanyName());
         company.setCompanySize(requestBody.getCompanySize());
         company.setBusinessNumber(requestBody.getBusinessNumber());
@@ -27,16 +24,13 @@ public interface CompanyMapper {
 
     default Company companyPatchToCompany(CompanyDto.Patch requestBody) {
         Company company = new Company();
-        Member member = new Member();
 
-        company.setMember(member);
         company.setCompanyId(requestBody.getCompanyId());
         company.setCompanySize(requestBody.getCompanySize());
         company.setBusinessNumber(requestBody.getBusinessNumber());
         company.setAddress(requestBody.getAddress());
         company.setInformation(requestBody.getInformation());
         company.setCompanyName(requestBody.getCompanyName());
-
 
         return company;
 
@@ -50,13 +44,22 @@ public interface CompanyMapper {
                 .businessNumber(company.getBusinessNumber())
                 .address(company.getAddress())
                 .information(company.getInformation())
-                .memberId(company.getMember().getMemberId())
                 .build();
     }
 
-    default List<CompanyDto.Response> companiesToCompanyResponses(List<Company> companies) {
+    default CompanyDto.ResponseForList companiesToCompanyResponseForList(Company company) {
+        return CompanyDto.ResponseForList.builder()
+                .companyId(company.getCompanyId())
+                .companyName(company.getCompanyName())
+                .companySize(company.getCompanySize())
+                .businessNumber(company.getBusinessNumber())
+                .address(company.getAddress())
+                .information(company.getInformation())
+                .build();
+    }
+    default List<CompanyDto.ResponseForList> companiesToCompanyResponses(List<Company> companies) {
         return companies.stream()
-                .map(company -> companyToCompanyResponse(company))
+                .map(company -> companiesToCompanyResponseForList(company))
                 .collect(Collectors.toList());
     }
 }
