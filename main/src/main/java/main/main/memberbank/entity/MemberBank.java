@@ -15,6 +15,7 @@ import javax.persistence.*;
 public class MemberBank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long memberBankId;
     private String accountNumber;
 

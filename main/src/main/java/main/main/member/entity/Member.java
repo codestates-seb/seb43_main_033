@@ -44,7 +44,7 @@ public class Member {
         this.salaryStatements.add(salaryStatement);
     }
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<MemberBank> memberBanks = new ArrayList<>();
 
 }
