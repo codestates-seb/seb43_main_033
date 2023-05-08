@@ -12,6 +12,7 @@ import javax.persistence.*;
 public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID")
     private Long companyId;
     private String companyName;
     private String companySize;
