@@ -1,18 +1,28 @@
 package main.main.company.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import main.main.company.mapper.CompanyMapper;
 import main.main.company.service.CompanyService;
 import main.main.dto.ListPageResponseDto;
+import main.main.exception.BusinessLogicException;
+import main.main.exception.ExceptionCode;
+import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RequestMapping("/companies")
@@ -63,4 +73,47 @@ public class CompanyController {
         companyService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
+
+
+    @PostMapping(path = "/imageupload/{company-id}")
+    public ResponseEntity postCompanyImageUpload(@PathVariable("company-id") Long companyId,
+                                          @RequestPart(required = false) MultipartFile file){
+
+        String dir = Long.toString(companyId);
+        String extension = companyService.getExtension(file);
+
+        if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".jpeg")) {
+
+            throw new BusinessLogicException(ExceptionCode.IMAGE_NOT_SUPPORT);
+        }
+
+        companyService.uploading(file, companyId, dir);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/image/{company-id}")
+    public ResponseEntity<byte[]> getCompanyProfileImage(@PathVariable("company-id") long companyId, MultipartFile file) throws IOException {
+        String dir = Long.toString(companyId);
+        String fileExtension = companyService.getExtension(file);
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream( "img" + "/" + "회사 대표 이미지" + "/" + dir + "/" + dir + ".jpeg");
+        } catch (Exception e) {
+            inputStream = new FileInputStream( "img" + "/" + "회사 대표 이미지" + "/" + dir + "/" + dir + ".png");
+        } finally {
+            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+            inputStream.close();
+
+            HttpHeaders httpHeaders = new HttpHeaders();
+            if (".png".equals(fileExtension)) {
+                httpHeaders.setContentType(MediaType.IMAGE_PNG);
+            } else if (".jpeg".equals(fileExtension)) {
+                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+            } return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
+        }
+    }
+
 }
