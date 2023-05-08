@@ -80,5 +80,6 @@ export default function login() {
         </a>
       </div>
     </main>
+    </div>
   );
 }
