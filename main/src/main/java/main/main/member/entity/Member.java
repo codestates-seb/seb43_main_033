@@ -35,8 +35,8 @@ public class Member {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
 
-    @ManyToOne
-    private Company company;
+    @OneToMany
+    private List<Company> company = new ArrayList<>();
     @OneToMany
     private List<SalaryStatement> salaryStatements = new ArrayList<>();
     public void addSalaryStatement(SalaryStatement salaryStatement) {
