@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Modal from "../HomeComponents/Modal";
+import Modal from "./Modal";
 
 export default function TopInformation() {
   const [isModal, setIsModal] = useState(false);

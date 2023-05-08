@@ -1,4 +1,4 @@
-// "use client";
+"use client";
 
 import { data } from "autoprefixer";
 import axios from "axios";

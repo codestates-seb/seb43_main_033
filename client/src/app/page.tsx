@@ -6,8 +6,7 @@ import { Container } from "postcss";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  return (
-    
+  return (    
     <main className="flex w-screen h-screen">
     <div className="p-4 border-r-2 border-solid border-stone-300 w-1/2 h-screen bg-teal-300">
       <div className="h-1/2 flex p-10">

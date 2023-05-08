@@ -9,7 +9,7 @@ type ModalProps = {
 
 export default function StaffSelectModal({ onClose }: ModalProps) {
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto">
+    <div className="fixed z-10 inset-0 overflow-y-auto top-[40%]">
       <div className="flex items-center justify-center min-h-screen px-4">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
