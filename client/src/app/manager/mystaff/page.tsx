@@ -3,7 +3,7 @@ import { useState } from 'react';
 import Bigsquare from '../../components/Bigsquare';
 import ListBox from '../../components/ListBox';
 import MyStaffModal from '../../components/MyStaffModal';
-import Navi from "../../components/workerNavi"
+import Navi from "../../components/managerNavi"
 import { format } from 'date-fns';
 import CheckBox from '@mui/icons-material/CheckBox';
 interface MyStaffData {
