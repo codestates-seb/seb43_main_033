@@ -3,13 +3,15 @@ import React, { useState,useEffect } from "react";
 import { ChangeEvent } from 'react';
 import axios from "axios";
 import moment from "moment";
+import { Event as CalendarEvent } from "react-big-calendar";
 //import { useRouter } from 'next/router';
 
 
-type WorkRecordTableProps = {
-    date: Date;
-    workRecordId: number;
-};
+interface WorkRecordTableProps {
+  date: Date;
+  addEvent: (date: Date, startWork: string, endWork: string, note: string) => void;
+  deleteEvent: (event: CalendarEvent) => void;
+}
 
 type WorkRecord = {
   id: number;
@@ -24,7 +26,10 @@ type WorkRecord = {
 
 //type EditingState = boolean | null; 
 
-const WorkRecordTable = ({ date, workRecordId }: WorkRecordTableProps) => {
+
+
+const WorkRecordTable = ({ date, addEvent, deleteEvent }: WorkRecordTableProps) => {
+
   const [startWork, setStartWork] = useState<string>("00:00");
 const [endWork, setEndWork] = useState<string>("00:00");
 const today: string = new Date().toISOString().slice(0, 10);
@@ -33,6 +38,11 @@ const [note, setNote] = useState<string>("");
 const [isEditing, setIsEditing] = useState<boolean>(false);
 const [isStartButtonDisabled, setIsStartButtonDisabled] = useState<boolean>(false);
 const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
+const [statusOfWorkId, setStatusOfWorkId] = useState<number | null>(null);
+
+/*useEffect(() => {
+  updateEvents(date, startWork, endWork, note);
+}, [date, startWork, endWork, note]);*/
 
   //const router = useRouter();
 
@@ -43,7 +53,7 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
   const fetchWorkRecord = () => {
     const year = moment(date).format("YYYY");
     const month = moment(date).format("M");
-  
+  //http://localhost:8080/statusofworks/${memberId}?year=${year}&month=${month}`
     axios
       .get(`http://localhost:8080/statusofworks/1?year=${year}&month=${month}`, {
         headers: {
@@ -62,6 +72,9 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
           setNote(workRecord.note);
           setIsStartButtonDisabled(!workRecord.startTime);
           setIsEndButtonDisabled(!workRecord.finishTime);
+          if (workRecord.id) {
+            setStatusOfWorkId(workRecord.id);
+          }       
         } else {
           setStartWork("00:00");
           setEndWork("00:00");
@@ -103,9 +116,10 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
     setIsEndButtonDisabled(true);
 };
 
-  const handleNoteChange = (event:ChangeEvent<HTMLSelectElement>) => {
-    setNote(event.target.value);
-  };
+const handleNoteChange = (e: ChangeEvent<HTMLSelectElement>) => {
+  setNote(e.target.value);
+};
+
 
   const handleSubmit = () => {
     
@@ -128,13 +142,14 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
        // router.push('/mywork');
       setIsEditing(true);
       fetchWorkRecord(); 
+      addEvent(date, startWork, endWork, note);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
- const handleEdit = () => {
+ const handleEdit = (statusOfWorkId: number) => {
     axios
       .patch(
         `http://localhost:8080/statusofworks/${statusOfWorkId}`,
@@ -153,14 +168,15 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
       .then(() => {
         //router.push('/mywork');
         setIsEditing(true);
-        fetchWorkRecord(); 
+        fetchWorkRecord();
+        addEvent(date, startWork, endWork, note); 
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleDelete = () => {
+  const handleDelete = (statusOfWorkId: number, event?: CalendarEvent) => {
     axios
       .delete(
         `http://localhost:8080/statusofworks/${statusOfWorkId}`,
@@ -172,9 +188,11 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
         }
       )
       .then(() => {
-        //router.push('/mywork');
         setIsEditing(false);
         fetchWorkRecord(); 
+        if(event){
+        deleteEvent(event);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -236,15 +254,10 @@ const [isEndButtonDisabled, setIsEndButtonDisabled] = useState<boolean>(false);
   퇴근
   </button>
       <div className="flex justify-end">
-      <button
-  
- onClick={isEditing ? handleEdit : handleSubmit}
- //onClick={handleSubmit}
->
-  {isEditing ? "Update" : "Submit"}
-</button>
-<button className="pl-2" onClick={handleDelete}>Delete</button>
-      
+      <button onClick={isEditing && statusOfWorkId ? () => handleEdit(statusOfWorkId) : handleSubmit}>
+         {isEditing ? "Update" : "Submit"}
+         </button>
+         <button className="pl-2" onClick={statusOfWorkId ? () => handleDelete(statusOfWorkId) : undefined}>Delete</button>
       </div>
     </div>
   );
