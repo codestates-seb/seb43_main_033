@@ -1,6 +1,5 @@
 package main.main.bank.dto;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,17 +9,18 @@ import main.main.bank.entity.Bank;
 public class BankDto {
 
     @Getter
-    @Setter
-    public static class Post {
-
-    private Bank.BankGroup bankGroup;
-
+    @Builder
+    public static class Response {
+    private Long bankId;
+    private String bankCode;
+    private String bankName;
     }
 
     @Getter
     @Builder
-    public static class Response {
-    private Long bankId;
-    private String bankName;
+    public static class ResponseForList {
+        private Long bankId;
+        private String bankCode;
+        private String bankName;
     }
 }
