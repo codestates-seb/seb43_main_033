@@ -1,19 +1,17 @@
 package main.main.company.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.repository.CompanyRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
-import main.main.member.entity.Member;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import main.main.salarystatement.entity.SalaryStatement;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,13 +24,13 @@ public class CompanyService {
         return companyRepository.save(company);
     }
 
-    public Company findCompany(String name) {
+    public Company findCompanyByName(String name) {
         return companyRepository.findByCompanyName(name).get();
     }
 
-    public Page<Company> findCompanies(int page, int size) {
-        return companyRepository.findAll(PageRequest.of(page, size, Sort.by("companyName").ascending()));
-    }
+//    public Page<Company> findCompanies(int page, int size) {
+//        return companyRepository.findAll(PageRequest.of(page, size, Sort.by("companyName").ascending()));
+//    }
 
     public Company findCompany(long companyId) {
         return findVerifiedCompany(companyId);
@@ -44,6 +42,19 @@ public class CompanyService {
         return findedCompany;
     }
 
+    public BigDecimal calculateTotalSalaryOfCompany(long companyId) {
+        Optional<Company> optionalCompany = companyRepository.findById(companyId);
+        BigDecimal totalSalaryOfCompany = BigDecimal.ZERO;
+        if (optionalCompany.isPresent()) {
+            List<SalaryStatement> statements = optionalCompany.get().getSalaryStatements();
+            if(statements != null) {
+                for (SalaryStatement statement : statements) {
+                totalSalaryOfCompany = totalSalaryOfCompany.add(statement.getTotalSalary());
+                }
+            }
+        }
+        return totalSalaryOfCompany;
+    }
 
     public Company updateCompany(Company company) {
         Company findedCompany = findVerifiedCompany(company.getCompanyId());
@@ -105,6 +116,5 @@ public class CompanyService {
                 .orElse("default_extension");
 
     }
-
 }
 

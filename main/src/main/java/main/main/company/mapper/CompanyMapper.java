@@ -4,6 +4,7 @@ import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import org.mapstruct.Mapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,7 +24,7 @@ public interface CompanyMapper {
     }
 
     default Company companyPatchToCompany(CompanyDto.Patch requestBody) {
-        Company company = new Company();
+            Company company = new Company();
 
         company.setCompanyId(requestBody.getCompanyId());
         company.setCompanySize(requestBody.getCompanySize());
@@ -47,7 +48,7 @@ public interface CompanyMapper {
                 .build();
     }
 
-    default CompanyDto.ResponseForList companiesToCompanyResponseForList(Company company) {
+    default CompanyDto.ResponseForList companyToCompanyResponseForList(Company company) {
         return CompanyDto.ResponseForList.builder()
                 .companyId(company.getCompanyId())
                 .companyName(company.getCompanyName())
@@ -57,9 +58,18 @@ public interface CompanyMapper {
                 .information(company.getInformation())
                 .build();
     }
-    default List<CompanyDto.ResponseForList> companiesToCompanyResponses(List<Company> companies) {
+    default List<CompanyDto.ResponseForList> companiesToCompaniesResponse(List<Company> companies) {
         return companies.stream()
-                .map(company -> companiesToCompanyResponseForList(company))
+                .map(company -> companyToCompanyResponseForList(company))
                 .collect(Collectors.toList());
+    }
+
+
+    default CompanyDto.ResponseForSalary companyToCompanyResponseForSalary(Company company, BigDecimal totalSalaryOfCompany) {
+        return CompanyDto.ResponseForSalary.builder()
+                .companyId(company.getCompanyId())
+                .companyName(company.getCompanyName())
+                .totalSalaryOfCompany(totalSalaryOfCompany)
+                .build();
     }
 }

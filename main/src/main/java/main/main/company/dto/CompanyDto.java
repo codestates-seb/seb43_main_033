@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 public class CompanyDto {
     @Getter
     @Setter
@@ -53,5 +55,15 @@ public class CompanyDto {
         private String businessNumber;
         private String address;
         private String information;
+    }
+
+    @Getter
+    @Setter
+    @Builder
+    public static class ResponseForSalary {
+
+        private Long companyId;
+        private String companyName;
+        private BigDecimal totalSalaryOfCompany;
     }
 }
