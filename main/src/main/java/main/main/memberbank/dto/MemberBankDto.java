@@ -30,6 +30,7 @@ public static class Response {
     private Long memberBankId;
     private Long memberId;
     private Long bankId;
+    private String bankCode;
     private String bankName;
     private String accountNumber;
 
@@ -43,6 +44,7 @@ public static class Response {
         private Long memberBankId;
         private Long memberId;
         private Long bankId;
+        private String bankCode;
         private String bankName;
         private String accountNumber;
 
