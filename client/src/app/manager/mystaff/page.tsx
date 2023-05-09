@@ -5,7 +5,7 @@ import ListBox from '../../components/ListBox';
 import MyStaffModal from '../../components/MyStaffModal';
 import Navi from "../../components/workerNavi"
 import { format } from 'date-fns';
-import CheckBox from '@material-ui/icons/CheckBox';
+import CheckBox from '@mui/icons-material/CheckBox';
 interface MyStaffData {
   staffnumber:  number;
   memberName: string;
