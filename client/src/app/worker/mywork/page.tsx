@@ -1,6 +1,6 @@
 import React from "react";
-import MyCalendar from "../components/MyCalendar";
-import Navi from "../Navi";
+import MyCalendar from "../../components/MyCalendar";
+import Navi from "../../components/workerNavi";
 
 export default function Mywork() {
   return (

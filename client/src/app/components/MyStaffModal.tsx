@@ -88,8 +88,8 @@ const handleEditClick= () => {
     salary: 4000000,
   };
   return (
-    <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
-        <div className="flex items-center justify-center min-h-screen px-4">
+    <div className="fixed z-10 inset-0 overflow-y-auto">
+      <div className="flex items-center justify-center min-h-screen px-4">
         <div className="fixed inset-0 transition-opacity" aria-hidden="true">
           <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
