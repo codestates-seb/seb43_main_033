@@ -3,8 +3,9 @@ package main.main.salarystatement.entity;
 import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
+import main.main.companymember.entity.CompanyMember;
+import main.main.laborcontract.entity.LaborContract;
 import main.main.member.entity.Member;
-import main.main.memberbank.entity.MemberBank;
 import main.main.statusofwork.entity.StatusOfWork;
 
 import javax.persistence.*;
@@ -25,16 +26,26 @@ public class SalaryStatement {
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_BANK_ID")
-    private MemberBank memberBank;
-
-    @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_MEMBER_ID")
+    private CompanyMember companyMember;
+
+    @ManyToOne
+    @JoinColumn(name = "LABOR_CONTRACT_ID")
+    private LaborContract laborContract;
 
     private int year;
 
     private int month;
+
+    private String name; // 근로자 이름
+
+    private String team; // 근로자 부서
+
+    private String grade; // 근로자 직급
 
     private BigDecimal hourlyWage;
 
@@ -71,6 +82,12 @@ public class SalaryStatement {
     public void setTotalSalary() {
         this.totalSalary.subtract(salary).subtract(incomeTax).subtract(nationalCoalition).subtract(healthInsurance).subtract(employmentInsurance);
     }
+
+    private String bankName;
+
+    private String accountNumber;
+
+    private String accountHolder;
 
     private boolean paymentStatus;
 
