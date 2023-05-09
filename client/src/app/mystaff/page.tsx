@@ -8,15 +8,13 @@ import { format } from 'date-fns';
 import CheckBox from '@material-ui/icons/CheckBox';
 interface MyStaffData {
   staffnumber:  number;
-  memberName: string;
+  name: string;
   department: string;
-  
-  
-  rank: string;
+  position: string;
   note : string,
-  startTime: number;
-  finishTime: number;
-  management: string;
+  startTime: string;
+  finishTime: string;
+  grade: string;
   salary: number;
 }
 
@@ -27,24 +25,24 @@ export default function Mystaff() {
   const data: MyStaffData[] = [
     {
       staffnumber: 2023001,
-      memberName: "홍길동",
+      name: "홍길동",
       department:"회계팀",
-      rank:"사원",
+      position:"사원",
       note : "지각",
-      startTime:900,
-      finishTime: 1800,
-      management: "standard",
+      startTime:"00:00",
+      finishTime: "00:00",
+      grade: "standard",
       salary: 4000000,
     },
     {
       staffnumber: 2023002,
-      memberName: "김철수",
+      name: "김철수",
       department:"마케팅팀",
-      rank:"대리",
+      position:"대리",
       note : "결근",
-      startTime:1000,
-      finishTime: 1900,
-      management: "flextime",
+      startTime:"10:00",
+      finishTime: "19:00",
+      grade: "manager",
       salary: 4500000,
     },
     //...
@@ -83,12 +81,12 @@ export default function Mystaff() {
             {data.map((item, index) => (
       <ListBox key={index}>
         <div>{item.staffnumber}</div>
-        <div>{item.memberName}</div>
+        <div>{item.name}</div>
         <div>{item.department}</div>
-        <div>{item.rank}</div>
+        <div>{item.position}</div>
         <div>{item.finishTime} {item.note}</div>
         <div>{item.startTime}~{item.finishTime}</div>
-        <div className="pr-5">{item.management}</div>
+        <div className="pr-5">{item.grade}</div>
         <button className="text-sm font-bold hover:bg-gray-300" onClick={() => setShowModal(true)}>수정</button>
             
             {showModal && (
