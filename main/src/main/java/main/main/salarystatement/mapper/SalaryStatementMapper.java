@@ -31,6 +31,9 @@ public interface SalaryStatementMapper {
                 .memberName(salaryStatement.getMember().getName())
                 .year(salaryStatement.getYear())
                 .month(salaryStatement.getMonth())
+                .name(salaryStatement.getName())
+                .team(salaryStatement.getTeam())
+                .grade(salaryStatement.getGrade())
                 .hourlyWage(salaryStatement.getHourlyWage())
                 .basePay(salaryStatement.getBasePay())
                 .overtimePay(salaryStatement.getOvertimePay())
@@ -48,6 +51,7 @@ public interface SalaryStatementMapper {
                 .totalSalary(salaryStatement.getTotalSalary())
                 .bankId(salaryStatement.getMemberBank().getBank().getBankId())
                 .bankName(salaryStatement.getMemberBank().getBank().getBankGroup().getBankName())
-                .accountNumber(salaryStatement.getMemberBank().getAccountNumber()).build();
+                .accountNumber(salaryStatement.getMemberBank().getAccountNumber())
+                .paymentStatus(salaryStatement.isPaymentStatus()).build();
     }
 }

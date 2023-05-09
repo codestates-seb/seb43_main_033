@@ -26,6 +26,9 @@ public class SalaryStatementDto {
         private String memberName;
         private int year;
         private int month;
+        private String name;
+        private String team;
+        private String grade;
         private BigDecimal hourlyWage;
         private BigDecimal basePay;
         private BigDecimal overtimePay;
@@ -44,5 +47,6 @@ public class SalaryStatementDto {
         private long bankId;
         private String bankName;
         private String accountNumber;
+        private boolean paymentStatus;
     }
 }
