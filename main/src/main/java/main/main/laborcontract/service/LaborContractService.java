@@ -38,7 +38,7 @@ public class LaborContractService {
         laborContract.setCompany(company);
         laborContract.setBankName(memberBank.getBank().getBankGroup().getBankName());
         laborContract.setAccountNumber(memberBank.getAccountNumber());
-        laborContract.setAccountOwner(memberBank.getMember().getName());
+        laborContract.setAccountHolder(memberBank.getMember().getName());
 
         LaborContract savedLaborContract = laborContractRepository.save(laborContract);
 

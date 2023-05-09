@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
 import main.main.member.entity.Member;
-import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -31,7 +30,7 @@ public class LaborContract {
 
     private String accountNumber;
 
-    private String accountOwner;
+    private String accountHolder;
 
     private LocalDateTime startOfContract;
 

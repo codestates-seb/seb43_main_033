@@ -38,7 +38,7 @@ public class LaborContractDto {
         private String companyName;
         private String bankName;
         private String accountNumber;
-        private String accountOwner;
+        private String accountHolder;
         private BigDecimal basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;

@@ -35,7 +35,7 @@ public interface LaborContractMapper {
                 .companyName(laborContract.getCompany().getCompanyName())
                 .bankName(laborContract.getBankName())
                 .accountNumber(laborContract.getAccountNumber())
-                .accountOwner(laborContract.getAccountOwner())
+                .accountHolder(laborContract.getAccountHolder())
                 .basicSalary(laborContract.getBasicSalary())
                 .startTime(laborContract.getStartTime())
                 .finishTime(laborContract.getFinishTime())
