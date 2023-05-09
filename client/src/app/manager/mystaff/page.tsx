@@ -1,9 +1,9 @@
 "use client"
 import { useState } from 'react';
-import Bigsquare from '../../components/Bigsquare';
-import ListBox from '../../components/ListBox';
-import MyStaffModal from '../../components/MyStaffModal';
-import Navi from "../../components/workerNavi"
+import Bigsquare from '../components/Bigsquare';
+import ListBox from '../components/ListBox';
+import MyStaffModal from '../components/MyStaffModal';
+import Navi from "../Navi"
 import { format } from 'date-fns';
 import CheckBox from '@material-ui/icons/CheckBox';
 interface MyStaffData {
@@ -53,16 +53,16 @@ export default function Mystaff() {
   const [showModal, setShowModal] = useState(false); 
   return (
     <>
-     <Navi />
-    <div className="flex flex-col w-full">
-     
+    <Navi/>
+    <div className="flex flex-col ">
+    
       <div className="flex justify-end pb-3">
         <h1 className="pr-10">우리 회사의 근무시간 : 09:00~18:00</h1>
         <i className="material-icons"></i>
         <CheckBox/>
         <h1 className="mr-8">오늘의 근무상황</h1>
       </div>
-      <div className="h-screen w-full flex justify-center">
+      <div className="h-screen w-screen flex justify-center">
         <Bigsquare>
             <div className="bg-white p-3 m-5 flex justify-between">
                 <div>나의 직원들</div>

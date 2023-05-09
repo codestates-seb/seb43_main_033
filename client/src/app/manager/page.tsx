@@ -8,7 +8,7 @@ import BottomInformation from "../components/ManagerHome/BottomInformation"
 export default function ManagerHome() {
   return (
     <>
-    <Navi />
+      <Navi />
       <section className="flex-1 flex flex-col px-8 py-4 bg-stone-50">
         <TopInformation />
         <MiddleInformation />

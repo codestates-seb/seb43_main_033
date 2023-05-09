@@ -1,11 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
+import axios, { Axios } from "axios";
+
+interface Data {
+  image: string;
+  companyName: string;
+  companySize: string;
+  businessNumber: string;
+  address: string;
+  information: string;
+}
 
 export default function TopInformation() {
   const [isModal, setIsModal] = useState(false);
-  const [data, setData] = useState({
+  const [data, setData] = useState<Data>({
     image: "",
     companyName: "법인명 예시",
     companySize: "기업분류 예시",
@@ -16,6 +26,19 @@ export default function TopInformation() {
   const patchInfo = () => {
     setIsModal(!isModal);
   };
+  // useEffect(() => {
+  //   axios
+  //     .get("")
+  //     .then((res) => setData(res.data))
+  //     .catch((err) => console.log(err));
+  // }, []);
+
+  // useEffect(() => {
+  //   axios
+  //     .post("")
+  //     .then((res) => setData(res.data))
+  //     .catch((err) => console.log(err));
+  // }, [data]);
   return (
     <>
       {isModal && <Modal setData={setData} data={data} patchInfo={patchInfo} />}
