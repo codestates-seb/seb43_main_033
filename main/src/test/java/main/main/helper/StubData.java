@@ -223,7 +223,7 @@ public class StubData {
             CompanyDto.Post post = new CompanyDto.Post();
             post.setCompanyName("회사명");
             post.setCompanySize("회사 규모");
-            post.setBusinessNumber(1L);
+            post.setBusinessNumber("사업자 등록 번호");
             post.setAddress("회사 주소");
             post.setInformation("회사 정보");
 
@@ -231,7 +231,7 @@ public class StubData {
             patch.setCompanyId(1L);
             patch.setCompanyName("회사명");
             patch.setCompanySize("회사 규모");
-            patch.setBusinessNumber(1L);
+            patch.setBusinessNumber("사업자 등록 번호");
             patch.setAddress("회사 주소");
             patch.setInformation("회사 정보");
 
@@ -254,31 +254,28 @@ public class StubData {
             return CompanyDto.Response.builder()
                     .companyId(1L)
                     .companyName("회사명")
-                    .memberId(1L)
                     .companySize("회사 규모")
-                    .businessNumber(1L)
+                    .businessNumber("사업자 등록 번호")
                     .address("회사 주소")
                     .information("회사 정보")
                     .build();
         }
 
-        public static List<CompanyDto.Response> getCompanyResponseForList() {
+        public static List<CompanyDto.ResponseForList> getCompaniesToCompaniesResponse() {
             return List.of(
-                    CompanyDto.Response.builder()
+                    CompanyDto.ResponseForList.builder()
                             .companyId(1L)
                             .companyName("회사명")
-                            .memberId(1L)
                             .companySize("회사 규모")
-                            .businessNumber(1L)
+                            .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
                             .build(),
-                    CompanyDto.Response.builder()
+                    CompanyDto.ResponseForList.builder()
                             .companyId(2L)
                             .companyName("회사명")
-                            .memberId(2L)
                             .companySize("회사 규모")
-                            .businessNumber(2L)
+                            .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
                             .build()
@@ -329,8 +326,13 @@ public class StubData {
         public static BankDto.Response getBankResponse() {
             return BankDto.Response.builder()
                     .bankId(1L)
+                    .bankCode("회원 계좌 은행 코드")
                     .bankName("회원 계좌 은행명")
                     .build();
         }
+    }
+
+    public static class MockCompanyMember {
+
     }
 }
