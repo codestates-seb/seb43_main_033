@@ -36,6 +36,9 @@ public class LaborContractDto {
     public static class Response {
         private String memberName;
         private String companyName;
+        private String bankName;
+        private String accountNumber;
+        private String accountHolder;
         private BigDecimal basicSalary;
         private LocalTime startTime;
         private LocalTime finishTime;

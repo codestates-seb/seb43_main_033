@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.laborcontract.entity.LaborContract;
@@ -39,6 +41,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SalaryStatementService {
     private final SalaryStatementRepository salaryStatementRepository;
+    private final CompanyMemberRepository companyMemberRepository;
     private final MemberService memberService;
     private final CompanyService companyService;
     private final StatusOfWorkService statusOfWorkService;
@@ -49,6 +52,7 @@ public class SalaryStatementService {
     public void createSalaryStatement(SalaryStatement salaryStatement) {
         Member member = memberService.findMember(salaryStatement.getMember().getMemberId());
         Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
         LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
         BigDecimal basicSalary = laborContract.getBasicSalary();
@@ -86,8 +90,12 @@ public class SalaryStatementService {
 
         salaryStatement.setMember(member);
         salaryStatement.setCompany(company);
-        salaryStatement.setMemberBank(member.getMemberBanks().get(0));
+        salaryStatement.setCompanyMember(companyMember);
+        salaryStatement.setLaborContract(laborContract);
         salaryStatement.setStatusOfWorks(statusOfWorks);
+        salaryStatement.setName(member.getName());
+        salaryStatement.setTeam(companyMember.getTeam());
+        salaryStatement.setGrade(companyMember.getGrade());
         salaryStatement.setHourlyWage(hourlyWage);
         salaryStatement.setBasePay(basicSalary);
         salaryStatement.setOvertimePay(overtimePay);
@@ -124,6 +132,9 @@ public class SalaryStatementService {
         salaryStatement.setHealthInsurance(basicSalary.multiply(BigDecimal.valueOf(0.0343)));
         salaryStatement.setEmploymentInsurance(basicSalary.multiply(BigDecimal.valueOf(0.008)));
         salaryStatement.setTotalSalary();
+        salaryStatement.setBankName(laborContract.getBankName());
+        salaryStatement.setAccountNumber(laborContract.getAccountNumber());
+        salaryStatement.setAccountHolder(laborContract.getAccountHolder());
 
         SalaryStatement savedSalaryStatement = salaryStatementRepository.save(salaryStatement);
         statusOfWorks.stream().forEach(statusOfWork -> statusOfWork.setSalaryStatement(savedSalaryStatement));
@@ -159,6 +170,9 @@ public class SalaryStatementService {
         document.open();
 
         // Add the employee details
+        String name = salaryStatement.getName();
+        String team = salaryStatement.getTeam();
+        String grade = salaryStatement.getGrade();
         BigDecimal hourlyWage = salaryStatement.getHourlyWage();
         BigDecimal basePay = salaryStatement.getBasePay();
         BigDecimal overtimePay = salaryStatement.getOvertimePay();
@@ -174,6 +188,9 @@ public class SalaryStatementService {
         BigDecimal healthInsurance = salaryStatement.getHealthInsurance();
         BigDecimal employmentInsurance = salaryStatement.getEmploymentInsurance();
         BigDecimal totalSalary = salaryStatement.getTotalSalary();
+        String bankName = salaryStatement.getBankName();
+        String accountNumber = salaryStatement.getAccountNumber();
+        String accountHolder = salaryStatement.getAccountHolder();
 
         PdfPTable table = new PdfPTable(5);	// 컬럼 갯수 지정.
         table.setWidthPercentage(100);	// Table 의 폭 %로 조절 가능.
@@ -194,7 +211,7 @@ public class SalaryStatementService {
         cell2.setPadding(10);
         table.addCell(cell2);
 
-        PdfPCell cell3 = new PdfPCell(new Phrase(salaryStatement.getMember().getName(), objFont));
+        PdfPCell cell3 = new PdfPCell(new Phrase(name, objFont));
         cell3.setColspan(2);
         cell3.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell3.setPadding(10);
@@ -215,7 +232,7 @@ public class SalaryStatementService {
         cell6.setPadding(10);
         table.addCell(cell6);
 
-        PdfPCell cell7 = new PdfPCell(new Phrase("웹 개발부", objFont));
+        PdfPCell cell7 = new PdfPCell(new Phrase(team, objFont));
         cell7.setColspan(2);
         cell7.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell7.setPadding(10);
@@ -226,7 +243,7 @@ public class SalaryStatementService {
         cell8.setPadding(10);
         table.addCell(cell8);
 
-        PdfPCell cell9 = new PdfPCell(new Phrase(salaryStatement.getMember().getGrade(), objFont));
+        PdfPCell cell9 = new PdfPCell(new Phrase(grade, objFont));
         cell9.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell9.setPadding(10);
         table.addCell(cell9);
@@ -577,7 +594,7 @@ public class SalaryStatementService {
         cell64.setPadding(9);
         table.addCell(cell64);
 
-        PdfPCell cell65 = new PdfPCell(new Phrase(salaryStatement.getMemberBank().getBank().getBankGroup().getBankName() + " " + salaryStatement.getMemberBank().getAccountNumber() + " / 예금주: " + salaryStatement.getMember().getName(), objFont));
+        PdfPCell cell65 = new PdfPCell(new Phrase(bankName + " " + accountNumber + " / 예금주: " + accountHolder, objFont));
         cell65.setColspan(5);
         cell65.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell65.setPadding(9);

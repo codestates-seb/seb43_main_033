@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
 import main.main.member.entity.Member;
-import main.main.salarystatement.entity.SalaryStatement;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -27,9 +26,11 @@ public class LaborContract {
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "SALARY_STATEMENT_ID")
-    private SalaryStatement salaryStatement;
+    private String bankName;
+
+    private String accountNumber;
+
+    private String accountHolder;
 
     private LocalDateTime startOfContract;
 
