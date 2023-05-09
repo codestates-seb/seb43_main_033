@@ -9,6 +9,7 @@ import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.repository.LaborContractRepository;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.memberbank.entity.MemberBank;
 import org.apache.commons.io.IOUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,9 +32,13 @@ public class LaborContractService {
     public void creatLaborContract(LaborContract laborContract, MultipartFile file) {
         Member member = memberService.findMember(laborContract.getMember().getMemberId());
         Company company = companyService.findCompany(laborContract.getCompany().getCompanyId());
+        MemberBank memberBank = member.getMemberBanks().stream().filter(mainMemberBank -> mainMemberBank.getMainTransaction());
 
         laborContract.setMember(member);
         laborContract.setCompany(company);
+        laborContract.setBankName(memberBank.getBank().getBankGroup().getBankName());
+        laborContract.setAccountNumber(memberBank.getAccountNumber());
+        laborContract.setAccountOwner(memberBank.getMember().getName());
 
         LaborContract savedLaborContract = laborContractRepository.save(laborContract);
 

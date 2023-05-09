@@ -27,9 +27,11 @@ public class LaborContract {
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @ManyToOne
-    @JoinColumn(name = "SALARY_STATEMENT_ID")
-    private SalaryStatement salaryStatement;
+    private String bankName;
+
+    private String accountNumber;
+
+    private String accountOwner;
 
     private LocalDateTime startOfContract;
 
