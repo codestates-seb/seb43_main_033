@@ -6,6 +6,9 @@ import main.main.memberbank.dto.MemberBankDto;
 import main.main.memberbank.entity.MemberBank;
 import org.mapstruct.Mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Mapper(componentModel = "spring")
 public interface MemberBankMapper {
 
@@ -20,7 +23,6 @@ public interface MemberBankMapper {
         memberBank.setMember(member);
         memberBank.setBank(bank);
         memberBank.setAccountNumber(requestBody.getAccountNumber());
-
 
 
         return memberBank;
@@ -52,5 +54,21 @@ public interface MemberBankMapper {
                 .accountNumber(memberBank.getAccountNumber())
                 .memberId(memberBank.getMember().getMemberId())
                 .build();
+    }
+
+    default MemberBankDto.ResponseForList memberBankToMemberBankResponseForList(MemberBank memberBank) {
+        return MemberBankDto.ResponseForList.builder()
+                .memberBankId(memberBank.getMemberBankId())
+                .bankId(memberBank.getBank().getBankId())
+                .bankName(memberBank.getBank().getBankGroup().getBankName())
+                .accountNumber(memberBank.getAccountNumber())
+                .memberId(memberBank.getMember().getMemberId())
+                .build();
+    }
+
+    default List<MemberBankDto.ResponseForList> memberBanksToMemberBanksResponse(List<MemberBank> memberBanks) {
+        return memberBanks.stream()
+                .map(memberBank -> memberBankToMemberBankResponseForList(memberBank))
+                .collect(Collectors.toList());
     }
 }
