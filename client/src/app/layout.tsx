@@ -23,7 +23,7 @@ export default function RootLayout({
           <div className="flex-grow"></div>
         </body>
         <Footer />
-      </div>      
+      </div>
     </html>
   );
 }
