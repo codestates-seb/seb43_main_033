@@ -11,13 +11,13 @@ type ModalProps = {
 
 interface MyStaffData {
   staffnumber:  number;
-  memberName: string;
+  name: string;
   department: string;
-  rank: string;
+  position: string;
   note : string,
-  startTime: number;
-  finishTime: number;
-  management: string;
+  startTime: string;
+  finishTime: string;
+  grade: string;
   salary: number;
 }
 export default function StaffSelectModal({onClose }: ModalProps) {
@@ -26,41 +26,41 @@ export default function StaffSelectModal({onClose }: ModalProps) {
 );
 useEffect(() => {
   if (stafflist && stafflist.data && stafflist.data.title) {
-    setStaffnumberValue(stafflist.numberName);
-    setStaffnumberValue(stafflist.memberName);
-     setDepartmentValue(stafflist.department);
-    setRankValue(stafflist.rankValue);
-     setStartTimeValue(stafflist.startTime;
-  setFinishTimeValue(stafflist.finishTimeValue);
+    setStaffnumberValue(stafflist.data.staffnumber);
+    setStaffnumberValue(stafflist.data.name);
+     setDepartmentValue(stafflist.datadepartment);
+    setPostionValue(stafflist.datapostion);
+     setStartTimeValue(stafflist.datastartTime);
+  setFinishTimeValue(stafflist.data.finishTime);
+  setSalaryValue(stafflist.data.salaryValue);
   }
-}, [stafflist]);
+}, [stafflist]);*/
 
-*/
 const [staffnumberValue, setStaffnumberValue] = useState<string>("");
 const [memberNameValue, setMemberNameValue] = useState<string>("");
 const [departmentValue, setDepartmentValue] = useState<string>("");
-const [rankValue, setRankValue] = useState<string>("");
+const [positionValue, setPositionValue] = useState<string>("");
 const [startTimeValue, setStartTimeValue] = useState<string>("");
 const [finishTimeValue, setFinishTimeValue] = useState<string>("");
-const [managementValue, setManagementValue] = useState<string>("");
+const [gradeValue, setGradeValue] = useState<string>("");
 const [salaryValue, setSalaryValue] = useState<number>(0);
 
-/*
-const handleEditClick= () => {
+
+/*const handleEditClick= () => {
  
 
   axios
     .patch(
       `${process.env.REACT_APP_API_URL}`,
       {
-         staffnumber: staffnumberValue;
-         memberName:memberNameValue;
-         department: departmentValue;
-         rank: rankValue;
-         startTime: startTimeValue;
-         finishTime: finishTimeValue;
-         management: managementTimeValue;
-         salary: salaryValue;
+         staffnumber: staffnumberValue,
+         memberName:memberNameValue,
+         department: departmentValue,
+         position: positionValue,
+         startTime: startTimeValue,
+         finishTime: finishTimeValue,
+         gradeValue: setGradeValue,
+         salary: salaryValue,
       },
       {
         headers: {
@@ -70,23 +70,25 @@ const handleEditClick= () => {
       }
     )
     .then(() => {
-      <Link href="/mystaff"></Link>
+    <Link href="/mystaff"></Link>
     })
     .catch((err) => {
       console.log(err);
     });
 };*/
+
   const data: MyStaffData = {
     staffnumber: 2023001,
-    memberName: "홍길동",
+    name: "홍길동",
     department:"회계팀",
-    rank:"사원",
+    position:"사원",
     note : "지각",
-    startTime:900,
-    finishTime: 1800,
-    management: "standard",
+    startTime:"00:00",
+    finishTime: "00:00",
+    grade: "standard",
     salary: 4000000,
   };
+
   return (
     <div className="fixed z-10 inset-0 overflow-y-auto flex items-center justify-center">
         <div className="flex items-center justify-center min-h-screen px-4">
@@ -126,8 +128,8 @@ const handleEditClick= () => {
         <input className="w-20 h-5 border-b border-gray-300 focus:outline-none hover:outline-none"
               type="text"
              
-              value={rankValue}
-              onChange={(e) => setRankValue(e.target.value)}
+              value={positionValue}
+              onChange={(e) => setPositionValue(e.target.value)}
             />
             </div>
         </div>
@@ -150,8 +152,8 @@ const handleEditClick= () => {
         <input className="w-20 h-5 ml-8 mb-3 border-b border-gray-300 focus:outline-none hover:outline-none"
               type="text"
         
-              value={managementValue}
-              onChange={(e) => setManagementValue(e.target.value)}
+              value={gradeValue}
+              onChange={(e) => setGradeValue(e.target.value)}
             />
 
         </div>
