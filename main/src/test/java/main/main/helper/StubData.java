@@ -4,17 +4,18 @@ import main.main.auth.jwt.JwtTokenizer;
 import main.main.bank.dto.BankDto;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
+import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.entity.CompanyMember;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.memberbank.dto.MemberBankDto;
+import main.main.salarystatement.dto.SalaryStatementDto;
+import main.main.statusofwork.dto.StatusOfWorkDto;
+import main.main.statusofwork.entity.StatusOfWork;
 import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import main.main.salarystatement.dto.SalaryStatementDto;
-import main.main.statusofwork.dto.StatusOfWorkDto;
-import main.main.statusofwork.entity.StatusOfWork;
-
 import org.springframework.http.HttpMethod;
 
 import java.io.FileInputStream;
@@ -251,6 +252,7 @@ public class StubData {
         }
 
         public static CompanyDto.Response getCompanyResponse() {
+
             return CompanyDto.Response.builder()
                     .companyId(1L)
                     .companyName("회사명")
@@ -258,6 +260,15 @@ public class StubData {
                     .businessNumber("사업자 등록 번호")
                     .address("회사 주소")
                     .information("회사 정보")
+                    .build();
+        }
+
+        public static CompanyDto.ResponseForSalary getCompanyResponseForSalary() {
+
+            return CompanyDto.ResponseForSalary.builder()
+                    .companyId(1L)
+                    .companyName("회사명")
+                    .totalSalaryOfCompany(BigDecimal.valueOf(10000))
                     .build();
         }
 
@@ -321,18 +332,74 @@ public class StubData {
 
     public static class MockBank {
 
-
-
         public static BankDto.Response getBankResponse() {
             return BankDto.Response.builder()
                     .bankId(1L)
-                    .bankCode("회원 계좌 은행 코드")
+//                    .bankCode("회원 계좌 은행 코드")
                     .bankName("회원 계좌 은행명")
                     .build();
         }
     }
 
-    public static class MockCompanyMember {
 
+    public static class MockCompanyMember {
+        private static Map<HttpMethod, Object> stubRequestBody;
+        static {
+            CompanyMemberDto.Post post = new CompanyMemberDto.Post();
+            post.setCompanyId(1L);
+            post.setMemberId(1L);
+            post.setGrade("회원 직급");
+            post.setTeam("회원 소속 부서");
+
+            CompanyMemberDto.Patch patch = new CompanyMemberDto.Patch();
+            patch.setCompanyMemberId(1L);
+            patch.setCompanyId(1L);
+            patch.setMemberId(1L);
+            patch.setGrade("회원 직급");
+            patch.setTeam("회원 소속 부서");
+
+            stubRequestBody = new HashMap<>();
+            stubRequestBody.put(HttpMethod.POST, post);
+            stubRequestBody.put(HttpMethod.PATCH, patch);
+        }
+
+        public static Object getRequestBody(HttpMethod method) { return stubRequestBody.get(method); }
+
+        public static Page<CompanyMember> getCompanyMembersByPage() {
+            CompanyMember companyMember1 = new CompanyMember();
+            CompanyMember companyMember2 = new CompanyMember();
+
+            return new PageImpl<>(List.of(companyMember1, companyMember2), PageRequest.of(0, 5, Sort.by("companyMemberId").descending()),2);
+
+        }
+
+        public static CompanyMemberDto.Response getCompanyMemberResponse() {
+            return CompanyMemberDto.Response.builder()
+                    .companyMemberId(1L)
+                    .companyId(1L)
+                    .memberId(1L)
+                    .grade("회원 직급")
+                    .team("회원 소속 부서")
+                    .build();
+        }
+
+        public static List<CompanyMemberDto.ResponseForList> getCompanyMembersToCompanyMembersResponse() {
+            return List.of(
+                    CompanyMemberDto.ResponseForList.builder()
+                            .companyMemberId(1L)
+                            .companyId(1L)
+                            .memberId(1L)
+                            .grade("회원 직급")
+                            .team("회원 소속 부서")
+                            .build(),
+                    CompanyMemberDto.ResponseForList.builder()
+                            .companyMemberId(2L)
+                            .companyId(1L)
+                            .memberId(1L)
+                            .grade("회원 직급")
+                            .team("회원 소속 부서")
+                            .build()
+            );
+        }
     }
 }

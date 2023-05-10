@@ -53,7 +53,7 @@ public class CompanyMemberController {
 
 
     @DeleteMapping("/{companymember-id}")
-    public ResponseEntity deleteCompanyMember(@Positive @PathVariable("compnaymember-id") long companyMemberId) {
+    public ResponseEntity deleteCompanyMember(@Positive @PathVariable("companymember-id") long companyMemberId) {
         companyMemberService.deleteCompanyMember(companyMemberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
