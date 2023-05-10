@@ -58,4 +58,11 @@ public class CompanyMemberController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping("/pending/{companymember-id}/{status}") // 승인 대기, 승인, 승인 거절
+    public void pendingCompanyMember(@PathVariable("companymember-id") long companyMemberId
+            , @PathVariable("status") String status) {
+
+        companyMemberService.companyMemberUpdate(companyMemberId, status);
+    }
+
 }
