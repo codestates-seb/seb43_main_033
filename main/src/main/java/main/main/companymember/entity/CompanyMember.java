@@ -2,6 +2,7 @@ package main.main.companymember.entity;
 
 import lombok.*;
 import main.main.company.entity.Company;
+import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
 
 import javax.persistence.*;
@@ -31,6 +32,7 @@ public class CompanyMember {
     private String Grade;
     private String Team;
 
+    private Status status;
 
     public void setCompany(Company company) {
         this.company = company;

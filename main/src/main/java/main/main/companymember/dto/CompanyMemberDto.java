@@ -40,6 +40,7 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
+        private Status status;
 
     }
 
@@ -53,6 +54,8 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
+
+        private Status status;
 
     }
 }

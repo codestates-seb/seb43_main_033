@@ -52,6 +52,7 @@ public interface CompanyMemberMapper {
                 .memberId(companyMember.getMember().getMemberId())
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
+                .status(companyMember.getStatus())
                 .build();
     }
     default CompanyMemberDto.ResponseForList companyMemberToCompanyMemberResponseForList(CompanyMember companyMember) {
@@ -61,6 +62,7 @@ public interface CompanyMemberMapper {
                 .memberId(companyMember.getMember().getMemberId())
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
+                .status(companyMember.getStatus())
                 .build();
     }
 

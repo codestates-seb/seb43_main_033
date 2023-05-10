@@ -3,6 +3,7 @@ package main.main.companymember.service;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
+import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
@@ -64,6 +65,21 @@ public class CompanyMemberService {
                 .ifPresent(team -> findedCompanyMember.setTeam(team));
 
         return companyMemberRepository.save(findedCompanyMember);
+    }
+
+    public CompanyMember companyMemberUpdate(long companyMemberId, String status) {
+        CompanyMember companyMember = findCompanyMember(companyMemberId);
+        if (status.equals("pending")) {
+            companyMember.setStatus(Status.PENDING);
+        } else if (status.equals("approved")) {
+            companyMember.setStatus(Status.APPROVED);
+        } else if (status.equals("refuse")) {
+            companyMember.setStatus(Status.REFUSE);
+        } else {
+            throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
+        }
+
+        return companyMemberRepository.save(companyMember);
     }
 
 }
