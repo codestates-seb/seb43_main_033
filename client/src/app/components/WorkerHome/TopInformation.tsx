@@ -26,19 +26,7 @@ export default function TopInformation() {
   const patchInfo = () => {
     setIsModal(!isModal);
   };
-  // useEffect(() => {
-  //   axios
-  //     .get("")
-  //     .then((res) => setData(res.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .post("")
-  //     .then((res) => setData(res.data))
-  //     .catch((err) => console.log(err));
-  // }, [data]);
   return (
     <>
       {isModal && <Modal setData={setData} data={data} patchInfo={patchInfo} />}
