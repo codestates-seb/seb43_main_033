@@ -2,31 +2,40 @@
 
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
 
-function Modal(props: any): React.ReactElement {
-  type props = {
-    setData: Dispatch<
-      SetStateAction<{
-        image: string;
-        companyName: string;
-        companySize: string;
-        businessNumber: string;
-        address: string;
-        information: string;
-      }>
-    >;
-    data: {
+type props = {
+  setData: Dispatch<
+    SetStateAction<{
       image: string;
       companyName: string;
       companySize: string;
       businessNumber: string;
       address: string;
       information: string;
-    };
-    patchInfo: () => void;
+    }>
+  >;
+  data: {
+    image: string;
+    companyName: string;
+    companySize: string;
+    businessNumber: string;
+    address: string;
+    information: string;
   };
+  patchInfo: () => void;
+};
 
+interface Inputs {
+  image: string;
+  companyName: string;
+  companySize: string;
+  businessNumber: string;
+  address: string;
+  information: string;
+}
+
+function Modal(props: any): React.ReactElement {
   const { setData, data, patchInfo } = props;
-  const [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState<Inputs>({
     image: "",
     companyName: "",
     companySize: "",
@@ -36,7 +45,7 @@ function Modal(props: any): React.ReactElement {
   });
   useEffect(() => setInputs({ ...data }), [data]);
   useEffect(() => console.log(inputs), [inputs]);
-  const handleOnChange = (e) => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.name);
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
@@ -45,6 +54,7 @@ function Modal(props: any): React.ReactElement {
   const handleOnSubmit = () => {
     setData({ ...data, ...inputs });
     setInputs({
+      image: "",
       companyName: "",
       companySize: "",
       businessNumber: "",
