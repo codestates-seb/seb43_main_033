@@ -56,6 +56,15 @@ export default function AuthenticatePageList({
           );
         })}
       </div>
+      <span className="flex items-center">
+        <svg
+          className="h-12 w-12"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 96 960 960"
+        >
+          <path d="M160 856v-60h386v60H160Zm0-166v-60h640v60H160Zm0-167v-60h640v60H160Zm0-167v-60h640v60H160Z" />
+        </svg>
+      </span>
     </li>
   );
 }
