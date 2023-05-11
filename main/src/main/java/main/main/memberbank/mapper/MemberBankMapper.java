@@ -54,6 +54,7 @@ public interface MemberBankMapper {
                 .bankName(memberBank.getBank().getBankGroup().getBankName())
                 .accountNumber(memberBank.getAccountNumber())
                 .memberId(memberBank.getMember().getMemberId())
+                .isMainAccount(memberBank.isMainAccount())
                 .build();
     }
 
@@ -65,6 +66,7 @@ public interface MemberBankMapper {
                 .bankName(memberBank.getBank().getBankGroup().getBankName())
                 .accountNumber(memberBank.getAccountNumber())
                 .memberId(memberBank.getMember().getMemberId())
+                .isMainAccount(memberBank.isMainAccount())
                 .build();
     }
 

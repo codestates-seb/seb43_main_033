@@ -2,7 +2,6 @@ package main.main.memberbank.controller;
 
 
 import lombok.RequiredArgsConstructor;
-import main.main.company.entity.Company;
 import main.main.dto.ListPageResponseDto;
 import main.main.memberbank.dto.MemberBankDto;
 import main.main.memberbank.entity.MemberBank;
@@ -45,6 +44,7 @@ public class MemberBankController {
     @GetMapping("/{memberbank-id}")
     public ResponseEntity getMemberBank(@Positive @PathVariable("memberbank-id") long memberBankId) {
         MemberBank memberBank = memberBankService.findMemberBank(memberBankId);
+        memberBankService.setMainAccount(memberBank.getMember(), memberBankId);
 
         return new ResponseEntity<>(memberBankMapper.memberBankToMemberBankResponse(memberBank), HttpStatus.OK);
     }
@@ -55,7 +55,11 @@ public class MemberBankController {
         Page<MemberBank> pageMemberBanks = memberBankService.findMemberBanks(page - 1, size);
         List<MemberBank> memberBanks = pageMemberBanks.getContent();
 
-        return new ResponseEntity<>(new ListPageResponseDto<>(memberBankMapper.memberBanksToMemberBanksResponse(memberBanks),pageMemberBanks), HttpStatus.OK);
+        for (MemberBank memberBank : memberBanks) {
+            memberBankService.setMainAccount(memberBank.getMember(), memberBank.getMemberBankId());
+        }
+
+        return new ResponseEntity<>(new ListPageResponseDto<>(memberBankMapper.memberBanksToMemberBanksResponse(memberBanks), pageMemberBanks), HttpStatus.OK);
     }
 
     @DeleteMapping("/{memberbank-id}")

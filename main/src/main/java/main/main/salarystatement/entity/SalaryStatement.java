@@ -6,6 +6,7 @@ import main.main.company.entity.Company;
 import main.main.companymember.entity.CompanyMember;
 import main.main.laborcontract.entity.LaborContract;
 import main.main.member.entity.Member;
+import main.main.memberbank.entity.MemberBank;
 import main.main.statusofwork.entity.StatusOfWork;
 
 import javax.persistence.*;
@@ -36,6 +37,10 @@ public class SalaryStatement {
     @ManyToOne
     @JoinColumn(name = "LABOR_CONTRACT_ID")
     private LaborContract laborContract;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_BANK_ID")
+    private MemberBank memberBank;
 
     private int year;
 
