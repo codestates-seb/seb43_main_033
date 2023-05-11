@@ -3,7 +3,7 @@ import { useState } from "react";
 import Bigsquare from "../../components/Bigsquare";
 import ListBox from "../../components/ListBox";
 import MyStaffModal from "../../components/MyStaffModal";
-import Navi from "../../components/workerNavi";
+import Navi from "../../components/managerNavi";
 import { format } from "date-fns";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
