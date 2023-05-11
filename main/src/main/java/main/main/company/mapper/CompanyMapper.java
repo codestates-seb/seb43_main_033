@@ -47,7 +47,7 @@ public interface CompanyMapper {
                 .build();
     }
 
-    default CompanyDto.ResponseForList companiesToCompanyResponseForList(Company company) {
+    default CompanyDto.ResponseForList companyToCompanyResponseForList(Company company) {
         return CompanyDto.ResponseForList.builder()
                 .companyId(company.getCompanyId())
                 .companyName(company.getCompanyName())
@@ -57,9 +57,9 @@ public interface CompanyMapper {
                 .information(company.getInformation())
                 .build();
     }
-    default List<CompanyDto.ResponseForList> companiesToCompanyResponses(List<Company> companies) {
+    default List<CompanyDto.ResponseForList> companiesToCompaniesResponse(List<Company> companies) {
         return companies.stream()
-                .map(company -> companiesToCompanyResponseForList(company))
+                .map(company -> companyToCompanyResponseForList(company))
                 .collect(Collectors.toList());
     }
 }

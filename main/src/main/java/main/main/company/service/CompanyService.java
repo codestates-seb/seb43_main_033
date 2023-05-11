@@ -1,12 +1,10 @@
 package main.main.company.service;
 
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.repository.CompanyRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
-import main.main.member.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -62,7 +60,7 @@ public class CompanyService {
         return companyRepository.save(findedCompany);
     }
 
-    public  void deleteCompany(long companyId) {
+    public void deleteCompany(long companyId) {
         Company findedCompany = findVerifiedCompany(companyId);
         companyRepository.delete(findedCompany);
     }
@@ -78,7 +76,7 @@ public class CompanyService {
 
 
         try {
-            File folder = new File("img" + File.separator + "회사 대표 이미지" + File.separator + dir);
+            File folder = new File("img" + File.separator + "회사_대표_이미지" + File.separator + dir);
             File[] files = folder.listFiles();
             if (!folder.exists()) {
                 folder.mkdirs();
@@ -87,11 +85,11 @@ public class CompanyService {
                     file1.delete();
                 }
             }
-            File destination = new File( folder.getAbsolutePath() , newFileName);
+            File destination = new File(folder.getAbsolutePath(), newFileName);
             file.transferTo(destination);
             result = Boolean.FALSE;
 
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             return result;

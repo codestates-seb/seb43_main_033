@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,7 +45,6 @@ public class CompanyController {
     public ResponseEntity patchCompany(@Positive @PathVariable("company-id") long companyId,
                                        @Valid @RequestBody CompanyDto.Patch requestBody) {
 
-
         requestBody.setCompanyId(companyId);
         companyService.updateCompany(companyMapper.companyPatchToCompany(requestBody));
 
@@ -65,7 +65,7 @@ public class CompanyController {
         Page<Company> pageCompanies = companyService.findCompanies(page - 1, size);
         List<Company> companies = pageCompanies.getContent();
 
-        return new ResponseEntity<>(new ListPageResponseDto<>(companyMapper.companiesToCompanyResponses(companies),pageCompanies), HttpStatus.OK);
+        return new ResponseEntity<>(new ListPageResponseDto<>(companyMapper.companiesToCompaniesResponse(companies),pageCompanies), HttpStatus.OK);
     }
 
     @DeleteMapping("/{company-id}")
@@ -73,8 +73,6 @@ public class CompanyController {
         companyService.deleteCompany(companyId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
 
 
     @PostMapping(path = "/imageupload/{company-id}")
@@ -95,24 +93,33 @@ public class CompanyController {
     }
 
     @GetMapping("/image/{company-id}")
-    public ResponseEntity<byte[]> getCompanyProfileImage(@PathVariable("company-id") long companyId, MultipartFile file) throws IOException {
+    public ResponseEntity<byte[]> getCompanyProfileImage(@PathVariable("company-id") long companyId) throws IOException {
         String dir = Long.toString(companyId);
-        String fileExtension = companyService.getExtension(file);
+        String filePath = "img" + "/" + "회사_대표_이미지" + "/" + dir + "/" + dir + ".jpeg";
+        File file = new File(filePath);
+        String fileName = file.getName();
+        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+
         InputStream inputStream = null;
         try {
-            inputStream = new FileInputStream( "img" + "/" + "회사 대표 이미지" + "/" + dir + "/" + dir + ".jpeg");
+            inputStream = new FileInputStream(filePath);
         } catch (Exception e) {
-            inputStream = new FileInputStream( "img" + "/" + "회사 대표 이미지" + "/" + dir + "/" + dir + ".png");
+            filePath = "img" + "/" + "회사_대표_이미지" + "/" + dir + "/" + dir + ".png";
+            file = new File(filePath);
+            fileName = file.getName();
+            fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+            inputStream = new FileInputStream(filePath);
         } finally {
             byte[] imageByteArray = IOUtils.toByteArray(inputStream);
             inputStream.close();
 
             HttpHeaders httpHeaders = new HttpHeaders();
-            if (".png".equals(fileExtension)) {
+            if ("png".equals(fileExtension)) {
                 httpHeaders.setContentType(MediaType.IMAGE_PNG);
-            } else if (".jpeg".equals(fileExtension)) {
+            } else if ("jpeg".equals(fileExtension)) {
                 httpHeaders.setContentType(MediaType.IMAGE_JPEG);
-            } return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
         }
     }
 
