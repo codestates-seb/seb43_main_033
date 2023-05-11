@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import defaultcontract from "../defaultcontract.png";
+import defaultcontract from "../public/defaultcontract.png";
 import axios from "axios";
 
 type ModalProps = {
@@ -30,21 +30,21 @@ useEffect(() => {
   setStaffData(stafflist);
 }, [stafflist]);*/
 
-const [staffData, setStaffData] = useState({
-  staffnumber: "",
-  membername: "",
-  department: "",
-  position: "",
-   grade: "",
-});
+  const [staffData, setStaffData] = useState({
+    staffnumber: "",
+    membername: "",
+    department: "",
+    position: "",
+    grade: "",
+  });
 
-const staffInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = e.target;
-  setStaffData((prevData) => ({
-    ...prevData,
-    [name]: value,
-  }));
-};
+  const staffInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setStaffData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
 
@@ -69,7 +69,7 @@ const staffInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 };
 */
 
- /*const staffDeleteClick= () => {
+  /*const staffDeleteClick= () => {
  
    axios
       .delete(`http://localhost:8080/stafflists/1`, {
@@ -233,17 +233,17 @@ useEffect(() => {
           {selectedTab === "edit" && (
             <div className="flex justify-between">
               <div>
-              <div>
-                <div className="mt-2 mb-2 font-bold">사번</div>
-                <input
-                className="h-5 mb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                type="text"
-                value={staffData.staffnumber}
-                onChange={staffInputChange}
-                name="staffnumber"
-                />
-              </div>
-              <div>
+                <div>
+                  <div className="mt-2 mb-2 font-bold">사번</div>
+                  <input
+                    className="h-5 mb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
+                    type="text"
+                    value={staffData.staffnumber}
+                    onChange={staffInputChange}
+                    name="staffnumber"
+                  />
+                </div>
+                <div>
                   <div className="mb-2 font-bold">이름</div>
                   <input
                     className="mb-2 h-5 border-b border-gray-300 focus:outline-none hover:outline-none"
@@ -252,7 +252,7 @@ useEffect(() => {
                     onChange={staffInputChange}
                     name="membername"
                   />
-              </div>
+                </div>
               </div>
               <div>
                 <div>
