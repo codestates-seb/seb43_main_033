@@ -24,9 +24,18 @@ const MyCalendar = () => {
     setEvents(updatedEvents);
   };
 
-  const addEvent = (date: Date, startWork: string, endWork: string, note: string) => {
-    const startTime = moment(`${moment(date).format("YYYY-MM-DD")}T${startWork}:00.000`);
-    const endTime = moment(`${moment(date).format("YYYY-MM-DD")}T${endWork}:00.000`);
+  const addEvent = (
+    date: Date,
+    startWork: string,
+    endWork: string,
+    note: string
+  ) => {
+    const startTime = moment(
+      `${moment(date).format("YYYY-MM-DD")}T${startWork}:00.000`
+    );
+    const endTime = moment(
+      `${moment(date).format("YYYY-MM-DD")}T${endWork}:00.000`
+    );
 
     const formattedNote = `출근: ${startWork}, 퇴근: ${endWork}\n${note}`;
 
@@ -85,7 +94,10 @@ const MyCalendar = () => {
       <Dialog open={dialogIsOpen} onClose={() => setDialogIsOpen(false)}>
         <DialogTitle className="font-bold">
           근무 현황 기록표
-          <button className="float-right font-bold" onClick={() => setDialogIsOpen(false)}>
+          <button
+            className="float-right font-bold"
+            onClick={() => setDialogIsOpen(false)}
+          >
             X
           </button>
         </DialogTitle>
@@ -102,4 +114,3 @@ const MyCalendar = () => {
 };
 
 export default MyCalendar;
-         
