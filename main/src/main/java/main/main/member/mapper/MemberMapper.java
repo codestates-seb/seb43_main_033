@@ -1,8 +1,13 @@
 package main.main.member.mapper;
 
+import main.main.bank.dto.BankDto;
+import main.main.bank.entity.Bank;
 import main.main.member.dto.MemberDto;
 import main.main.member.entity.Member;
+import main.main.memberbank.dto.MemberBankDto;
+import main.main.memberbank.entity.MemberBank;
 import org.mapstruct.Mapper;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,7 +17,30 @@ public interface MemberMapper {
 
 
     Member memberPostToMember(MemberDto.Post requestBody);
-    MemberDto.Response memberToMemberResponse(Member member);
+    default MemberDto.Response memberToMemberResponse(Member member) {
+        return MemberDto.Response.builder()
+                .memberId(member.getMemberId())
+                .email(member.getEmail())
+                .residentNumber(member.getResidentNumber())
+                .address(member.getAddress())
+                .name(member.getName())
+                .phoneNumber(member.getPhoneNumber())
+                .bank(getMemberBankToMember(member.getMemberBanks()))
+                .build();
+    }
+
+    default List<MemberBankDto.MemberBankList> getMemberBankToMember (List<MemberBank> memberBanks) {
+        return memberBanks.stream()
+                .map(memberBankList -> MemberBankDto.MemberBankList.builder()
+                        .memberBankId(memberBankList.getMemberBankId())
+                        .bankName(memberBankList.getBank().getBankGroup().getBankName())
+                        .accountNumber(memberBankList.getAccountNumber())
+                        .bankCode(memberBankList.getBank().getBankGroup().getBankCode())
+                        .bankId(memberBankList.getBank().getBankId())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     Member responserPatchToMember(MemberDto.Patch requestBody, long authenticationUserId);
 
     MemberDto.Response memberPatchToMember(Member member);
@@ -31,7 +59,6 @@ public interface MemberMapper {
                 .email(member.getEmail())
                 .residentNumber(member.getResidentNumber())
                 .address(member.getAddress())
-                .roles(member.getRoles())
                 .build();
     }
 }

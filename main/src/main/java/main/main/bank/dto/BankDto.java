@@ -23,4 +23,13 @@ public class BankDto {
         private String bankCode;
         private String bankName;
     }
+
+    @Getter
+    @Builder
+    public static class BankToMember {
+        private Long bankId;
+        private String bankCode;
+        private String bankName;
+
+    }
 }

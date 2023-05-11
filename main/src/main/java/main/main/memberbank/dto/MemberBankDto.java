@@ -4,6 +4,9 @@ package main.main.memberbank.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.bank.entity.Bank;
+
+import java.util.List;
 
 public class MemberBankDto {
 @Getter
@@ -47,6 +50,18 @@ public static class Response {
         private String bankCode;
         private String bankName;
         private String accountNumber;
+
+    }
+
+    @Getter
+    @Builder
+    public static class MemberBankList {
+
+        private Long memberBankId;
+        private Long bankId;
+        private String bankName;
+        private String accountNumber;
+        private String bankCode;
 
     }
 }
