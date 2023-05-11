@@ -4,14 +4,14 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Event as CalendarEvent } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { Dialog, DialogTitle, DialogContent } from "@material-ui/core";
+// import { Dialog, DialogTitle, DialogContent } from "@material-ui/core";
 import WorkRecordTable from "./WorkRecordTable";
 
 const localizer = momentLocalizer(moment);
 
 interface Event {
   start: Date;
-  
+
   end: Date;
   title: string;
 }
@@ -92,7 +92,7 @@ const MyCalendar = () => {
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />
-      <Dialog open={dialogIsOpen} onClose={() => setDialogIsOpen(false)}>
+      {/* <Dialog open={dialogIsOpen} onClose={() => setDialogIsOpen(false)}>
         <DialogTitle className="font-bold">
           근무 현황 기록표
           <button
@@ -102,14 +102,14 @@ const MyCalendar = () => {
             X
           </button>
         </DialogTitle>
-        <DialogContent>
-          <WorkRecordTable
+        <DialogContent> */}
+      {/* <WorkRecordTable
             date={selectedDate}
             addEvent={addEvent}
             deleteEvent={deleteEvent}
           />
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </div>
   );
 };

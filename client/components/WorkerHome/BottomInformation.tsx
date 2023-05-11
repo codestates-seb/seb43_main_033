@@ -30,7 +30,7 @@ export default function BottomInformation() {
     {
       key: 1683469475958,
       input: "히히",
-    },    
+    },
   ]);
 
   const handleOnBottomModal = () => {
@@ -62,9 +62,12 @@ export default function BottomInformation() {
         </div>
         <section className="flex flex-col min-h-32">
           <ul className="flex flex-col overflow-scroll">
-            {bottomList.map((x) => {
+            {bottomList.map((x, idx) => {
               return (
-                <li className="flex flex-wrap justify-between items-center">
+                <li
+                  key={idx}
+                  className="flex flex-wrap justify-between items-center"
+                >
                   <span>{x.input}</span>
                   <div>
                     <button
