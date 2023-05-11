@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Navi from "../../components/ManagerNavi";
-import AuthenticateModal from "../../components/authenticateComponents/AuthenticateModal";
-import AuthenticatePageList from "../../components/authenticateComponents/AuthenticatePageList";
+import AuthenticateModal from "../../components/AuthenticateComponents/AuthenticateModal";
+import AuthenticatePageList from "../../components/AuthenticateComponents/AuthenticatePageList";
 import axios from "axios";
 
 interface Inputs {

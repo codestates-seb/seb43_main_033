@@ -1,4 +1,4 @@
-import Logo from "./logo";
+import Logo from "./Logo";
 import Link from "next/link";
 
 export default function Footer() {
