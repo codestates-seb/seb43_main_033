@@ -1,14 +1,14 @@
 //import { useState } from 'react';
 "use client";
 import { useState } from "react";
-import GreenTop from "../components/GreenTop";
-import StaffSelect from "../components/StaffSelect";
-import StaffSelectModal from "../components/StaffSelectModal";
-import PaystubName from "../components/PaystubName";
-import PaystubInput from "../components/PaystubInput";
-import PaystubPreview from "../components/PaystubPreview";
-import WorkingStatus from "../components/WorkingStatus";
-// import Navi from "../Navi"
+import GreenTop from "../../components/GreenTop";
+import StaffSelect from "../../components/StaffSelect";
+import StaffSelectModal from "../../components/StaffSelectModal";
+import PaystubName from "../../components/PaystubName";
+import PaystubInput from "../../components/PaystubInput";
+import PaystubPreview from "../../components/PaystubPreview";
+import WorkingStatus from "../../components/WorkingStatus";
+import Navi from "../../components/managerNavi"
 
 const Paystub = () => {
   const [showModal, setShowModal] = useState(false);
@@ -16,8 +16,10 @@ const Paystub = () => {
 
   //  const [isChecked, setIsChecked] = useState<boolean>(false);
   return (
-    <div>
-      {/* <Navi /> */}
+    <>
+    <Navi />
+    <div className="">
+      
       <GreenTop>직원선택</GreenTop>
       <div className="bg-white p-3 m-5 flex justify-between">
         <StaffSelect>홍길동</StaffSelect>
@@ -72,6 +74,7 @@ const Paystub = () => {
       <GreenTop>공제내역</GreenTop>
       <WorkingStatus></WorkingStatus>
     </div>
+    </>
   );
 };
 

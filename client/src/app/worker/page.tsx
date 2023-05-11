@@ -1,15 +1,19 @@
 import Link from "next/link"
-import Navi from "../Navi"
+import Navi from "../components/workerNavi"
+import TopInformation from "../components/WorkerHome/TopInformation"
+import MiddleInformation from "../components/WorkerHome/MiddleInformation"
+import BottomInformation from "../components/WorkerHome/BottomInformation"
 
-export default function Worker() {
+
+export default function ManagerHome() {
   return (
-    <div className="flex">
+    <>
     <Navi />
-    <main className="max-w-screen-sm mx-auto flex flex-col pt-28 m-16">
-      <article className="bg-white p-6 border border-solid border-black h-screen/4 w-full">
-        근로자 전용 페이지
-      </article>
-    </main>
-    </div>
-  )
+      <section className="flex-1 flex flex-col px-8 py-4 bg-stone-50">
+        <TopInformation />
+        <MiddleInformation />
+        <BottomInformation />
+      </section>
+    </>
+  );
 }

@@ -1,6 +1,6 @@
 "use client"
-import Bigsquare from '../components/Bigsquare';
-import Navi from '../Navi';
+import Bigsquare from '../../components/Bigsquare';
+import Navi from "../../components/workerNavi";
 
 export default function Mycontract() {
    

@@ -26,7 +26,7 @@ export default function BottomModal(props) {
       ></button>
       <div className="flex justify-center items-center font-semibold text-white mb-3">
         <span className="justify-center items-center font-semibold text-2xl">
-          이번 달 특이사항
+          개인 정보 수정
         </span>
       </div>
       <section className="flex flex-col p-3 pt-6 w-full bg-stone-100 rounded">
