@@ -1,16 +1,10 @@
 import { data } from "autoprefixer";
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  OptionHTMLAttributes,
-  useState,
-} from "react";
+import { ChangeEvent, useState } from "react";
 import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import axios from "axios";
 
-export default function WorkingStatus() {
+export default function WorkingStatusAdd() {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishDate] = useState(new Date());
   const [statusDate, setStatusDate] = useState("");
@@ -59,8 +53,8 @@ export default function WorkingStatus() {
       .catch((err) => console.log(err));
   };
   return (
-    <div>
-      <div className="ml-10">
+    <div className=" flex border p-2">
+      <div className="flex">
         <select onChange={(e) => handleStatus(e)}>
           {statusArr.map((el, idx) => (
             <option key={idx} value={el}>
@@ -82,8 +76,10 @@ export default function WorkingStatus() {
           dateFormat="MM/dd/yyyy h:mm aa"
           showTimeInput
         />
-        <button onClick={handleSubmit}>submit</button>
       </div>
+      <button className="ml-10 " onClick={handleSubmit}>
+        submit
+      </button>
     </div>
   );
 }
