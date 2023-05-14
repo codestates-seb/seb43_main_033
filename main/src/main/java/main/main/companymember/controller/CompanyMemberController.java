@@ -65,4 +65,13 @@ public class CompanyMemberController {
         companyMemberService.companyMemberUpdate(companyMemberId, status);
     }
 
+    @PatchMapping("/role/{companymember-id}")
+    public ResponseEntity<CompanyMember> updateMemberRole(
+            @PathVariable("companymember-id") Long companyMemberId,
+            @RequestBody CompanyMemberDto.Roles roles) {
+
+        CompanyMember companyMember = companyMemberService.updateCompanyMemberRole(companyMemberId, roles);
+
+        return new ResponseEntity(companyMemberMapper.companyMemberToRolesResponse(companyMember), HttpStatus.OK);
+    }
 }

@@ -17,7 +17,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final AuthenticationManager authenticationManager;
@@ -57,7 +59,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Map<String, Object> claims = new HashMap<>();
         claims.put("memberId", member.getMemberId());
         claims.put("email", member.getEmail());
-        claims.put("roles", member.getRoles());
+
+        List<String> roles = member.getCompanyMembers().stream()
+                .flatMap(companyMember -> companyMember.getRoles().stream())
+                        .collect(Collectors.toList());
+
+        claims.put("roles", roles);
 
         String subject = member.getEmail();
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());

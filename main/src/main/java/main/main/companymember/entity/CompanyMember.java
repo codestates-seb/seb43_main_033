@@ -6,6 +6,8 @@ import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -28,6 +30,8 @@ public class CompanyMember {
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
 
     private String Grade;
     private String Team;

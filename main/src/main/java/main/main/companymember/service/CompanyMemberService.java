@@ -1,10 +1,13 @@
 package main.main.companymember.service;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
+import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.mapper.CompanyMemberMapper;
 import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,11 +28,16 @@ public class CompanyMemberService {
     private final CompanyMemberRepository companyMemberRepository;
     private final CompanyService companyService;
     private final MemberService memberService;
+    private final CompanyMemberMapper companyMemberMapper;
+    private final CustomAuthorityUtils authorityUtils;
 
     public CompanyMember createCompanyMember(CompanyMember companyMember) {
 
         Company company = companyService.findCompany(companyMember.getCompany().getCompanyId());
         Member member = memberService.findMember(companyMember.getMember().getMemberId());
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        companyMember.setRoles(roles);
 
         companyMember.setCompany(company);
         companyMember.setMember(member);
@@ -82,4 +91,12 @@ public class CompanyMemberService {
         return companyMemberRepository.save(companyMember);
     }
 
-}
+        public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
+
+        CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
+
+        companyMember.setRoles(companyMemberMapper.companyMemberToRoles(roles));
+            return companyMemberRepository.save(companyMember);
+        }
+    }

@@ -5,6 +5,7 @@ import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.entity.CompanyMember;
 import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
+import org.springframework.util.MultiValueMap;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +54,7 @@ public interface CompanyMemberMapper {
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
                 .status(companyMember.getStatus())
+                .roles(companyMember.getRoles())
                 .build();
     }
     default CompanyMemberDto.ResponseForList companyMemberToCompanyMemberResponseForList(CompanyMember companyMember) {
@@ -72,4 +74,10 @@ public interface CompanyMemberMapper {
                 .map(companyMember -> companyMemberToCompanyMemberResponseForList(companyMember))
                 .collect(Collectors.toList());
     }
+
+    default List<String> companyMemberToRoles(CompanyMemberDto.Roles roles) {
+        return roles.getRoles();
+    }
+
+    CompanyMemberDto.Roles companyMemberToRolesResponse(CompanyMember companyMember);
 }
