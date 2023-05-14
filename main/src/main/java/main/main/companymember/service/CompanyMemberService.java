@@ -3,6 +3,7 @@ package main.main.companymember.service;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
+import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.repository.CompanyMemberRepository;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -82,4 +84,7 @@ public class CompanyMemberService {
         return companyMemberRepository.save(companyMember);
     }
 
+    public List<CompanyMember> getCompanyMembersByAuthority(Authority authority) {
+        return companyMemberRepository.findByAuthority(authority);
+    }
 }

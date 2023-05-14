@@ -24,6 +24,7 @@ public interface CompanyMemberMapper {
         companyMember.setMember(member);
         companyMember.setGrade(requestBody.getGrade());
         companyMember.setTeam(requestBody.getTeam());
+        companyMember.setAuthority(requestBody.getAuthority());
 
         return companyMember;
     }
@@ -41,6 +42,7 @@ public interface CompanyMemberMapper {
         companyMember.setCompanyMemberId(requestBody.getCompanyMemberId());
         companyMember.setGrade(requestBody.getGrade());
         companyMember.setTeam(requestBody.getTeam());
+        companyMember.setAuthority(requestBody.getAuthority());
 
         return companyMember;
     }
@@ -53,6 +55,7 @@ public interface CompanyMemberMapper {
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
                 .status(companyMember.getStatus())
+                .authority(companyMember.getAuthority())
                 .build();
     }
     default CompanyMemberDto.ResponseForList companyMemberToCompanyMemberResponseForList(CompanyMember companyMember) {
@@ -63,6 +66,7 @@ public interface CompanyMemberMapper {
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
                 .status(companyMember.getStatus())
+                .authority(companyMember.getAuthority())
                 .build();
     }
 
