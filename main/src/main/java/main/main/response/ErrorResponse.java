@@ -93,7 +93,9 @@ public class ErrorResponse {
     public static ErrorResponse of(ExceptionCode exceptionCode) {
         return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
     }
-
+    public static ErrorResponse of(ExceptionCode exceptionCode, String message) {
+        return new ErrorResponse(exceptionCode.getStatus(), message);
+    }
     public static ErrorResponse of(HttpStatus httpStatus) {
         return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase());
     }
