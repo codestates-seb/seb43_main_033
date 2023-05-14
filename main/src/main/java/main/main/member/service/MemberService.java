@@ -2,10 +2,14 @@ package main.main.member.service;
 
 import lombok.RequiredArgsConstructor;
 import main.main.auth.utils.CustomAuthorityUtils;
+import main.main.company.entity.Company;
+import main.main.company.repository.CompanyRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
+import main.main.member.dto.MemberDto;
 import main.main.member.dto.Position;
 import main.main.member.entity.Member;
+import main.main.member.mapper.MemberMapper;
 import main.main.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +28,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final CompanyRepository companyRepository;
+    private final MemberMapper mapper;
     public Member updateMember(Member member) {
         Member findedMember = findVerifiedMember(member.getMemberId());
         verifiyExitstEmail(member.getEmail());
@@ -46,6 +52,16 @@ public class MemberService {
         return memberRepository.save(findedMember);
     }
 
+//    public Member companyMember (long memberId, long companyId) {
+//
+//        Member member = findMember(memberId);
+//        Company company = companyRepository.findById(companyId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//
+//        member.setCompany(company);
+//
+//        return memberRepository.save(member);
+//    }
 
     public Member findMember(Long memberId) {
         return findVerifiedMember(memberId);
@@ -56,8 +72,8 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
 
-        List<String> roles = authorityUtils.createRoles(member.getEmail());
-        member.setRoles(roles);
+//        List<String> roles = authorityUtils.createRoles(member.getEmail());
+//        member.setRoles(roles);
 
         return memberRepository.save(member);
 
@@ -147,5 +163,20 @@ public class MemberService {
     public List<Member> getMembersByPosition(Position position) {
         return memberRepository.findByPosition(position);
     }
+
+//    public Member updateMemberRole(Long memberId, Long companyId, MemberDto.Roles roles) {
+//
+//        Member member = memberRepository.findById(memberId)
+//                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+//
+//        Company company = member.getCompany();
+//
+//        if (company.getCompanyId().equals(companyId)) {
+//            member.setRoles(mapper.memberPatchToRole(roles));
+//            return memberRepository.save(member);
+//        } else {
+//            throw new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND);
+//        }
+//    }
 
 }

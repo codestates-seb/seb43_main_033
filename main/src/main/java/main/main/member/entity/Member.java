@@ -1,7 +1,7 @@
 package main.main.member.entity;
 
 import lombok.*;
-import main.main.company.entity.Company;
+import main.main.bank.entity.Bank;
 import main.main.companymember.entity.CompanyMember;
 import main.main.member.dto.Position;
 import main.main.memberbank.entity.MemberBank;
@@ -23,7 +23,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long memberId;
-
     private String name;
     private String phoneNumber;
     private String email;
@@ -33,14 +32,9 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Position position;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
-
-    @ManyToOne
-    @JoinColumn(name = "COMPANY_ID")
-    private Company company;
-
-    @OneToMany(mappedBy = "member")
+//    @ElementCollection(fetch = FetchType.EAGER)
+//    private List<String> roles = new ArrayList<>();
+    @OneToMany(mappedBy = "member",  fetch = FetchType.EAGER)
     private List<CompanyMember> companyMembers = new ArrayList<>();
     public void addCompanyMember(CompanyMember companyMember) {this.companyMembers.add(companyMember); }
 

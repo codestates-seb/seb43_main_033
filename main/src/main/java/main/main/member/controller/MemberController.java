@@ -2,6 +2,7 @@ package main.main.member.controller;
 
 import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
+import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.dto.ListPageResponseDto;
 import main.main.member.dto.MemberDto;
 import main.main.member.dto.Position;
@@ -13,6 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -73,7 +77,7 @@ public class MemberController {
             position = Position.STAFF;
         }
 
-        member.setRoles(Arrays.asList(position.getRole()));
+//        member.setRoles(Arrays.asList(position.getRole()));
 
         memberService.updateMember(member);
         return new ResponseEntity<>(mapper.memberPatchToMember(memberService.findMember(memberId)), HttpStatus.OK);
@@ -135,6 +139,25 @@ public class MemberController {
         List<Member> members = memberService.getMembersByPosition(pos);
         return ResponseEntity.ok(members);
     }
+
+//    @PatchMapping("/{company-id}/{member-id}/role")
+//    public ResponseEntity<Member> updateMemberRole(
+//            @PathVariable("member-id") Long memberId,
+//            @PathVariable("company-id") Long companyId,
+//            @RequestBody MemberDto.Roles roles) {
+//
+//        memberService.updateMemberRole(memberId, companyId, roles);
+//
+//        return new ResponseEntity(mapper.memberPatchToMember(memberService.findMember(memberId)), HttpStatus.OK);
+//    }
+//
+//    @PatchMapping("/transfer/{member-id}/{company-id}")
+//    public ResponseEntity companyTransfer(@PathVariable("member-id") Long memberId,
+//                                          @PathVariable("company-id") Long companyId) {
+//
+//        return new ResponseEntity(mapper.memberToMembersResponses(
+//                memberService.companyMember(memberId, companyId)), HttpStatus.OK);
+//    }
 
 
 }
