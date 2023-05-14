@@ -22,7 +22,9 @@ public interface MemberBankMapper {
 
         memberBank.setMember(member);
         memberBank.setBank(bank);
+
         memberBank.setAccountNumber(requestBody.getAccountNumber());
+        memberBank.setMainAccount(requestBody.isMainAccount());
 
 
         return memberBank;
@@ -41,6 +43,7 @@ public interface MemberBankMapper {
         memberBank.setBank(bank);
         memberBank.setMemberBankId(requestBody.getMemberBankId());
         memberBank.setAccountNumber(requestBody.getAccountNumber());
+        memberBank.setMainAccount(requestBody.isMainAccount());
 
         return memberBank;
     }
@@ -54,6 +57,7 @@ public interface MemberBankMapper {
                 .bankName(memberBank.getBank().getBankGroup().getBankName())
                 .accountNumber(memberBank.getAccountNumber())
                 .memberId(memberBank.getMember().getMemberId())
+                .mainAccount(memberBank.isMainAccount())
                 .build();
     }
 
@@ -65,6 +69,7 @@ public interface MemberBankMapper {
                 .bankName(memberBank.getBank().getBankGroup().getBankName())
                 .accountNumber(memberBank.getAccountNumber())
                 .memberId(memberBank.getMember().getMemberId())
+                .mainAccount(memberBank.isMainAccount())
                 .build();
     }
 
