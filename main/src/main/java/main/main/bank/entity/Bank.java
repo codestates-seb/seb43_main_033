@@ -18,6 +18,7 @@ public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter
+    @Column(name = "ID")
     private Long bankId;
 
     @Enumerated(EnumType.STRING)
@@ -86,7 +87,7 @@ public class Bank {
             this.bankName = bankName;
         }
 
-        @JsonValue
+//        @JsonValue
         public String getBankCode() {
             return bankCode;
         }
