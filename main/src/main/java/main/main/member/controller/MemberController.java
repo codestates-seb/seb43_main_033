@@ -73,7 +73,6 @@ public class MemberController {
             position = Position.STAFF;
         }
 
-        member.setRoles(Arrays.asList(position.getRole()));
 
         memberService.updateMember(member);
         return new ResponseEntity<>(mapper.memberPatchToMember(memberService.findMember(memberId)), HttpStatus.OK);

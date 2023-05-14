@@ -35,14 +35,11 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Position position;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    private List<String> roles = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(fetch =FetchType.EAGER ,mappedBy = "member")
     @JsonIgnore
     @JsonIgnoreProperties("members")
     private List<CompanyMember> companyMembers = new ArrayList<>();
