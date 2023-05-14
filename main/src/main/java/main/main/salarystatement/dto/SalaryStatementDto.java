@@ -44,7 +44,6 @@ public class SalaryStatementDto {
         private BigDecimal healthInsurance;
         private BigDecimal employmentInsurance;
         private BigDecimal totalSalary;
-        private long bankId;
         private String bankName;
         private String accountNumber;
         private boolean paymentStatus;
