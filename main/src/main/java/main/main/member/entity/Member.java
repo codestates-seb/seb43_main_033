@@ -1,5 +1,7 @@
 package main.main.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.entity.CompanyMember;
@@ -41,6 +43,8 @@ public class Member {
     private Company company;
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
+    @JsonIgnoreProperties("members")
     private List<CompanyMember> companyMembers = new ArrayList<>();
     public void addCompanyMember(CompanyMember companyMember) {this.companyMembers.add(companyMember); }
 
@@ -52,6 +56,7 @@ public class Member {
 
 
     @OneToMany(mappedBy = "member")
+    @JsonIgnoreProperties("member")
     private List<MemberBank> memberBanks = new ArrayList<>();
     public void addMemberBank(MemberBank memberBank) { this.memberBanks.add(memberBank); }
 
