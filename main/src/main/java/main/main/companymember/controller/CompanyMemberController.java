@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.mapper.CompanyMemberMapper;
+import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.companymember.service.CompanyMemberService;
 import main.main.dto.ListPageResponseDto;
 import org.springframework.data.domain.Page;
@@ -63,6 +64,16 @@ public class CompanyMemberController {
             , @PathVariable("status") String status) {
 
         companyMemberService.companyMemberUpdate(companyMemberId, status);
+    }
+
+    @PatchMapping("/role/{companymember-id}")
+    public ResponseEntity<CompanyMember> updateMemberRole(
+            @PathVariable("companymember-id") Long companyMemberId,
+            @RequestBody CompanyMemberDto.Roles roles) {
+
+        CompanyMember companyMember = companyMemberService.updateCompanyMemberRole(companyMemberId, roles);
+
+        return new ResponseEntity(companyMemberMapper.companyMemberToRolesResponse(companyMember), HttpStatus.OK);
     }
 
 }

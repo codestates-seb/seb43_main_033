@@ -55,6 +55,7 @@ public interface CompanyMemberMapper {
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
                 .status(companyMember.getStatus())
+                .roles(companyMember.getRoles())
                 .authority(companyMember.getAuthority())
                 .build();
     }
@@ -76,4 +77,10 @@ public interface CompanyMemberMapper {
                 .map(companyMember -> companyMemberToCompanyMemberResponseForList(companyMember))
                 .collect(Collectors.toList());
     }
+
+    default List<String> companyMemberToRoles(CompanyMemberDto.Roles roles) {
+        return roles.getRoles();
+    }
+
+    CompanyMemberDto.Roles companyMemberToRolesResponse(CompanyMember companyMember);
 }
