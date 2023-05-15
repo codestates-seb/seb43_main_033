@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 public class CompanyMemberDto {
 
     @Getter
@@ -45,6 +47,7 @@ public class CompanyMemberDto {
         private String grade;
         private String team;
         private Status status;
+        private List<String> roles;
         private Authority authority;
 
 
@@ -63,6 +66,13 @@ public class CompanyMemberDto {
         private Status status;
         private Authority authority;
 
+
+    }
+
+    @Getter
+    @Setter
+    public static class Roles {
+        private List<String> roles;
 
     }
 }

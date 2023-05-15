@@ -1,11 +1,14 @@
 package main.main.companymember.service;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
 import main.main.companymember.dto.Authority;
+import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.mapper.CompanyMemberMapper;
 import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
@@ -26,11 +29,16 @@ public class CompanyMemberService {
     private final CompanyMemberRepository companyMemberRepository;
     private final CompanyService companyService;
     private final MemberService memberService;
+    private final CustomAuthorityUtils authorityUtils;
+    private final CompanyMemberMapper companyMemberMapper;
 
     public CompanyMember createCompanyMember(CompanyMember companyMember) {
 
         Company company = companyService.findCompany(companyMember.getCompany().getCompanyId());
         Member member = memberService.findMember(companyMember.getMember().getMemberId());
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        companyMember.setRoles(roles);
 
         companyMember.setCompany(company);
         companyMember.setMember(member);
@@ -86,5 +94,14 @@ public class CompanyMemberService {
 
     public List<CompanyMember> getCompanyMembersByAuthority(Authority authority) {
         return companyMemberRepository.findByAuthority(authority);
+    }
+
+    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
+
+        CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
+
+        companyMember.setRoles(companyMemberMapper.companyMemberToRoles(roles));
+        return companyMemberRepository.save(companyMember);
     }
 }

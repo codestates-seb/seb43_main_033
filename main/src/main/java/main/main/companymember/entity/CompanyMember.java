@@ -10,6 +10,8 @@ import main.main.member.entity.Member;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -40,6 +42,8 @@ public class CompanyMember {
 
     private Status status;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
