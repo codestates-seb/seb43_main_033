@@ -3,7 +3,6 @@ package main.main.companymember.repository;
 import main.main.company.entity.Company;
 import main.main.companymember.dto.Authority;
 import main.main.companymember.entity.CompanyMember;
-import main.main.member.dto.Position;
 import main.main.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
