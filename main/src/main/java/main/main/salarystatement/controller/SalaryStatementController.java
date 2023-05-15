@@ -1,6 +1,7 @@
 package main.main.salarystatement.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.member.service.MemberService;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.salarystatement.entity.SalaryStatement;
@@ -23,28 +24,32 @@ public class SalaryStatementController {
 
     @PostMapping
     public ResponseEntity postSalaryStatement(@RequestBody SalaryStatementDto.Post requestBody) {
-        salaryStatementService.createSalaryStatement(salaryStatementMapper.postToSalaryStatement(requestBody));
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        salaryStatementService.createSalaryStatement(salaryStatementMapper.postToSalaryStatement(requestBody), authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/{salarystatement-id}")
     public ResponseEntity getSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
-        SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId, authenticationMemberId);
 
         return new ResponseEntity<>(salaryStatementMapper.salaryStatementToResponse(salaryStatement), HttpStatus.OK);
     }
 
     @DeleteMapping("/{salarystatement-id}")
     public ResponseEntity deleteSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
-        salaryStatementService.deleteSalaryStatement(salaryStatementId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        salaryStatementService.deleteSalaryStatement(salaryStatementId, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/{salarystatement-id}/payslip")
     public ResponseEntity<byte[]> generatePayslip(@PathVariable("salarystatement-id") long salaryStatementId ) throws Exception {
-        SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId, authenticationMemberId);
         ByteArrayOutputStream baos = salaryStatementService.makePdf(salaryStatement);
 
         HttpHeaders headers = new HttpHeaders();
@@ -57,7 +62,8 @@ public class SalaryStatementController {
 
     @PostMapping("/{salarystatement-id}/payslip")
     public ResponseEntity sendSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
-        salaryStatementService.sendEmail(salaryStatementId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        salaryStatementService.sendEmail(salaryStatementId, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
