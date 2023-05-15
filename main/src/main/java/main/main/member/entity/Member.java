@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.entity.CompanyMember;
-import main.main.member.dto.Position;
 import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.entity.SalaryStatement;
 
@@ -32,8 +31,6 @@ public class Member {
     private String password;
     private String residentNumber;
     private String address;
-    @Enumerated(EnumType.STRING)
-    private Position position;
 
     @ManyToOne
     @JoinColumn(name = "COMPANY_ID")
