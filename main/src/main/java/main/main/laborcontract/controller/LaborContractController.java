@@ -1,6 +1,7 @@
 package main.main.laborcontract.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.mapper.LaborContractMapper;
@@ -25,7 +26,8 @@ public class LaborContractController {
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity postLaborContract(@RequestPart LaborContractDto.Post requestPart,
                                             @RequestPart(required = false) MultipartFile file) {
-        laborContractService.creatLaborContract(laborContractMapper.postToLaborContract(requestPart), file);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        laborContractService.creatLaborContract(laborContractMapper.postToLaborContract(requestPart), file, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -34,21 +36,25 @@ public class LaborContractController {
     public ResponseEntity patchLaborContract(@PathVariable("laborcontract-id") long laborContractId,
                                              @RequestPart LaborContractDto.Patch requestPart,
                                              @RequestPart(required = false) MultipartFile file) {
-        laborContractService.updateLaborContract(laborContractId, laborContractMapper.patchToLaborContract(requestPart), file);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        laborContractService.updateLaborContract(laborContractId, laborContractMapper.patchToLaborContract(requestPart), file, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{laborcontract-id}")
     public ResponseEntity getLaborContract(@PathVariable("laborcontract-id") long laborContractId) {
-        LaborContract laborContract = laborContractService.findLaborContract(laborContractId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        LaborContract laborContract = laborContractService.findLaborContract(laborContractId, authenticationMemberId);
 
         return new ResponseEntity<>(laborContractMapper.laborContractToResponse(laborContract), HttpStatus.OK);
     }
 
     @GetMapping("/{laborcontract-id}/file")
     public ResponseEntity<byte[]> getProfileImage(@PathVariable("laborcontract-id") long laborContractId) throws IOException {
-        HashMap<byte[], String> image = laborContractService.getImage(laborContractId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        HashMap<byte[], String> image = laborContractService.getImage(laborContractId, authenticationMemberId);
         byte[] imageByteArray = image.keySet().iterator().next();
         String imageType = image.get(imageByteArray);
 
@@ -58,7 +64,8 @@ public class LaborContractController {
 
     @DeleteMapping("/{laborcontract-id}")
     public ResponseEntity deleteLaborContract(@PathVariable("laborcontract-id") long laborContractId) {
-        laborContractService.deleteLaborContract(laborContractId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        laborContractService.deleteLaborContract(laborContractId, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

@@ -3,6 +3,8 @@ package main.main.laborcontract.service;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.laborcontract.entity.LaborContract;
@@ -26,13 +28,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LaborContractService {
     private final LaborContractRepository laborContractRepository;
+    private final CompanyMemberRepository companyMemberRepository;
     private final MemberService memberService;
     private final CompanyService companyService;
 
-    public void creatLaborContract(LaborContract laborContract, MultipartFile file) {
+    public void creatLaborContract(LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
         Member member = memberService.findMember(laborContract.getMember().getMemberId());
         Company company = companyService.findCompany(laborContract.getCompany().getCompanyId());
-        MemberBank memberBank = (MemberBank) member.getMemberBanks().stream().filter(mainMemberBank -> mainMemberBank.isMainAccount());
+        MemberBank memberBank = member.getMemberBanks().stream()
+                .filter(mainMemberBank -> mainMemberBank.isMainAccount())
+                .findFirst()
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBERBANK_ONLY_ONE));
+
+        checkPermission(authenticationMemberId, company);
 
         laborContract.setMember(member);
         laborContract.setCompany(company);
@@ -45,10 +53,10 @@ public class LaborContractService {
         uploadFile(file, savedLaborContract);
     }
 
-
-
-    public void updateLaborContract(long laborContractId, LaborContract laborContract, MultipartFile file) {
+    public void updateLaborContract(long laborContractId, LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
         LaborContract findedLaborContract = findVerifiedContract(laborContractId);
+
+        checkPermission(authenticationMemberId, findedLaborContract.getCompany());
 
         Optional.ofNullable(laborContract.getBasicSalary())
                 .ifPresent(basicSalary -> findedLaborContract.setBasicSalary(basicSalary));
@@ -64,8 +72,12 @@ public class LaborContractService {
         uploadFile(file, findedLaborContract);
     }
 
-    public LaborContract findLaborContract(long laborContractId) {
-        return findVerifiedContract(laborContractId);
+    public LaborContract findLaborContract(long laborContractId, long authenticationMemberId) {
+        LaborContract findedLaborContract = findVerifiedContract(laborContractId);
+
+        checkGetPermission(authenticationMemberId, findedLaborContract);
+
+        return findedLaborContract;
     }
 
     public LaborContract findLaborContractForSalaryStatement(Member member, Company company, int year, int month) {
@@ -76,11 +88,15 @@ public class LaborContractService {
         return  laborContract;
     }
 
-    public void deleteLaborContract(long laborContractId) {
+    public void deleteLaborContract(long laborContractId, long authenticationMemberId) {
+        checkPermission(authenticationMemberId, findVerifiedContract(laborContractId).getCompany());
+
         laborContractRepository.delete(findVerifiedContract(laborContractId));
     }
 
-    public HashMap<byte[], String> getImage(long laborContractId) throws IOException {
+    public HashMap<byte[], String> getImage(long laborContractId, long authenticationMemberId) throws IOException {
+        checkGetPermission(authenticationMemberId, findVerifiedContract(laborContractId));
+
         String dir = Long.toString(laborContractId);
         File folder = new File("img" + File.separator + "근로계약서" + File.separator + dir);
         File[] files = folder.listFiles();
@@ -139,6 +155,28 @@ public class LaborContractService {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void checkPermission(long authenticationMemberId, Company company) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member manager = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(manager, company);
+        if (!companyMember.getRoles().contains("MANAGER")) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkGetPermission(long authenticationMemberId, LaborContract findedLaborContract) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member manager = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(manager, findedLaborContract.getCompany());
+        if (!companyMember.getRoles().contains("MANAGER") || findedLaborContract.getMember().getMemberId() != authenticationMemberId) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
     }
 }
