@@ -50,7 +50,7 @@ public class SalaryStatementService {
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
 
-    public void createSalaryStatement(SalaryStatement salaryStatement) {
+    public void createSalaryStatement(SalaryStatement salaryStatement, long authenticationMemberId) {
         Member member = memberService.findMember(salaryStatement.getMember().getMemberId());
         Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
         CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
@@ -66,6 +66,8 @@ public class SalaryStatementService {
         BigDecimal holidayWorkAllowance = BigDecimal.ZERO;
         int holidayWorkAllowanceBasis = 0;
         BigDecimal unpaidLeave = BigDecimal.ZERO;
+
+        checkPermission(authenticationMemberId, company);
 
         for (StatusOfWork statusOfWork : statusOfWorks) {
             switch (statusOfWork.getNote()) {
@@ -141,12 +143,20 @@ public class SalaryStatementService {
         statusOfWorks.stream().forEach(statusOfWork -> statusOfWork.setSalaryStatement(savedSalaryStatement));
     }
 
-    public SalaryStatement findSalaryStatement(long salaryStatementId) {
-        return  findVerifiedSalaryStatement(salaryStatementId);
+    public SalaryStatement findSalaryStatement(long salaryStatementId, long authenticationMemberId) {
+        SalaryStatement salaryStatement = findVerifiedSalaryStatement(salaryStatementId);
+
+        checkGetPermission(authenticationMemberId, salaryStatement);
+
+        return salaryStatement;
     }
 
-    public void deleteSalaryStatement(long salaryStatementId) {
-        salaryStatementRepository.delete(findVerifiedSalaryStatement(salaryStatementId));
+    public void deleteSalaryStatement(long salaryStatementId, long authenticationMemberId) {
+        SalaryStatement salaryStatement = findVerifiedSalaryStatement(salaryStatementId);
+
+        checkPermission(authenticationMemberId, salaryStatement.getCompany());
+
+        salaryStatementRepository.delete(salaryStatement);
     }
 
     private SalaryStatement findVerifiedSalaryStatement(long salaryStatementId) {
@@ -607,8 +617,11 @@ public class SalaryStatementService {
         return baos;
     }
 
-    public void sendEmail(long salaryStatementId) {
+    public void sendEmail(long salaryStatementId, long authenticationMemberId) {
         SalaryStatement salaryStatement = findVerifiedSalaryStatement(salaryStatementId);
+
+        checkPermission(authenticationMemberId, salaryStatement.getCompany());
+
         String year = String.valueOf(salaryStatement.getYear());
         String month = String.valueOf(salaryStatement.getMonth());
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -631,5 +644,27 @@ public class SalaryStatementService {
         context.setVariable("year", year);
         context.setVariable("month", month);
         return templateEngine.process(type, context);
+    }
+
+    private void checkPermission(long authenticationMemberId, Company company) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member manager = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(manager, company);
+        if (!companyMember.getRoles().contains("MANAGER")) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkGetPermission(long authenticationMemberId, SalaryStatement findedSalaryStatement) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member manager = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(manager, findedSalaryStatement.getCompany());
+        if (!companyMember.getRoles().contains("MANAGER") || findedSalaryStatement.getMember().getMemberId() != authenticationMemberId) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
     }
 }
