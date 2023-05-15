@@ -17,7 +17,7 @@ const Paystub = () => {
   return (
     <>
       <Navi />
-      <div className="">
+      <div className="w-full">
         <Greenheader>직원선택</Greenheader>
         <div className="bg-white p-3 m-5 flex justify-between">
           <StaffSelect>홍길동</StaffSelect>
