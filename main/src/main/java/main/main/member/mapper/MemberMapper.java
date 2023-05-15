@@ -1,13 +1,10 @@
 package main.main.member.mapper;
 
-import main.main.bank.dto.BankDto;
-import main.main.bank.entity.Bank;
 import main.main.member.dto.MemberDto;
 import main.main.member.entity.Member;
 import main.main.memberbank.dto.MemberBankDto;
 import main.main.memberbank.entity.MemberBank;
 import org.mapstruct.Mapper;
-import org.springframework.security.core.GrantedAuthority;
 
 import java.util.List;
 import java.util.stream.Collectors;

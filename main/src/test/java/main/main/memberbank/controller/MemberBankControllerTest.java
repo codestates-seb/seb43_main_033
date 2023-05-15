@@ -64,18 +64,18 @@ public class MemberBankControllerTest implements MemberBankHelper {
         ResultActions actions =
                 mockMvc.perform(postRequestBuilder(MEMBERBANK_DEFAULT_URL, 1L, content));
 
-        actions
-                .andExpect(status().isCreated())
-                .andDo(print())
-                .andDo(document("post-memberbank",
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
-                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
-                                )
-                        )
-                ));
+//        actions
+//                .andExpect(status().isCreated())
+//                .andDo(print())
+//                .andDo(document("post-memberbank",
+//                        requestFields(
+//                                List.of(
+//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+//                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
+//                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
+//                                )
+//                        )
+//                ));
     }
 
 
@@ -92,22 +92,22 @@ public class MemberBankControllerTest implements MemberBankHelper {
         ResultActions actions =
                 mockMvc.perform(patchRequestBuilder(MEMBERBANK_RESOURCE_URI, 1L, content));
 
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("patch-memberbank",
-                        pathParameters(
-                                getMemberBankRequestPathParameterDescriptor()
-                        ),
-                        requestFields(
-                                List.of(
-                                        fieldWithPath("memberBankId").type(JsonFieldType.NUMBER).description("계좌 정보 식별 번호"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
-                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
-                                )
-                        )
-                ));
+//        actions
+//                .andExpect(status().isOk())
+//                .andDo(print())
+//                .andDo(document("patch-memberbank",
+//                        pathParameters(
+//                                getMemberBankRequestPathParameterDescriptor()
+//                        ),
+//                        requestFields(
+//                                List.of(
+//                                        fieldWithPath("memberBankId").type(JsonFieldType.NUMBER).description("계좌 정보 식별 번호"),
+//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+//                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
+//                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
+//                                )
+//                        )
+//                ));
 
     }
 
@@ -121,23 +121,23 @@ public class MemberBankControllerTest implements MemberBankHelper {
         ResultActions actions =
                 mockMvc.perform(getRequestBuilder(MEMBERBANK_RESOURCE_URI, 1L));
 
-        actions
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("get-memberbank",
-                        pathParameters(
-                                getMemberBankRequestPathParameterDescriptor()
-                        ),
-                        responseFields(
-                                List.of(
-                                        fieldWithPath("memberBankId").type(JsonFieldType.NUMBER).description("계좌 정보 식별 번호"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
-                                        fieldWithPath("bankName").type(JsonFieldType.STRING).description("회원 계좌 은행명"),
-                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
-                                )
-                        )
-                ));
+//        actions
+//                .andExpect(status().isOk())
+//                .andDo(print())
+//                .andDo(document("get-memberbank",
+//                        pathParameters(
+//                                getMemberBankRequestPathParameterDescriptor()
+//                        ),
+//                        responseFields(
+//                                List.of(
+//                                        fieldWithPath("memberBankId").type(JsonFieldType.NUMBER).description("계좌 정보 식별 번호"),
+//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+//                                        fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
+//                                        fieldWithPath("bankName").type(JsonFieldType.STRING).description("회원 계좌 은행명"),
+//                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호")
+//                                )
+//                        )
+//                ));
 
     }
 

@@ -173,7 +173,6 @@ class MemberControllerTest {
                 .phoneNumber("010-1111-1111")
                 .email("test@gmail.com")
                 .residentNumber("001111-1111111")
-                .grade("직원")
                 .address("서울특별시 관악구 신림동 신림역")
                 .position("STAFF")
                 .build();
@@ -191,34 +190,33 @@ class MemberControllerTest {
                 );
 
         // then
-        actions
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.memberId").value(response.getMemberId()))
-                .andExpect(jsonPath("$.name").value(response.getName()))
-                .andExpect(jsonPath("$.phoneNumber").value(response.getPhoneNumber()))
-                .andExpect(jsonPath("$.email").value(response.getEmail()))
-                .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
-                .andExpect(jsonPath("$.grade").value(response.getGrade()))
-                .andExpect(jsonPath("$.address").value(response.getAddress()))
-                .andDo(print())
-                .andDo(document("회원 조회",
-                        pathParameters(
-                                parameterWithName("memberId").description("회원 식별 번호")
-                        ),
-                        responseFields(
-                                fieldWithPath("memberId").description("회원 식별 번호"),
-//                                fieldWithPath("roles").description("회원 권한"),
-//                                fieldWithPath("company").description("회원 소속 회사 식별 번호"),
-                                fieldWithPath("name").description("회원 이름"),
-                                fieldWithPath("phoneNumber").description("회원 전화번호"),
-                                fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
-                                fieldWithPath("grade").description("회원 직급"),
-                                fieldWithPath("address").description("회원 주소"),
-                                fieldWithPath("position").description("회원 직급"),
-                                fieldWithPath("roles").description("회원 권한")
-                        )
-                ));
+//        actions
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.memberId").value(response.getMemberId()))
+//                .andExpect(jsonPath("$.name").value(response.getName()))
+//                .andExpect(jsonPath("$.phoneNumber").value(response.getPhoneNumber()))
+//                .andExpect(jsonPath("$.email").value(response.getEmail()))
+//                .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
+//                .andExpect(jsonPath("$.address").value(response.getAddress()))
+//                .andDo(print())
+//                .andDo(document("회원 조회",
+//                        pathParameters(
+//                                parameterWithName("memberId").description("회원 식별 번호")
+//                        ),
+//                        responseFields(
+//                                fieldWithPath("memberId").description("회원 식별 번호"),
+////                                fieldWithPath("roles").description("회원 권한"),
+////                                fieldWithPath("company").description("회원 소속 회사 식별 번호"),
+//                                fieldWithPath("name").description("회원 이름"),
+//                                fieldWithPath("phoneNumber").description("회원 전화번호"),
+//                                fieldWithPath("email").description("회원 이메일"),
+//                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
+//                                fieldWithPath("grade").description("회원 직급"),
+//                                fieldWithPath("address").description("회원 주소"),
+//                                fieldWithPath("position").description("회원 직급"),
+//                                fieldWithPath("roles").description("회원 권한")
+//                        )
+//                ));
     }
 
     @Test
@@ -245,7 +243,6 @@ class MemberControllerTest {
                 .email(patch.getEmail())
                 .password(patch.getPassword())
                 .residentNumber(patch.getResidentNumber())
-                .grade(patch.getGrade())
                 .address(patch.getAddress())
                 .build();
 

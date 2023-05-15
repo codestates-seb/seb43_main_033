@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.dto.ListPageResponseDto;
 import main.main.member.dto.MemberDto;
-import main.main.member.dto.Position;
 import main.main.member.entity.Member;
 import main.main.member.mapper.MemberMapper;
 import main.main.member.service.MemberService;
@@ -64,15 +63,8 @@ public class MemberController {
                                     @Valid @RequestBody MemberDto.Patch requestBody) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         requestBody.setMemberId(memberId);
-//        memberService.updateMember(mapper.responserPatchToMember(requestBody, authenticationMemberId));
 
         Member member = mapper.responserPatchToMember(requestBody, authenticationMemberId);
-
-        Position position = member.getPosition();
-        if (position == null) {
-            position = Position.STAFF;
-        }
-
 
         memberService.updateMember(member);
         return new ResponseEntity<>(mapper.memberPatchToMember(memberService.findMember(memberId)), HttpStatus.OK);
@@ -127,13 +119,5 @@ public class MemberController {
             } return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
         }
     }
-
-    @GetMapping("/position/{position}")
-    public ResponseEntity<List<Member>> getMembersByPosition(@PathVariable String position) {
-        Position pos = Position.valueOf(position);
-        List<Member> members = memberService.getMembersByPosition(pos);
-        return ResponseEntity.ok(members);
-    }
-
 
 }

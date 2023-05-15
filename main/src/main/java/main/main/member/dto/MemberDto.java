@@ -36,21 +36,17 @@ public class MemberDto {
         private String residentNumber;
         private String grade;
         private String address;
-        private String position;
     }
 
     @Getter
     @Builder
     public static class Response {
         private Long memberId;
-        private Long companyId;
         private String name;
         private String phoneNumber;
         private String email;
         private String residentNumber;
         private String address;
-        private String position;
         private List<MemberBankDto.MemberBankList> bank;
-//        private List<String> roles;
     }
 }

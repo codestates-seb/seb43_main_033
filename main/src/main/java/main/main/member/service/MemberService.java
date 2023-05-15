@@ -1,10 +1,8 @@
 package main.main.member.service;
 
 import lombok.RequiredArgsConstructor;
-import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
-import main.main.member.dto.Position;
 import main.main.member.entity.Member;
 import main.main.member.repository.MemberRepository;
 import org.springframework.data.domain.Page;
@@ -22,7 +20,6 @@ import java.util.*;
 public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
-    private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
     public Member updateMember(Member member) {
         Member findedMember = findVerifiedMember(member.getMemberId());
@@ -40,8 +37,6 @@ public class MemberService {
                 .ifPresent(residentNumber -> findedMember.setResidentNumber(member.getResidentNumber()));
         Optional.ofNullable(member.getAddress())
                 .ifPresent(address -> findedMember.setAddress(member.getAddress()));
-        Optional.ofNullable(member.getPosition())
-                .ifPresent(position -> findedMember.setPosition(member.getPosition()));
 
         return memberRepository.save(findedMember);
     }
@@ -140,10 +135,6 @@ public class MemberService {
         } finally {
             return result;
         }
-    }
-
-    public List<Member> getMembersByPosition(Position position) {
-        return memberRepository.findByPosition(position);
     }
 
 }
