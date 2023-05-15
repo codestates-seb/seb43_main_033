@@ -174,7 +174,6 @@ class MemberControllerTest {
                 .email("test@gmail.com")
                 .residentNumber("001111-1111111")
                 .address("서울특별시 관악구 신림동 신림역")
-                .position("STAFF")
                 .build();
 
 
@@ -233,7 +232,6 @@ class MemberControllerTest {
                 .residentNumber("001111-1111111")
                 .grade("매니저")
                 .address("서울특별시 금천구 독산동 독산역")
-                .position("MEMBER")
                 .build();
 
         Member updatedMember = Member.builder()

@@ -60,7 +60,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
         MockMultipartFile pdfFile = new MockMultipartFile("file", "test.png", "image/png", " ".getBytes());
 
         given(laborContractMapper.postToLaborContract(Mockito.any(LaborContractDto.Post.class))).willReturn(new LaborContract());
-        doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
+        doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class), Mockito.anyLong());
 
         mockMvc.perform(multipart(LABORCONTRACT_DEFAULT_URL)
                         .file(jsonFile)
@@ -100,7 +100,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
         MockMultipartFile pdfFile = new MockMultipartFile("file", "test.png", "image/png", " ".getBytes());
 
         given(laborContractMapper.patchToLaborContract(Mockito.any(LaborContractDto.Patch.class))).willReturn(new LaborContract());
-        doNothing().when(laborContractService).updateLaborContract(Mockito.anyLong(), Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class));
+        doNothing().when(laborContractService).updateLaborContract(Mockito.anyLong(), Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class), Mockito.anyLong());
 
         mockMvc.perform(multipartPutBuilder("/laborcontracts/{laborcontarct-id}", 1L)
                 .file(jsonFile)
@@ -134,7 +134,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
     @Test
     @DisplayName("LaborContract Get Test")
     public void getLaborContractTest() throws Exception {
-        given(laborContractService.findLaborContract(Mockito.anyLong())).willReturn(new LaborContract());
+        given(laborContractService.findLaborContract(Mockito.anyLong(), Mockito.anyLong())).willReturn(new LaborContract());
         given(laborContractMapper.laborContractToResponse(Mockito.any(LaborContract.class))).willReturn(StubData.MockLaborContract.getResponseBody());
 
         mockMvc.perform(getRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L));
@@ -163,7 +163,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
     @Test
     @DisplayName("LaborContract Image Get Test")
     public void getLaborContractImageTest() throws Exception {
-        given(laborContractService.getImage(Mockito.anyLong())).willReturn(StubData.MockLaborContract.getImage());
+        given(laborContractService.getImage(Mockito.anyLong(), Mockito.anyLong())).willReturn(StubData.MockLaborContract.getImage());
 
         mockMvc.perform(getImageRequestBuilder(LABORCONTRACT_IMAGE_URI, 1L))
                 .andExpect(status().isOk())
@@ -181,7 +181,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
     @Test
     @DisplayName("LaborContract Delete Test")
     public void deleteLaborContractTest() throws Exception {
-        doNothing().when(laborContractService).deleteLaborContract(Mockito.anyLong());
+        doNothing().when(laborContractService).deleteLaborContract(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(deleteRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
