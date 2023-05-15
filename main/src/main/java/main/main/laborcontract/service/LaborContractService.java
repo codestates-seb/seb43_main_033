@@ -32,7 +32,7 @@ public class LaborContractService {
     public void creatLaborContract(LaborContract laborContract, MultipartFile file) {
         Member member = memberService.findMember(laborContract.getMember().getMemberId());
         Company company = companyService.findCompany(laborContract.getCompany().getCompanyId());
-        MemberBank memberBank = member.getMemberBanks().stream().filter(mainMemberBank -> mainMemberBank.getMainTransaction());
+        MemberBank memberBank = (MemberBank) member.getMemberBanks().stream().filter(mainMemberBank -> mainMemberBank.isMainAccount());
 
         laborContract.setMember(member);
         laborContract.setCompany(company);

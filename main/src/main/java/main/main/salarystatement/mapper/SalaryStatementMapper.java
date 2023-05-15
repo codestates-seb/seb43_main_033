@@ -49,9 +49,8 @@ public interface SalaryStatementMapper {
                 .healthInsurance(salaryStatement.getHealthInsurance())
                 .employmentInsurance(salaryStatement.getEmploymentInsurance())
                 .totalSalary(salaryStatement.getTotalSalary())
-                .bankId(salaryStatement.getMemberBank().getBank().getBankId())
-                .bankName(salaryStatement.getMemberBank().getBank().getBankGroup().getBankName())
-                .accountNumber(salaryStatement.getMemberBank().getAccountNumber())
+                .bankName(salaryStatement.getBankName())
+                .accountNumber(salaryStatement.getAccountNumber())
                 .paymentStatus(salaryStatement.isPaymentStatus()).build();
     }
 }
