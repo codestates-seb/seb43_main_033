@@ -58,7 +58,7 @@ public class SalaryStatementControllerTest implements SalaryStatementHelper {
         String content = toJsonContent(post);
 
         given(salaryStatementMapper.postToSalaryStatement(Mockito.any(SalaryStatementDto.Post.class))).willReturn(new SalaryStatement());
-        doNothing().when(salaryStatementService).createSalaryStatement(Mockito.any(SalaryStatement.class));
+        doNothing().when(salaryStatementService).createSalaryStatement(Mockito.any(SalaryStatement.class), Mockito.anyLong());
 
         mockMvc.perform(postRequestBuilder(SALARYSTATEMENT_DEFAULT_URL, content))
                 .andExpect(status().isCreated())
@@ -80,7 +80,7 @@ public class SalaryStatementControllerTest implements SalaryStatementHelper {
     @Test
     @DisplayName("SalaryStatement Get Test")
     public void getSalaryStatementTest() throws Exception {
-        given(salaryStatementService.findSalaryStatement(Mockito.anyLong())).willReturn(new SalaryStatement());
+        given(salaryStatementService.findSalaryStatement(Mockito.anyLong(), Mockito.anyLong())).willReturn(new SalaryStatement());
         given(salaryStatementMapper.salaryStatementToResponse(Mockito.any(SalaryStatement.class))).willReturn(StubData.MockSalaryStatement.getResponseBody());
 
         mockMvc.perform(getRequestBuilder(SALARYSTATEMENT_RESOURCE_URI, 1L));
@@ -127,7 +127,7 @@ public class SalaryStatementControllerTest implements SalaryStatementHelper {
     @Test
     @DisplayName("SalaryStatement Delete Test")
     public void deleteSalaryStatementTest() throws Exception {
-        doNothing().when(salaryStatementService).deleteSalaryStatement(Mockito.anyLong());
+        doNothing().when(salaryStatementService).deleteSalaryStatement(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(deleteRequestBuilder(SALARYSTATEMENT_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
@@ -147,7 +147,7 @@ public class SalaryStatementControllerTest implements SalaryStatementHelper {
     @Test
     @DisplayName("SalaryStatement Download Test")
     public void downloadSalaryStatementTest() throws Exception {
-        given(salaryStatementService.findSalaryStatement(Mockito.anyLong())).willReturn(new SalaryStatement());
+        given(salaryStatementService.findSalaryStatement(Mockito.anyLong(), Mockito.anyLong())).willReturn(new SalaryStatement());
         given(salaryStatementService.makePdf(Mockito.any(SalaryStatement.class))).willReturn(new ByteArrayOutputStream());
 
         ByteArrayOutputStream content = new ByteArrayOutputStream();
@@ -178,7 +178,7 @@ public class SalaryStatementControllerTest implements SalaryStatementHelper {
     @Test
     @DisplayName("Email Send Test")
     public void sendEmailTest() throws Exception {
-        doNothing().when(salaryStatementService).sendEmail(Mockito.anyLong());
+        doNothing().when(salaryStatementService).sendEmail(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(post("/salarystatements/{salarystatement-id}/payslip", 1L))
                 .andExpect(status().isOk())
