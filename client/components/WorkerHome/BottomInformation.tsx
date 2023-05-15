@@ -1,10 +1,16 @@
 "use client";
 import { useState } from "react";
+import axios from "axios";
 import BottomModal from "./BottomModal";
+
+interface BottomItem {
+  key: number;
+  input: string;
+}
 
 export default function BottomInformation() {
   const [isBottomModal, setIsBottomModal] = useState(false);
-  const [bottomList, setBottomList] = useState([
+  const [bottomList, setBottomList] = useState<BottomItem[]>([
     {
       key: 1683469475954,
       input: "안녕",
@@ -25,7 +31,6 @@ export default function BottomInformation() {
       key: 1683469475958,
       input: "히히",
     },
-    
   ]);
 
   const handleOnBottomModal = () => {
@@ -57,16 +62,26 @@ export default function BottomInformation() {
         </div>
         <section className="flex flex-col min-h-32">
           <ul className="flex flex-col overflow-scroll">
-            {bottomList.map((x) => {
+            {bottomList.map((x, idx) => {
               return (
-                <li className="flex flex-wrap justify-between">
+                <li
+                  key={idx}
+                  className="flex flex-wrap justify-between items-center"
+                >
                   <span>{x.input}</span>
                   <div>
                     <button
                       className="cursor-pointer"
                       onClick={() => handleOnDelete(x.key)}
                     >
-                      취소
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        height="30"
+                        viewBox="0 96 960 960"
+                        width="30"
+                      >
+                        <path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
+                      </svg>
                     </button>
                   </div>
                 </li>

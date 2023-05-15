@@ -3,19 +3,20 @@ import { useState } from "react";
 import Bigsquare from "../../components/Bigsquare";
 import ListBox from "../../components/ListBox";
 import MyStaffModal from "../../components/MyStaffModal";
-import Navi from "../../components/managerNavi";
+import Navi from "../../components/ManagerNavi";
 import { format } from "date-fns";
-import CheckBox from "@mui/icons-material/CheckBox";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+
 interface MyStaffData {
   staffnumber: number;
-  memberName: string;
+  name: string;
   department: string;
-
-  rank: string;
+  position: string;
   note: string;
-  startTime: number;
-  finishTime: number;
-  management: string;
+  startTime: string;
+  finishTime: string;
+  grade: string;
   salary: number;
 }
 
@@ -25,24 +26,24 @@ export default function Mystaff() {
   const data: MyStaffData[] = [
     {
       staffnumber: 2023001,
-      memberName: "홍길동",
+      name: "홍길동",
       department: "회계팀",
-      rank: "사원",
+      position: "사원",
       note: "지각",
-      startTime: 900,
-      finishTime: 1800,
-      management: "standard",
+      startTime: "00:00",
+      finishTime: "00:00",
+      grade: "standard",
       salary: 4000000,
     },
     {
       staffnumber: 2023002,
-      memberName: "김철수",
+      name: "김철수",
       department: "마케팅팀",
-      rank: "대리",
+      position: "대리",
       note: "결근",
-      startTime: 1000,
-      finishTime: 1900,
-      management: "flextime",
+      startTime: "10:00",
+      finishTime: "19:00",
+      grade: "manager",
       salary: 4500000,
     },
     //...
@@ -56,7 +57,7 @@ export default function Mystaff() {
         <div className="flex justify-end pb-3">
           <h1 className="pr-10">우리 회사의 근무시간 : 09:00~18:00</h1>
           <i className="material-icons"></i>
-          <CheckBox />
+          <CheckBoxIcon />
           <h1 className="mr-8">오늘의 근무상황</h1>
         </div>
         <div className="h-screen w-full flex justify-center">
@@ -75,27 +76,28 @@ export default function Mystaff() {
               <div>기본근무시간</div>
               <div className="sm:mr-20 lg:mr-40 lg:pr-20">관리권한</div>
             </ListBox>
-            {data ? (
+            {data && (
               <>
                 {data.map((item, index) => (
                   <ListBox key={index}>
                     <div>{item.staffnumber}</div>
-                    <div>{item.memberName}</div>
+                    <div>{item.name}</div>
                     <div>{item.department}</div>
-                    <div>{item.rank}</div>
+                    <div>{item.position}</div>
                     <div>
                       {item.finishTime} {item.note}
                     </div>
                     <div>
                       {item.startTime}~{item.finishTime}
                     </div>
-                    <div className="pr-5">{item.management}</div>
+                    <div className="pr-5">{item.grade}</div>
                     <button
                       className="text-sm font-bold hover:bg-gray-300"
                       onClick={() => setShowModal(true)}
                     >
-                      수정
+                      <EditOutlinedIcon />
                     </button>
+
                     {showModal && (
                       <MyStaffModal
                         onClose={() => setShowModal(false)}
@@ -104,7 +106,7 @@ export default function Mystaff() {
                   </ListBox>
                 ))}
               </>
-            ) : null}
+            )}
           </Bigsquare>
         </div>
       </div>
