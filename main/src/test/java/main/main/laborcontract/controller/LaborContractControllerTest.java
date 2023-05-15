@@ -137,26 +137,29 @@ public class LaborContractControllerTest implements LaborContractHelper {
         given(laborContractService.findLaborContract(Mockito.anyLong(), Mockito.anyLong())).willReturn(new LaborContract());
         given(laborContractMapper.laborContractToResponse(Mockito.any(LaborContract.class))).willReturn(StubData.MockLaborContract.getResponseBody());
 
-        mockMvc.perform(getRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L));
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andDo(document("get-LaborContract",
-//                        getRequestPreProcessor(),
-//                        getResponsePreProcessor(),
-//                        pathParameters(
-//                                getRequestPathParameterDescriptor()
-//                        ),
-//                        responseFields(
-//                                List.of(
-//                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("회원 이름"),
-//                                        fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
-//                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
-//                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
-//                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
-//                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
-//                                )
-//                        )
-//                ));
+        mockMvc.perform(getRequestBuilder(LABORCONTRACT_RESOURCE_URI, 1L))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-LaborContract",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                getRequestPathParameterDescriptor()
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("bankName").type(JsonFieldType.STRING).description("은행 이름"),
+                                        fieldWithPath("accountNumber").type(JsonFieldType.STRING).description("계좌 번호"),
+                                        fieldWithPath("accountHolder").type(JsonFieldType.STRING).description("예금주"),
+                                        fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                )
+                        )
+                ));
 
     }
 

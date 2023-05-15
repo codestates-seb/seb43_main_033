@@ -23,7 +23,6 @@ public class SalaryStatementDto {
         private long companyId;
         private String companyName;
         private long memberId;
-        private String memberName;
         private int year;
         private int month;
         private String name;
