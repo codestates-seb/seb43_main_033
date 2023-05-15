@@ -5,9 +5,7 @@ import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.Status;
-import main.main.member.dto.Position;
 import main.main.member.entity.Member;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
