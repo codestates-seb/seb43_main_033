@@ -65,7 +65,7 @@ public class SalaryStatement {
 
     private BigDecimal unpaidLeave; // 무급휴가
 
-    private BigDecimal salary;
+    private BigDecimal salary = BigDecimal.ZERO;
     public void setSalary() {
         this.salary.add(basePay).add(overtimePay).add(nightWorkAllowance).add(holidayWorkAllowance).add(unpaidLeave);
     }
@@ -78,7 +78,7 @@ public class SalaryStatement {
 
     private BigDecimal employmentInsurance; // 고용 보험
 
-    private BigDecimal totalSalary;
+    private BigDecimal totalSalary = BigDecimal.ZERO;
     public void setTotalSalary() {
         this.totalSalary.subtract(salary).subtract(incomeTax).subtract(nationalCoalition).subtract(healthInsurance).subtract(employmentInsurance);
     }

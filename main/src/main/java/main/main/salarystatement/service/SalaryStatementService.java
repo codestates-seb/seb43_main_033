@@ -31,6 +31,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -56,7 +57,7 @@ public class SalaryStatementService {
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
         LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
         BigDecimal basicSalary = laborContract.getBasicSalary();
-        BigDecimal hourlyWage = basicSalary.divide(BigDecimal.valueOf(209));
+        BigDecimal hourlyWage = basicSalary.divide(BigDecimal.valueOf(209), RoundingMode.HALF_UP);
         int time;
         BigDecimal overtimePay = BigDecimal.ZERO;
         int overtimePayBasis = 0;
