@@ -209,7 +209,6 @@ public class StubData {
                     .healthInsurance(BigDecimal.valueOf(10000))
                     .employmentInsurance(BigDecimal.valueOf(10000))
                     .totalSalary(BigDecimal.valueOf(2050000))
-                    .bankId(1L)
                     .bankName("국민")
                     .accountNumber("111-111111-11-11")
                     .build();
@@ -224,7 +223,6 @@ public class StubData {
             CompanyDto.Post post = new CompanyDto.Post();
             post.setCompanyName("회사명");
             post.setCompanySize("회사 규모");
-            post.setBusinessNumber("사업자 등록 번호");
             post.setAddress("회사 주소");
             post.setInformation("회사 정보");
 
@@ -263,14 +261,14 @@ public class StubData {
                     .build();
         }
 
-        public static CompanyDto.ResponseForSalary getCompanyResponseForSalary() {
-
-            return CompanyDto.ResponseForSalary.builder()
-                    .companyId(1L)
-                    .companyName("회사명")
-                    .totalSalaryOfCompany(BigDecimal.valueOf(10000))
-                    .build();
-        }
+//        public static CompanyDto.ResponseForSalary getCompanyResponseForSalary() {
+//
+//            return CompanyDto.ResponseForSalary.builder()
+//                    .companyId(1L)
+//                    .companyName("회사명")
+//                    .totalSalaryOfCompany(BigDecimal.valueOf(10000))
+//                    .build();
+//        }
 
         public static List<CompanyDto.ResponseForList> getCompaniesToCompaniesResponse() {
             return List.of(
