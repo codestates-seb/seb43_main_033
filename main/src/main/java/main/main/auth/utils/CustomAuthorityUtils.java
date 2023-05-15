@@ -11,21 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthorityUtils {
-    @Value("${mail.address.admin}")
-    private String adminMailAddress;
 
-    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_MEMBER");
+    private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_MEMBER");
+    private final List<GrantedAuthority> MANAGER_ROLES = AuthorityUtils.createAuthorityList("ROLE_MANAGER");
     private final List<GrantedAuthority> MEMBER_ROLES = AuthorityUtils.createAuthorityList("ROLE_MEMBER");
-    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "MEMBER");
+    private final List<String> ADMIN_ROLES_STRING = List.of("ADMIN", "MANAGER", "MEMBER");
     private final List<String> MEMBER_ROLES_STRING = List.of("MEMBER");
 
-    // 메모리 상의 Role을 기반으로 권한 정보 생성.
-    public List<GrantedAuthority> createAuthorities(String email) {
-        if (email.equals(adminMailAddress)) {
-            return ADMIN_ROLES;
-        }
-        return MEMBER_ROLES;
-    }
 
     // DB에 저장된 Role을 기반으로 권한 정보 생성
     public List<GrantedAuthority> createAuthorities(List<String> roles) {
@@ -37,9 +29,6 @@ public class CustomAuthorityUtils {
 
     // DB 저장 용
     public List<String> createRoles(String email) {
-        if (email.equals(adminMailAddress)) {
-            return ADMIN_ROLES_STRING;
-        }
         return MEMBER_ROLES_STRING;
     }
 }
