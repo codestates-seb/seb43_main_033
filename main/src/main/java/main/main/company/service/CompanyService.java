@@ -9,6 +9,7 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.entity.SalaryStatement;
 
 import org.springframework.data.domain.Page;
@@ -83,34 +84,34 @@ public class CompanyService {
         companyRepository.delete(findedCompany);
     }
 
-    public BigDecimal[] calculateSalaryOfCompany(long companyId) {
-        Optional<Company> optionalCompany = companyRepository.findById(companyId);
-        BigDecimal theSalaryOfTheCompanyThisMonth = BigDecimal.ZERO;
-        BigDecimal theSalaryOfTheCompanyLastMonth = BigDecimal.ZERO;
+    public BigDecimal[] salaryOfCompany(long companyId) {
+        Company company = findVerifiedCompany(companyId);
 
-        if (optionalCompany.isPresent()) {
-            List<SalaryStatement> statements = optionalCompany.get().getSalaryStatements();
+        BigDecimal salaryOfCompanyThisMonth = BigDecimal.ZERO;
+        BigDecimal salaryOfCompanyLastMonth = BigDecimal.ZERO;
 
-            if (statements != null) {
-                LocalDate currentMonth = LocalDate.now();
-                LocalDate lastMonth = currentMonth.minusMonths(1);
+        List<SalaryStatement> statements = company.getSalaryStatements();
 
-                for (SalaryStatement statement : statements) {
-                    LocalDate statementDate = LocalDate.of(statement.getYear(), statement.getMonth(), 1);
+        LocalDate localDate = LocalDate.now();
+        int currentYear = localDate.getYear();
+        int currentMonth = localDate.getMonthValue();
+        int lastMonth = (currentMonth == 1) ? 12 : currentMonth - 1;
+        int lastYear = (currentMonth == 1) ? currentYear - 1 : currentYear;
 
-                    if (statementDate.isEqual(currentMonth)) {
-                        statement.setTotalSalary();
-                        theSalaryOfTheCompanyThisMonth = theSalaryOfTheCompanyThisMonth.add(statement.getTotalSalary());
-                    }
 
-                    if (statementDate.isEqual(lastMonth)) {
-                        statement.setTotalSalary();
-                        theSalaryOfTheCompanyLastMonth = theSalaryOfTheCompanyLastMonth.add(statement.getTotalSalary());
-                    }
-                }
+        for (SalaryStatement statement : statements) {
+            int statementYear = statement.getYear();
+            int statementMonth = statement.getMonth();
+
+            if (statementMonth == currentMonth && statementYear == currentYear) {
+                salaryOfCompanyThisMonth = statement.getTotalSalary();
+            }
+
+            if (statementMonth == lastMonth && statementYear == lastYear) {
+                salaryOfCompanyLastMonth = statement.getTotalSalary();
             }
         }
-        return new BigDecimal[]{theSalaryOfTheCompanyThisMonth, theSalaryOfTheCompanyLastMonth};
+        return new BigDecimal[]{salaryOfCompanyThisMonth, salaryOfCompanyLastMonth};
     }
 
 

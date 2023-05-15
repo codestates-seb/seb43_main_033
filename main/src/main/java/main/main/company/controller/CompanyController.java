@@ -46,7 +46,7 @@ public class CompanyController {
         requestBody.setCompanyId(companyId);
 
         companyService.updateCompany(companyMapper.companyPatchToCompany(requestBody), requestBody.getBusinessNumber());
-        BigDecimal[] SalaryOfCompany = companyService.calculateSalaryOfCompany(companyId);
+        BigDecimal[] SalaryOfCompany = companyService.salaryOfCompany(companyId);
 
         Company company = companyService.findCompany(companyId);
 
@@ -57,7 +57,7 @@ public class CompanyController {
     @GetMapping("/{company-id}")
     public ResponseEntity getCompany(@PathVariable("company-id") @Positive long companyId) {
         Company company = companyService.findCompany(companyId);
-        BigDecimal[] SalaryOfCompany = companyService.calculateSalaryOfCompany(companyId);
+        BigDecimal[] SalaryOfCompany = companyService.salaryOfCompany(companyId);
         return new ResponseEntity<>(companyMapper.companyToCompanyResponse(company, SalaryOfCompany), HttpStatus.OK);
 
     }
