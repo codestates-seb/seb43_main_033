@@ -1,13 +1,13 @@
 //import { useState } from 'react';
 "use client";
 import { useState } from "react";
-import GreenTop from "../../components/PaystubPage/GreenTop";
+import Greenheader from "../../components/PaystubPage/GreenTop";
 import StaffSelect from "../../components/StaffSelect";
 import StaffSelectModal from "../../components/StaffSelectModal";
 import PaystubPreview from "../../components/PaystubPage/PaystubPreview";
 import WorkingStatus from "../../components/PaystubPage/WorkingStatus";
-import Navi from "../../components/managerNavi";
-import AccountAdd from "@/app/components/PaystubPage/AccountAdd";
+import Navi from "../../components/ManagerNavi";
+import AccountAdd from "../../components/PaystubPage/AccountAdd";
 
 const Paystub = () => {
   const [showModal, setShowModal] = useState(false);
@@ -18,7 +18,7 @@ const Paystub = () => {
     <>
       <Navi />
       <div className="">
-        <GreenTop>직원선택</GreenTop>
+        <Greenheader>직원선택</Greenheader>
         <div className="bg-white p-3 m-5 flex justify-between">
           <StaffSelect>홍길동</StaffSelect>
           <button
@@ -40,11 +40,11 @@ const Paystub = () => {
             <StaffSelect>ddd</StaffSelect>
           </StaffSelectModal>
         )}
-        <GreenTop>계좌번호</GreenTop>
+        <Greenheader>계좌번호</Greenheader>
         <AccountAdd />
-        <GreenTop>근태</GreenTop>
+        <Greenheader>근태</Greenheader>
         <WorkingStatus></WorkingStatus>
-        <GreenTop>지급내역</GreenTop>
+        <Greenheader>지급내역</Greenheader>
         <PaystubPreview></PaystubPreview>
       </div>
     </>
