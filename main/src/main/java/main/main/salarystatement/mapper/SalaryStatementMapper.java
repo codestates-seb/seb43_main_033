@@ -28,7 +28,6 @@ public interface SalaryStatementMapper {
                 .companyId(salaryStatement.getCompany().getCompanyId())
                 .companyName(salaryStatement.getCompany().getCompanyName())
                 .memberId(salaryStatement.getMember().getMemberId())
-                .memberName(salaryStatement.getMember().getName())
                 .year(salaryStatement.getYear())
                 .month(salaryStatement.getMonth())
                 .name(salaryStatement.getName())

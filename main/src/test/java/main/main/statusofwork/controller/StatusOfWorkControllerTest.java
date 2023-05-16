@@ -57,7 +57,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         String content = toJsonContent(post);
 
         given(statusOfWorkMapper.postToStatusOfWork(Mockito.any(StatusOfWorkDto.Post.class))).willReturn(new StatusOfWork());
-        doNothing().when(statusOfWorkService).createStatusOfWork(Mockito.any(StatusOfWork.class));
+        doNothing().when(statusOfWorkService).createStatusOfWork(Mockito.any(StatusOfWork.class), Mockito.anyLong());
 
         mockMvc.perform(postRequestBuilder(STATUSOFWORK_DEFAULT_URL, content))
                 .andExpect(status().isCreated())
@@ -84,7 +84,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         String content = toJsonContent(patch);
 
         given(statusOfWorkMapper.patchToStatusOfWork(Mockito.any(StatusOfWorkDto.Patch.class))).willReturn(new StatusOfWork());
-        doNothing().when(statusOfWorkService).updateStatusOfWork(Mockito.anyLong(), Mockito.any(StatusOfWork.class));
+        doNothing().when(statusOfWorkService).updateStatusOfWork(Mockito.anyLong(), Mockito.any(StatusOfWork.class), Mockito.anyLong());
 
         mockMvc.perform(patchRequestBuilder(STATUSOFWORK_RESOURCE_URI, 1L, content))
                 .andExpect(status().isOk())
@@ -148,7 +148,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
     @Test
     @DisplayName("StatusOfWork Delete Test")
     public void deleteStatusOfWorkTest() throws Exception {
-        doNothing().when(statusOfWorkService).deleteStatusOfWork(Mockito.anyLong());
+        doNothing().when(statusOfWorkService).deleteStatusOfWork(Mockito.anyLong(), Mockito.anyLong());
 
         mockMvc.perform(deleteRequestBuilder(STATUSOFWORK_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
