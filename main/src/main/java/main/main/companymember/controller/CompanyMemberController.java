@@ -26,7 +26,7 @@ public class CompanyMemberController {
 
     @PostMapping
     public ResponseEntity postCompanyMember(@Valid @RequestBody CompanyMemberDto.Post requestBody) {
-        CompanyMember companyMember = companyMemberService.createCompanyMember(companyMemberMapper.companyMemberPostToCompanyMember(requestBody));
+        companyMemberService.createCompanyMember(companyMemberMapper.companyMemberPostToCompanyMember(requestBody));
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -34,6 +34,13 @@ public class CompanyMemberController {
     public ResponseEntity patchCompanyMember(@Positive @PathVariable("companymember-id") long companyMemberId,
                                              @Valid @RequestBody CompanyMemberDto.Patch requestBody) {
         requestBody.setCompanyMemberId(companyMemberId);
+        String grade = requestBody.getGrade();
+        String team = requestBody.getTeam();
+
+        CompanyMember companyMember = new CompanyMember();
+        companyMember.setGrade(grade);
+        companyMember.setTeam(team);
+
         companyMemberService.updateCompanyMember(companyMemberMapper.companyMemberPacthToCompanyMember(requestBody));
         return new ResponseEntity<>(companyMemberMapper.companyMemberToCompanyMemberResponse(companyMemberService.findCompanyMember(companyMemberId)), HttpStatus.OK);
     }
