@@ -4,6 +4,9 @@ import AccountAdd from "./AccountAdd";
 export default function AccountList() {
   const accountDataArr: Account[] = accountData.bank;
   const [accountAdd, setAccountAdd] = useState(false);
+  const [accountEditId, setAccountEditId] = useState<number | null>(null);
+  const [accountDeleteId, setAccountDeleteId] = useState<number | null>(null);
+  const [accoutEdit, setAccountEdit] = useState<string | null>(null);
   return (
     <div className="ml-10">
       {accountDataArr.map((el, idx) => {
@@ -17,6 +20,29 @@ export default function AccountList() {
             <div className="w-[120px]">{el.bankCode}</div>
             <div className="w-[170px]">{el.bankName}</div>
             <div className="w-[170px]">{el.accountNumber}</div>
+            <button
+              className="text-[12px] text-gray-400"
+              onClick={() => {
+                setAccountEditId(el.memberBankId);
+                setAccountEdit(el.accountNumber);
+              }}
+            >
+              edit
+            </button>
+            <button
+              className="ml-5 text-[12px] text-gray-400"
+              onClick={() => setAccountDeleteId(el.memberBankId)}
+            >
+              delete
+            </button>
+            {accountEditId === el.memberBankId ? (
+              <AccountAdd
+                setAccountAdd={setAccountAdd}
+                setAccountEditId={setAccountEditId}
+                accountEditId={accountEditId}
+                accoutEdit={accoutEdit}
+              />
+            ) : null}
           </div>
         );
       })}
@@ -57,7 +83,7 @@ export const accountData: AccountData = {
       mainAccount: false,
     },
     {
-      memberBankId: 1,
+      memberBankId: 2,
       bankId: 3,
       bankName: "난쟁은행",
       accountNumber: "1234-112-124421",
@@ -65,7 +91,7 @@ export const accountData: AccountData = {
       mainAccount: false,
     },
     {
-      memberBankId: 1,
+      memberBankId: 3,
       bankId: 3,
       bankName: "백설왕국은행",
       accountNumber: "156-112-124421",

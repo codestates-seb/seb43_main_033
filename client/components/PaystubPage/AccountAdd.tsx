@@ -1,10 +1,20 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 export default function AccountAdd({
   setAccountAdd,
+  setAccountEditId,
+  accountEditId,
+  accoutEdit,
 }: {
   setAccountAdd: Dispatch<SetStateAction<boolean>>;
+  setAccountEditId: Dispatch<SetStateAction<number | null>>;
+  accountEditId: number | null;
+  accoutEdit: string | null;
 }) {
+  const [account, setAccount] = useState<string | null>(null);
+  useEffect(() => {
+    accoutEdit ? setAccount(accoutEdit) : setAccount(null);
+  }, [accoutEdit]);
   return (
     <div className="ml-10">
       <div className="fixed pt-40 z-10 inset-0 overflow-y-auto">
@@ -16,7 +26,11 @@ export default function AccountAdd({
             <div className="flex justify-end">
               <button
                 className="ml-5 fond-bold mb-3"
-                onClick={() => setAccountAdd(false)}
+                onClick={
+                  accountEditId
+                    ? () => setAccountEditId(null)
+                    : () => setAccountAdd(false)
+                }
               >
                 X
               </button>
@@ -28,6 +42,8 @@ export default function AccountAdd({
               <input
                 id="bankName"
                 className="borer border-b-2 outline-none"
+                value={account}
+                onChange={(e) => setAccount(e.target.value)}
               ></input>
               <div className="flex justify-end">
                 <button className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5">
