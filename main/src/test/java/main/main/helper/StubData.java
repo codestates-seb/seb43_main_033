@@ -4,7 +4,9 @@ import main.main.auth.jwt.JwtTokenizer;
 import main.main.bank.dto.BankDto;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
+import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.memberbank.dto.MemberBankDto;
@@ -383,6 +385,8 @@ public class StubData {
                     .memberId(1L)
                     .grade("회원 직급")
                     .team("회원 소속 부서")
+                    .status(Status.PENDING)
+                    .authority(Authority.MEMBER)
                     .build();
         }
 
@@ -394,6 +398,8 @@ public class StubData {
                             .memberId(1L)
                             .grade("회원 직급")
                             .team("회원 소속 부서")
+                            .status(Status.PENDING)
+                            .authority(Authority.MEMBER)
                             .build(),
                     CompanyMemberDto.ResponseForList.builder()
                             .companyMemberId(2L)
@@ -401,6 +407,8 @@ public class StubData {
                             .memberId(1L)
                             .grade("회원 직급")
                             .team("회원 소속 부서")
+                            .status(Status.PENDING)
+                            .authority(Authority.MEMBER)
                             .build()
             );
         }

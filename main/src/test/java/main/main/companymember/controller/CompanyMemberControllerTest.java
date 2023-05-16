@@ -6,6 +6,7 @@ import main.main.companymember.mapper.CompanyMemberMapper;
 import main.main.companymember.service.CompanyMemberService;
 import main.main.helper.CompanyMemberHelper;
 import main.main.helper.StubData;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -19,12 +20,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static main.main.helper.StubData.MockCompanyMember.*;
@@ -123,23 +129,26 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
         ResultActions actions =
                 mockMvc.perform(getRequestBuilder(COMPANYMEMBER_RESOURCE_URI, 1L));
 
-//        actions
-//                .andExpect(status().isOk())
-//                .andDo(print())
-//                .andDo(document("get-companymember",
-//                        pathParameters(
-//                                getCompanyMemberRequestPathParameterDescriptor()
-//                        ),
-//                        responseFields(
-//                                List.of(
-//                                        fieldWithPath("companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
-//                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-//                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-//                                        fieldWithPath("grade").type(JsonFieldType.STRING).description("사원 직급"),
-//                                        fieldWithPath("team").type(JsonFieldType.STRING).description("사원 소속 부서")
-//                                )
-//                        )
-//                ));
+        actions
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-companymember",
+                        pathParameters(
+                                getCompanyMemberRequestPathParameterDescriptor()
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("grade").type(JsonFieldType.STRING).description("사원 직급"),
+                                        fieldWithPath("team").type(JsonFieldType.STRING).description("사원 소속 부서"),
+                                        fieldWithPath("roles").type(JsonFieldType.ARRAY).description("사원 권한").optional(),
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("사원 상태"),
+                                        fieldWithPath("authority").type(JsonFieldType.STRING).description("사원 임시 권한")
+                                )
+                        )
+                ));
 
     }
 
@@ -159,29 +168,30 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
         ResultActions actions =
                 mockMvc.perform(getRequestBuilder(COMPANYMEMBER_DEFAULT_URL, params));
 
-//        actions.andExpect(status().isOk())
-//                .andDo(print())
-//                .andDo(document("get-members",
-//                        requestParameters(
-//                                List.of(
-//                                        parameterWithName("page").description("페이지"),
-//                                        parameterWithName("size").description("한 페이지내 항목 수")
-//                                )
-//                        ),
-//                        responseFields(
-//                                List.of(
-//                                        fieldWithPath("data[].companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
-//                                        fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-//                                        fieldWithPath("data[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-//                                        fieldWithPath("data[].grade").type(JsonFieldType.STRING).description("사원 직급"),
-//                                        fieldWithPath("data[].team").type(JsonFieldType.STRING).description("사원 소속 부서"),
-//                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
-//                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회사 수"),
-//                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
-//
-//                                )
-//                        )
-//                ));
+        actions.andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-members",
+                        requestParameters(
+                                List.of(
+                                        parameterWithName("page").description("페이지"),
+                                        parameterWithName("size").description("한 페이지내 항목 수")
+                                )
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("data[].companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
+                                        fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("data[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("data[].grade").type(JsonFieldType.STRING).description("사원 직급"),
+                                        fieldWithPath("data[].team").type(JsonFieldType.STRING).description("사원 소속 부서"),
+                                        fieldWithPath("data[].status").type(JsonFieldType.STRING).description("사원 승인 상태"),
+                                        fieldWithPath("data[].authority").type(JsonFieldType.STRING).description("사원 임시 승인 상태"),
+                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회사 수"),
+                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                                )
+                        )
+                ));
     }
 
 
@@ -196,6 +206,53 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
                 .andDo(document("delete-companymember",
                         pathParameters(
                                 parameterWithName("companymember-id").description("회사 사원 식별 번호")
+                        )
+                ));
+    }
+
+
+    @Test
+    @DisplayName("CompanyMember Pending Test")
+    public void pendingCompanyMemberTest() throws Exception {
+        long companyMemberId = 1L;
+        String status = "pending";
+
+        mockMvc.perform(RestDocumentationRequestBuilders.post(
+                                "/companymembers/pending/{companymember-id}/{status}", companyMemberId, status)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("pendding-companyMember",
+                        pathParameters(
+                                parameterWithName("companymember-id").description("회사 사원 식별 번호"),
+                                parameterWithName("status").description("승인 여부")
+                        )));
+    }
+
+    @Test
+    @DisplayName("updateMember Role Test")
+    public void updateMemberRoleTest() throws Exception {
+
+        long companyMemberId = 1L;
+        CompanyMemberDto.Roles roles = new CompanyMemberDto.Roles();
+        roles.setRoles(Arrays.asList("MANAGER"));
+
+        CompanyMember updatedCompanyMember = new CompanyMember();
+
+        given(companyMemberService.updateCompanyMemberRole(
+                Mockito.eq(companyMemberId), Mockito.any(CompanyMemberDto.Roles.class)))
+                .willReturn(updatedCompanyMember);
+
+        mockMvc.perform(RestDocumentationRequestBuilders.patch(
+                                "/companymembers/role/{companymember-id}", companyMemberId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJsonContent(roles)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("update-memberRole",
+                        pathParameters(
+                                parameterWithName("companymember-id").description("회사 사원 식별 번호")
+                        ),
+                        requestFields(
+                                fieldWithPath("roles").description("업데이트 전 역할")
                         )
                 ));
     }
