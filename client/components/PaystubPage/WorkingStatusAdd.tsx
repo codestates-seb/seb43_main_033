@@ -1,5 +1,11 @@
 import { data } from "autoprefixer";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import {
+  ChangeEvent,
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import DatePicker from "react-datepicker";
 import { format } from "date-fns";
 import axios from "axios";
@@ -9,17 +15,27 @@ export default function WorkingStatusAdd({
   add,
   setAdd,
   setEditId,
+  startTime,
+  finishTime,
 }: {
   editId: number | null;
   setEditId: Dispatch<SetStateAction<number | null>>;
   add: boolean;
   setAdd: Dispatch<SetStateAction<boolean>>;
+  startTime: string;
+  finishTime: string;
 }) {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishDate] = useState(new Date());
   console.log(finishDate, startDate);
   const [statusDate, setStatusDate] = useState("");
   const [statusFinishDate, setStatusFinishDate] = useState("");
+  useEffect(() => {
+    startTime ? setStartDate(new Date(startTime)) : null;
+  }, [startTime]);
+  useEffect(() => {
+    finishTime ? setFinishDate(new Date(finishTime)) : null;
+  }, [finishTime]);
   const [status, setStatus] = useState("지각");
   const statusArr = [
     "지각",

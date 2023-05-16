@@ -47,6 +47,8 @@ export default function WorkingStatus() {
                     setEditId={setEditId}
                     add={add}
                     setAdd={setAdd}
+                    startTime={el.startTime}
+                    finishTime={el.finishTime}
                   />
                 ) : null}
               </div>
