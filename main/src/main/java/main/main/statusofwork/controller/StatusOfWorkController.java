@@ -3,6 +3,8 @@ package main.main.statusofwork.controller;
 import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.statusofwork.dto.StatusOfWorkDto;
+import main.main.statusofwork.dto.VacationDto;
+import main.main.statusofwork.entity.RequestVacation;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.mapper.StatusOfWorkMapper;
 import main.main.statusofwork.service.StatusOfWorkService;
@@ -13,21 +15,40 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/statusofworks")
 @RequiredArgsConstructor
 public class StatusOfWorkController {
     private final StatusOfWorkService statusOfWorkService;
     private final StatusOfWorkMapper statusOfWorkMapper;
 
-    @PostMapping
-    public ResponseEntity postStatusOfWork(@RequestBody StatusOfWorkDto.Post requestBody) {
+    @PostMapping("/manager/{company-id}/members/{companymember-id}/status")
+    public ResponseEntity postStatusOfWork(@RequestBody StatusOfWorkDto.Post requestBody,
+                                           @PathVariable("company-id") long companyId,
+                                           @PathVariable("companymember-id") long companyMemberId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        statusOfWorkService.createStatusOfWork(statusOfWorkMapper.postToStatusOfWork(requestBody), authenticationMemberId);
+        StatusOfWork statusOfWork = statusOfWorkMapper.postToStatusOfWork(requestBody);
+        statusOfWorkService.createStatusOfWork(statusOfWork, companyId, companyMemberId, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{statusofwork-id}")
+    @PostMapping("/worker/mywork/vacations")
+    public ResponseEntity requestVacation(@RequestBody VacationDto.Post requestBody) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        statusOfWorkService.requestVacation(statusOfWorkMapper.postToRequestVacation(requestBody), authenticationMemberId);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PostMapping("/manager/vacations/{vacation-id}/{status}")
+    public ResponseEntity reviewVacation(@PathVariable("vacation-id") long requestId,
+                                         @PathVariable("status") String status) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        statusOfWorkService.reviewRequestVacation(requestId, status, authenticationMemberId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PatchMapping("/status/{statusofwork-id}")
     public ResponseEntity patchStatusOfWork(@PathVariable("statusofwork-id") long statusOfworkId,
                                             @RequestBody StatusOfWorkDto.Patch requestBody) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
@@ -36,16 +57,23 @@ public class StatusOfWorkController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month,
-                                          @PathVariable("member-id") long memberId) {
+    @GetMapping("/manager/{company-id}/vacations")
+    public ResponseEntity getVacationRequestList(@PathVariable("company-id") long companyId) {
+        List<RequestVacation> requestList = statusOfWorkService.getRequestList(companyId);
+
+        return new ResponseEntity<>(statusOfWorkMapper.requestResponses(requestList), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/worker/mywork")
+    public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, memberId, authenticationMemberId);
+        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, 1, authenticationMemberId);
 
         return new ResponseEntity<>(statusOfWorkMapper.statusOfWorksToResponses(statusOfWorks), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{statusofwork-id}")
+    @DeleteMapping("/status/{statusofwork-id}")
     public ResponseEntity deleteStatusOfWork(@PathVariable("statusofwork-id") long stausOfworkId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         statusOfWorkService.deleteStatusOfWork(stausOfworkId, authenticationMemberId);

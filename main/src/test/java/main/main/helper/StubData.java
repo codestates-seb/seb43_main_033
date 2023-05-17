@@ -54,7 +54,7 @@ public class StubData {
             LocalDateTime time = LocalDateTime.now();
 
             LaborContractDto.Post post = new LaborContractDto.Post();
-            post.setMemberId(1L);
+            post.setCompanyMemberId(1L);
             post.setCompanyId(1L);
             post.setBasicSalary(BigDecimal.valueOf(3000000));
             post.setStartOfContract(time);
@@ -80,6 +80,7 @@ public class StubData {
 
         public static LaborContractDto.Response getResponseBody() {
             return LaborContractDto.Response.builder()
+                    .laborContactId(1L)
                     .memberName("직원 이름")
                     .companyName("회사 이름")
                     .bankName("은행 이름")
@@ -89,6 +90,33 @@ public class StubData {
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
                     .information("근로계약서 정보").build();
+        }
+
+        public static List<LaborContractDto.Response> getMultiResponseBody() {
+            return List.of(
+                    LaborContractDto.Response.builder()
+                            .laborContactId(2L)
+                            .memberName("직원 이름")
+                            .companyName("회사 이름")
+                            .bankName("은행 이름")
+                            .accountNumber("계좌 번호")
+                            .accountHolder("예금주")
+                            .basicSalary(BigDecimal.valueOf(3000000))
+                            .startTime(LocalTime.MIDNIGHT)
+                            .finishTime(LocalTime.MIDNIGHT)
+                            .information("근로계약서 정보").build(),
+                    LaborContractDto.Response.builder()
+                            .laborContactId(1L)
+                            .memberName("직원 이름")
+                            .companyName("회사 이름")
+                            .bankName("은행 이름")
+                            .accountNumber("계좌 번호")
+                            .accountHolder("예금주")
+                            .basicSalary(BigDecimal.valueOf(3000000))
+                            .startTime(LocalTime.MIDNIGHT)
+                            .finishTime(LocalTime.MIDNIGHT)
+                            .information("근로계약서 정보").build()
+            );
         }
 
         public static HashMap<byte[], String> getImage() throws IOException {
@@ -108,16 +136,14 @@ public class StubData {
             LocalDateTime time = LocalDateTime.now();
 
             StatusOfWorkDto.Post post = new StatusOfWorkDto.Post();
-            post.setCompanyId(1L);
-            post.setMemberId(1L);
             post.setStartTime(time);
             post.setFinishTime(time);
-            post.setNote(StatusOfWork.note.지각);
+            post.setNote(StatusOfWork.Note.지각);
 
             StatusOfWorkDto.Patch patch = new StatusOfWorkDto.Patch();
             patch.setStartTime(time);
             patch.setFinishTime(time);
-            patch.setNote(StatusOfWork.note.결근);
+            patch.setNote(StatusOfWork.Note.결근);
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);

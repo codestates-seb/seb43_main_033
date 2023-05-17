@@ -10,6 +10,8 @@ public enum ExceptionCode {
     QUESTION_NOT_FOUND(404, "Question not found"),
     TAG_NOT_FOUND(404, "Tag not found"),
     ONLY_AUTHOR(403, "You don't have permission"),
+    CAN_NOT_OVER_VACATION_COUNT(403, "적립된 휴가가 없습니다."),
+    REQUEST_NOT_FOUND(404, "휴가 신청 내역을 찾을 수 없습니다."),
     UNAUTHORIZED(401,  "권한이 없습니다."),
     LABORCONTRACT_FOR_SALARY_NOT_FOUND(404, "해당 기간에 유효한 근로 계약서를 찾을 수 없습니다."),
     LABORCONTRACT_NOT_FOUND(404, "근로 계약서를 찾을 수 없습니다."),
