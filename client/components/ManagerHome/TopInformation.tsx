@@ -70,7 +70,7 @@ export default function TopInformation() {
             이미지
           </span>
           <button
-            className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow"
+            className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow hover:bg-slate-600 hover:text-white"
             onClick={patchInfo}
           >
             수정

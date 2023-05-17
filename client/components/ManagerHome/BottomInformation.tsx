@@ -67,7 +67,7 @@ export default function BottomInformation() {
         <div className="flex justify-between items-center bg-stone-200 p-2 mb-3 rounded">
           <span className="mx-4 font-semibold text-2xl">이번 달 특이사항</span>
           <span
-            className="mx-4 bg-stone-50 px-2 py-1 rounded-sm font-semibold drop-shadow cursor-pointer"
+            className="mx-4 bg-stone-50 px-2 py-1 rounded-sm font-semibold drop-shadow cursor-pointer  hover:bg-slate-600 hover:text-white"
             onClick={handleOnBottomModal}
           >
             수정
@@ -81,14 +81,13 @@ export default function BottomInformation() {
                   <span>{x.input}</span>
                   <div>
                     <button
-                      className="cursor-pointer"
+                      className="cursor-pointer hover:bg-stone-600 hover:text-white rounded group"
                       onClick={() => handleOnDelete(x.key)}
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        height="30"
+                        className="w-8 y-8 group-hover:fill-white"
                         viewBox="0 96 960 960"
-                        width="30"
                       >
                         <path d="m249 849-42-42 231-231-231-231 42-42 231 231 231-231 42 42-231 231 231 231-42 42-231-231-231 231Z" />
                       </svg>
