@@ -144,8 +144,7 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
                                         fieldWithPath("grade").type(JsonFieldType.STRING).description("사원 직급"),
                                         fieldWithPath("team").type(JsonFieldType.STRING).description("사원 소속 부서"),
                                         fieldWithPath("roles").type(JsonFieldType.ARRAY).description("사원 권한").optional(),
-                                        fieldWithPath("status").type(JsonFieldType.STRING).description("사원 상태"),
-                                        fieldWithPath("authority").type(JsonFieldType.STRING).description("사원 임시 권한")
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("사원 상태")
                                 )
                         )
                 ));
