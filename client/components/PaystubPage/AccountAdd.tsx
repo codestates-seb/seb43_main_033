@@ -28,8 +28,8 @@ export default function AccountAdd({
                 className="ml-5 fond-bold mb-3"
                 onClick={
                   accountEditId
-                    ? () => setAccountEditId(null)
-                    : () => setAccountAdd(false)
+                    ? () => setAccountEditId && setAccountEditId(null)
+                    : () => setAccountAdd && setAccountAdd(false)
                 }
               >
                 X

@@ -20,7 +20,7 @@ export default function LoginForm() {
   };
   const loginAxios = () => {
     axios
-      .post(`http://${process.env.NEXT_PUBLIC_URL}/login`, {
+      .post(`${process.env.NEXT_PUBLIC_URL}/login`, {
         email,
         password,
       })
