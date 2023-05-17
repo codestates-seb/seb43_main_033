@@ -96,12 +96,12 @@ public class CompanyMemberService {
         return companyMemberRepository.findByAuthority(authority);
     }
 
-    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
+    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Patch requestBody) {
 
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
 
-        companyMember.setRoles(companyMemberMapper.companyMemberToRoles(roles));
+        companyMember.setRoles(requestBody.getRoles());
         return companyMemberRepository.save(companyMember);
     }
 }

@@ -33,8 +33,11 @@ public class CompanyMemberController {
     @PatchMapping("/{companymember-id}")
     public ResponseEntity patchCompanyMember(@Positive @PathVariable("companymember-id") long companyMemberId,
                                              @Valid @RequestBody CompanyMemberDto.Patch requestBody) {
+        System.out.println("1번지점");
         requestBody.setCompanyMemberId(companyMemberId);
         companyMemberService.updateCompanyMember(companyMemberMapper.companyMemberPacthToCompanyMember(requestBody));
+        companyMemberService.updateCompanyMemberRole(companyMemberId, requestBody);
+
         return new ResponseEntity<>(companyMemberMapper.companyMemberToCompanyMemberResponse(companyMemberService.findCompanyMember(companyMemberId)), HttpStatus.OK);
     }
 
@@ -64,16 +67,6 @@ public class CompanyMemberController {
             , @PathVariable("status") String status) {
 
         companyMemberService.companyMemberUpdate(companyMemberId, status);
-    }
-
-    @PatchMapping("/role/{companymember-id}")
-    public ResponseEntity<CompanyMember> updateMemberRole(
-            @PathVariable("companymember-id") Long companyMemberId,
-            @RequestBody CompanyMemberDto.Roles roles) {
-
-        CompanyMember companyMember = companyMemberService.updateCompanyMemberRole(companyMemberId, roles);
-
-        return new ResponseEntity(companyMemberMapper.companyMemberToRolesResponse(companyMember), HttpStatus.OK);
     }
 
 }
