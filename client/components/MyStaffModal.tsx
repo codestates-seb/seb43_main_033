@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import defaultcontract from "../public/defaultcontract.png";
 import axios from "axios";
+import Link from "next/link";
 
 type ModalProps = {
   children: React.ReactNode;
@@ -48,7 +49,7 @@ useEffect(() => {
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
 
-  /*const staffEditClick = () => {
+  const staffEditClick = () => {
   axios
     .patch(
       `http://localhost:8080/stafflists/1`,
@@ -61,15 +62,15 @@ useEffect(() => {
       }
     )
     .then(() => {
-      return <Link href="/mystaff" />;
+      return <Link href="/mystaff" ></Link>;
     })
     .catch((err) => {
       console.log(err);
     });
 };
-*/
 
-  /*const staffDeleteClick= () => {
+
+  const staffDeleteClick= () => {
  
    axios
       .delete(`http://localhost:8080/stafflists/1`, {
@@ -83,7 +84,7 @@ useEffect(() => {
       .catch((err) => {
         console.log(err);
       });
-};*/
+};
 
   //-------------------------------------------------
   const [file, setFile] = useState<File | null>(null);
