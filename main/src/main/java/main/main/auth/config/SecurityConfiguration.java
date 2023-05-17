@@ -107,12 +107,13 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/members/**")
                 .addPathPatterns("/banks/**")
                 .addPathPatterns("/calculationofsalary")
-                .addPathPatterns("/companies")
+                .addPathPatterns("/companies/**")
                 .addPathPatterns("/salarystatements/**")
                 .addPathPatterns("/laborcontracts/**")
                 .addPathPatterns("/salarystatement")
                 .addPathPatterns("/statusofworks/**")
-                .addPathPatterns("/memberbanks");
+                .addPathPatterns("/memberbanks/**")
+                .addPathPatterns("/companymembers/**");
     }
 
     @Bean
