@@ -8,7 +8,7 @@ export default function WorkingStatus() {
   const [add, setAdd] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   // const [deletedId,setDeletedId] = useState<number|null>(null);
-  const handleDelete = (deletedId) => {
+  const handleDelete = (deletedId: number) => {
     axios
       .delete(`${process.env.NEXT_PUBLIC_URL}/statusofworks/${deletedId}`)
       .then((res) => console.log(res))

@@ -6,10 +6,10 @@ export default function AccountAdd({
   accountEditId,
   accoutEdit,
 }: {
-  setAccountAdd: Dispatch<SetStateAction<boolean>>;
-  setAccountEditId: Dispatch<SetStateAction<number | null>>;
-  accountEditId: number | null;
-  accoutEdit: string | null;
+  setAccountAdd?: Dispatch<SetStateAction<boolean>> | undefined;
+  setAccountEditId?: Dispatch<SetStateAction<number | null>> | undefined;
+  accountEditId?: number | null;
+  accoutEdit?: string | null;
 }) {
   const [account, setAccount] = useState<string>("");
   useEffect(() => {

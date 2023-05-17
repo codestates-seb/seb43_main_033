@@ -18,12 +18,12 @@ export default function WorkingStatusAdd({
   startTime,
   finishTime,
 }: {
-  editId: number | null;
-  setEditId: Dispatch<SetStateAction<number | null>>;
-  add: boolean;
-  setAdd: Dispatch<SetStateAction<boolean>>;
-  startTime: string;
-  finishTime: string;
+  editId?: number | null;
+  setEditId?: Dispatch<SetStateAction<number | null>>;
+  add?: boolean;
+  setAdd?: Dispatch<SetStateAction<boolean>>;
+  startTime?: string;
+  finishTime?: string;
 }) {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishDate] = useState(new Date());
@@ -51,7 +51,7 @@ export default function WorkingStatusAdd({
     console.log(status);
   };
 
-  const handleTime = (date) => {
+  const handleTime = (date: any) => {
     setStartDate(date);
     const newDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
     setStatusDate(newDate);
@@ -125,14 +125,14 @@ export default function WorkingStatusAdd({
               </select>
               <DatePicker
                 selected={startDate}
-                onChange={(date) => handleTime(date)}
+                onChange={(date: any) => handleTime(date)}
                 timeInputLabel="Time:"
                 dateFormat="yyyy/MM/dd h:mm aa"
                 showTimeInput
               />
               <DatePicker
                 selected={finishDate}
-                onChange={(date) => handleTime2(date)}
+                onChange={(date: any) => handleTime2(date)}
                 timeInputLabel="Time:"
                 dateFormat="yyyy/MM/dd h:mm aa"
                 showTimeInput

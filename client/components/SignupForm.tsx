@@ -39,10 +39,7 @@ export default function SignupFrom() {
     };
     console.log(memberdata);
     axios
-      .post<MemberData>(
-        "https://c49c-61-254-8-200.ngrok-free.app/members",
-        memberdata
-      )
+      .post<MemberData>(`${process.env.NEXT_PUBLIC_URL}/members`, memberdata)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
