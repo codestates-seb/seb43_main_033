@@ -80,7 +80,7 @@ public class LaborContractControllerTest implements LaborContractHelper {
         given(laborContractMapper.postToLaborContract(Mockito.any(LaborContractDto.Post.class))).willReturn(new LaborContract());
         doNothing().when(laborContractService).creatLaborContract(Mockito.any(LaborContract.class), Mockito.any(MultipartFile.class), Mockito.anyLong());
 
-        mockMvc.perform(multipart("/manager/{company-id}/member/{companymember-id}/laborcontracts", 1L, 1L, accessToken)
+        mockMvc.perform(multipart("/manager/{company-id}/members/{companymember-id}/laborcontracts", 1L, 1L, accessToken)
                         .file(jsonFile)
                         .file(pdfFile)
                         .contentType("multipart/form-data")
