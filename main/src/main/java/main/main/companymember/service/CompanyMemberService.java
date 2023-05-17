@@ -14,6 +14,7 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.statusofwork.entity.Vacation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +41,7 @@ public class CompanyMemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         companyMember.setRoles(roles);
 
+        companyMember.setVacation(new Vacation());
         companyMember.setCompany(company);
         companyMember.setMember(member);
 
