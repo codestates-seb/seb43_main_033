@@ -103,6 +103,10 @@ export default function Authenticate() {
       setIsAuthenticated(undefined);
     }
   };
+  const handleOnDelete = (businessNo: string) => {
+    const onClicked = list.find((x) => x.b_no === businessNo);
+    setList([...list.filter((x) => x !== onClicked)]);
+  };
   useEffect(() => console.log(status), [status]);
 
   return (
@@ -195,9 +199,18 @@ export default function Authenticate() {
             <span className="mb-3 text-xl font-semibold">
               사업자등록증 정보 조회
             </span>
-            <ul className="flex flex-col p-3 bg-stone-100 w-full rounded drop-shadow-lg">
-              {list.map((x) => {
-                return <AuthenticatePageList prop={x} />;
+            <ul
+              className={`flex flex-col p-3 bg-stone-100 w-full rounded drop-shadow-lg ${
+                list.length === 0 && "hidden"
+              }`}
+            >
+              {list.map((x: Status) => {
+                return (
+                  <AuthenticatePageList
+                    prop={x}
+                    handleOnDelete={handleOnDelete}
+                  />
+                );
               })}
             </ul>
           </div>
