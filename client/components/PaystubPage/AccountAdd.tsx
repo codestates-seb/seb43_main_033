@@ -27,7 +27,7 @@ export default function AccountAdd({
               <button
                 className="ml-5 fond-bold mb-3"
                 onClick={
-                  accountEditId
+                  accountEditId !== undefined
                     ? () => setAccountEditId(null)
                     : () => setAccountAdd(false)
                 }

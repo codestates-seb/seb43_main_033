@@ -46,7 +46,7 @@ const Paystub = () => {
         <Greenheader>근태</Greenheader>
         <WorkingStatus></WorkingStatus>
         <Greenheader>지급내역</Greenheader>
-        <PaystubPreview></PaystubPreview>
+        <PaystubPreview isMyPaystub={false}></PaystubPreview>
       </div>
     </>
   );
