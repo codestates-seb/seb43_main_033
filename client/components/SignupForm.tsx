@@ -40,7 +40,7 @@ export default function SignupFrom() {
     console.log(memberdata);
     axios
       .post<MemberData>(
-        "http://ec2-13-125-206-238.ap-northeast-2.compute.amazonaws.com:8080/members",
+        '${NEXT_PUBLIC_URL}/members',
         memberdata
       )
       .then((res) => console.log(res))

@@ -11,9 +11,9 @@ interface AuthenticatePageListProps {
   tax_type: string;
   tax_type_cd: string;
   tax_type_change_dt: string;
-  utcc_yn: string;
-  handleOnDelete: (b_no: string) => void;
-}
+  utcc_yn: string;  
+};
+handleOnDelete: (b_no: string) => void;
 }
 
 export default function AuthenticatePageList({
