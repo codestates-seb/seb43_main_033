@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import WorkingStatusAdd from "./WorkingStatusAdd";
@@ -10,10 +10,24 @@ export default function WorkingStatus() {
   // const [deletedId,setDeletedId] = useState<number|null>(null);
   const handleDelete = (deletedId) => {
     axios
-      .delete(`http://localhost:8080/statusofworks/${deletedId}`)
+      .delete(`${process.env.NEXT_PUBLIC_URL}/statusofworks/${deletedId}`)
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const month = currentDate
+      .toLocaleString("default", { month: "long" })
+      .slice(0, 1);
+    const year = currentDate.getFullYear();
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_URL}/statusofworks/2?year=${year}&month=${month}`
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="flex flex-col mb-20 ml-10">

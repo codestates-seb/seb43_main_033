@@ -11,9 +11,9 @@ export default function AccountAdd({
   accountEditId: number | null;
   accoutEdit: string | null;
 }) {
-  const [account, setAccount] = useState<string | null>(null);
+  const [account, setAccount] = useState<string>("");
   useEffect(() => {
-    accoutEdit ? setAccount(accoutEdit) : setAccount(null);
+    accoutEdit ? setAccount(accoutEdit) : setAccount("");
   }, [accoutEdit]);
   return (
     <div className="ml-10">

@@ -73,6 +73,7 @@ interface AccountData {
 }
 
 export const accountData: AccountData = {
+  //계좌리스트더미데이터
   bank: [
     {
       memberBankId: 1,

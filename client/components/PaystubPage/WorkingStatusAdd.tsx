@@ -27,7 +27,6 @@ export default function WorkingStatusAdd({
 }) {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishDate] = useState(new Date());
-  console.log(finishDate, startDate);
   const [statusDate, setStatusDate] = useState("");
   const [statusFinishDate, setStatusFinishDate] = useState("");
   useEffect(() => {
@@ -65,17 +64,14 @@ export default function WorkingStatusAdd({
   const handleSubmit = () => {
     let workStatusdata = {
       companyId: 1,
-      memberId: 1,
+      memberId: 2,
       startTime: statusDate,
       finishTime: statusFinishDate,
       note: status,
     };
     console.log(workStatusdata);
     axios
-      .post(
-        "https://c49c-61-254-8-200.ngrok-free.app/statusofworks",
-        workStatusdata
-      )
+      .post(`${process.env.NEXT_PUBLIC_URL}/statusofworks`, workStatusdata)
       .then((res) => {
         console.log(res);
         setAdd(false);
