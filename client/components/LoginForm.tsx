@@ -2,11 +2,13 @@
 
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import axios, { AxiosResponseHeaders } from "axios";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     set: Dispatch<SetStateAction<string>>
@@ -18,7 +20,7 @@ export default function LoginForm() {
   };
   const loginAxios = () => {
     axios
-      .post('${NEXT_PUBLIC_URL}/login', {
+      .post(`${process.env.NEXT_PUBLIC_URL}/login`, {
         email,
         password,
       })
@@ -32,9 +34,10 @@ export default function LoginForm() {
           localStorage.setItem("memberid", memberid);
         };
         if (response.status === 200 || response.status === 201) {
-          setIsLogin(false);
+          setIsLogin(true);
           saveToken(token);
           saveMemberId(memberid);
+          router.push("/");
         }
       })
       .catch((err) => {

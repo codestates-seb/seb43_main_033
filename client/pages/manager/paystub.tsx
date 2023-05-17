@@ -1,5 +1,5 @@
 //import { useState } from 'react';
-"use client";
+// "use client";
 import { useState } from "react";
 import Greenheader from "../../components/PaystubPage/GreenTop";
 import StaffSelect from "../../components/StaffSelect";
@@ -8,6 +8,7 @@ import PaystubPreview from "../../components/PaystubPage/PaystubPreview";
 import WorkingStatus from "../../components/PaystubPage/WorkingStatus";
 import Navi from "../../components/ManagerNavi";
 import AccountAdd from "../../components/PaystubPage/AccountAdd";
+import AccountList from "../../components/PaystubPage/AccountList";
 
 const Paystub = () => {
   const [showModal, setShowModal] = useState(false);
@@ -17,7 +18,7 @@ const Paystub = () => {
   return (
     <>
       <Navi />
-      <div className="">
+      <div className="w-full">
         <Greenheader>직원선택</Greenheader>
         <div className="bg-white p-3 m-5 flex justify-between">
           <StaffSelect>홍길동</StaffSelect>
@@ -41,11 +42,11 @@ const Paystub = () => {
           </StaffSelectModal>
         )}
         <Greenheader>계좌번호</Greenheader>
-        <AccountAdd />
+        <AccountList />
         <Greenheader>근태</Greenheader>
         <WorkingStatus></WorkingStatus>
         <Greenheader>지급내역</Greenheader>
-        <PaystubPreview></PaystubPreview>
+        <PaystubPreview isMyPaystub={false}></PaystubPreview>
       </div>
     </>
   );

@@ -1,35 +1,82 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 
 import WorkingStatusAdd from "./WorkingStatusAdd";
+import axios from "axios";
 
 export default function WorkingStatus() {
   const [add, setAdd] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  // const [deletedId,setDeletedId] = useState<number|null>(null);
+  const handleDelete = (deletedId: number) => {
+    axios
+      .delete(`${process.env.NEXT_PUBLIC_URL}/statusofworks/${deletedId}`)
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
+  useEffect(() => {
+    const currentDate = new Date();
+    const month = currentDate
+      .toLocaleString("default", { month: "long" })
+      .slice(0, 1);
+    const year = currentDate.getFullYear();
+    axios
+      .get(
+        `${process.env.NEXT_PUBLIC_URL}/statusofworks/2?year=${year}&month=${month}`
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }, []);
 
   return (
     <div className="flex flex-col mb-20 ml-10">
       <div>
         {workingStatusDummydata.map((el, idx) => {
           return (
-            <div key={el.id} className="flex mb-5">
-              <div className="mr-[38px]">{el.note}</div>
-              <div className="mr-[50px]"> {koreanTime(el.startTime)}</div>
-              <div> {koreanTime(el.finishTime)}</div>
-              <div className="ml-7">
-                <button className="text-[12px] text-gray-400 mr-3">edit</button>
-                <button className="text-[12px] text-gray-400">delete</button>
+            <div key={el.id} className="flex mb-5 flex-col">
+              <div className="flex">
+                <div className="mr-[38px]">{el.note}</div>
+                <div className="mr-[50px]"> {koreanTime(el.startTime)}</div>
+                <div> {koreanTime(el.finishTime)}</div>
+                <div className="ml-7">
+                  <button
+                    className="text-[12px] text-gray-400 mr-3"
+                    onClick={() => setEditId(el.id)}
+                  >
+                    edit
+                  </button>
+                  <button
+                    className="text-[12px] text-gray-400"
+                    onClick={() => handleDelete(el.id)}
+                  >
+                    delete
+                  </button>
+                </div>
+              </div>
+              <div>
+                {editId === el.id ? (
+                  <WorkingStatusAdd
+                    editId={editId}
+                    setEditId={setEditId}
+                    add={add}
+                    setAdd={setAdd}
+                    startTime={el.startTime}
+                    finishTime={el.finishTime}
+                  />
+                ) : null}
               </div>
             </div>
           );
         })}
       </div>
-      {add ? <WorkingStatusAdd /> : null}
+      {add ? <WorkingStatusAdd add={add} setAdd={setAdd} /> : null}
       <div className="flex justify-end">
         <button
           onClick={() => setAdd((prev) => !prev)}
           className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5"
         >
-          {add ? "Cancel" : "Add"}
+          {add ? "" : "Add"}
         </button>
       </div>
     </div>
@@ -70,7 +117,7 @@ export const workingStatusDummydata = [
   },
 ];
 
-export const koreanTime = (date : any) => {
+export const koreanTime = (date: Date | string) => {
   const dateStr = new Date(date);
   const koreanTimeStr = dateStr.toLocaleString("ko-KR", {
     timeZone: "Asia/Seoul",
