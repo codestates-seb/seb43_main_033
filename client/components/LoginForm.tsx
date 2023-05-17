@@ -2,11 +2,13 @@
 
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import axios, { AxiosResponseHeaders } from "axios";
+import { useRouter } from "next/router";
 
 export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     set: Dispatch<SetStateAction<string>>
@@ -18,10 +20,13 @@ export default function LoginForm() {
   };
   const loginAxios = () => {
     axios
-      .post("http://ec2-13-125-206-238.ap-northeast-2.compute.amazonaws.com:8080/login", {
-        email,
-        password,
-      })
+      .post(
+        "http://ec2-13-125-206-238.ap-northeast-2.compute.amazonaws.com:8080/login",
+        {
+          email,
+          password,
+        }
+      )
       .then((response) => {
         const token = response.headers.authorization;
         const saveToken = (token: string) => {
@@ -32,9 +37,10 @@ export default function LoginForm() {
           localStorage.setItem("memberid", memberid);
         };
         if (response.status === 200 || response.status === 201) {
-          setIsLogin(false);
+          setIsLogin(true);
           saveToken(token);
           saveMemberId(memberid);
+          router.push("/");
         }
       })
       .catch((err) => {
