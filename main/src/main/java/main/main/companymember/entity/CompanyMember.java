@@ -6,6 +6,7 @@ import main.main.company.entity.Company;
 import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
+import main.main.statusofwork.entity.Vacation;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,6 +36,9 @@ public class CompanyMember {
     @JsonIgnoreProperties("companyMembers")
     private Member member;
 
+    @OneToOne(mappedBy = "companyMember", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Vacation vacation;
+
     private String grade;
     private String team;
 
@@ -49,6 +53,13 @@ public class CompanyMember {
         this.company = company;
         if(!company.getCompanyMembers().contains(this)) {
             company.getCompanyMembers().add(this);
+        }
+    }
+
+    public void setVacation(Vacation vacation) {
+        this.vacation = vacation;
+        if (vacation.getCompanyMember() != this) {
+            vacation.setCompanyMember(this);
         }
     }
 }

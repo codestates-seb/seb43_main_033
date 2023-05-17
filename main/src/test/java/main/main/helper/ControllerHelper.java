@@ -7,6 +7,7 @@ import org.springframework.restdocs.headers.HeaderDescriptor;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
@@ -116,6 +117,7 @@ public interface ControllerHelper<T> {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeSerializer());
         gsonBuilder.registerTypeAdapter(LocalTime.class, new LocalTimeSerializer());
+        gsonBuilder.registerTypeAdapter(LocalDate.class, new LocalDateSerializer());
 
         Gson gson = gsonBuilder.setPrettyPrinting().create();
         String content = gson.toJson(t);

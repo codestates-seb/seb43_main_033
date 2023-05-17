@@ -1,10 +1,17 @@
 package main.main.salarystatement.mapper;
 
 import main.main.company.entity.Company;
+import main.main.companymember.entity.CompanyMember;
 import main.main.member.entity.Member;
+import main.main.salarystatement.dto.PreDto;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.salarystatement.entity.SalaryStatement;
+import main.main.statusofwork.entity.StatusOfWork;
 import org.mapstruct.Mapper;
+
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface SalaryStatementMapper {
@@ -51,5 +58,65 @@ public interface SalaryStatementMapper {
                 .bankName(salaryStatement.getBankName())
                 .accountNumber(salaryStatement.getAccountNumber())
                 .paymentStatus(salaryStatement.isPaymentStatus()).build();
+    }
+
+    default SalaryStatementDto.PreContent preContent(SalaryStatement salaryStatement, Boolean check, SalaryStatement checkSalaryStatement) {
+        SalaryStatementDto.PreContent preContent = SalaryStatementDto.PreContent.builder()
+                .member(preMember(salaryStatement))
+                .status(preStatusList(salaryStatement))
+                .statement(preStatement(salaryStatement))
+                .exist(check).build();
+
+        if(checkSalaryStatement != null) {
+            preContent.setSalaryStatementId(checkSalaryStatement.getId());
+        }
+
+        return preContent;
+    }
+
+    default PreDto.Member preMember(SalaryStatement salaryStatement) {
+        CompanyMember companyMember = salaryStatement.getCompanyMember();
+        Member member = companyMember.getMember();
+
+        return PreDto.Member.builder()
+                .companyMemberId(companyMember.getCompanyMemberId())
+                .name(member.getName())
+                .bankName(salaryStatement.getBankName())
+                .accountNumber(salaryStatement.getAccountNumber())
+                .accountHolder(salaryStatement.getAccountHolder())
+                .build();
+    }
+
+    default List<PreDto.Status> preStatusList(SalaryStatement salaryStatement) {
+        return salaryStatement.getStatusOfWorks().stream()
+                .sorted(Comparator.comparing(StatusOfWork::getId).reversed())
+                .map(statusOfWork -> preStatus(statusOfWork))
+                .collect(Collectors.toList());
+    }
+
+    default PreDto.Status preStatus(StatusOfWork statusOfWork) {
+        return PreDto.Status.builder()
+                .statusId(statusOfWork.getId())
+                .startTime(statusOfWork.getStartTime())
+                .finishTime(statusOfWork.getFinishTime())
+                .note(statusOfWork.getNote().getStatus()).build();
+    }
+
+    default PreDto.Statement preStatement(SalaryStatement salaryStatement) {
+        return PreDto.Statement.builder()
+                .year(salaryStatement.getYear())
+                .month(salaryStatement.getMonth())
+                .basePay(salaryStatement.getBasePay())
+                .overtimePay(salaryStatement.getOvertimePay())
+                .nightWorkAllowance(salaryStatement.getNightWorkAllowance())
+                .holidayWorkAllowance(salaryStatement.getHolidayWorkAllowance())
+                .unpaidLeave(salaryStatement.getUnpaidLeave())
+                .salary(salaryStatement.getSalary())
+                .incomeTax(salaryStatement.getIncomeTax())
+                .nationalCoalition(salaryStatement.getNationalCoalition())
+                .healthInsurance(salaryStatement.getHealthInsurance())
+                .employmentInsurance(salaryStatement.getEmploymentInsurance())
+                .deduction(salaryStatement.getSalary().subtract(salaryStatement.getTotalSalary()))
+                .totalSalary(salaryStatement.getTotalSalary()).build();
     }
 }

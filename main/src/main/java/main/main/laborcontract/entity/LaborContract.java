@@ -3,6 +3,7 @@ package main.main.laborcontract.entity;
 import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
+import main.main.companymember.entity.CompanyMember;
 import main.main.member.entity.Member;
 
 import javax.persistence.*;
@@ -25,6 +26,10 @@ public class LaborContract {
     @ManyToOne
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
+
+    @ManyToOne
+    @JoinColumn(name = "COMPNAY_MEMEBER_ID")
+    private CompanyMember companyMember;
 
     private String bankName;
 
