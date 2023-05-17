@@ -3,6 +3,7 @@ package main.main.statusofwork.entity;
 import lombok.Getter;
 import lombok.Setter;
 import main.main.company.entity.Company;
+import main.main.companymember.entity.CompanyMember;
 import main.main.member.entity.Member;
 import main.main.salarystatement.entity.SalaryStatement;
 
@@ -26,6 +27,10 @@ public class StatusOfWork {
     private Member member;
 
     @ManyToOne
+    @JoinColumn(name = "COMPANY_MEMEBER_ID")
+    private CompanyMember companyMember;
+
+    @ManyToOne
     @JoinColumn(name = "SALARY_STATEMENT_ID")
     private SalaryStatement salaryStatement;
 
@@ -33,9 +38,10 @@ public class StatusOfWork {
 
     private LocalDateTime finishTime;
 
-    private note note;
+    private Note note = Note.정상근무;
 
-    public enum note {
+    public enum Note {
+        정상근무(0, "정상근무"), // 정상 근무
         지각(0, "지각"), // 지각
         조퇴(0, "조퇴"), // 조퇴
         결근(0, "결근"), // 결근
@@ -50,7 +56,7 @@ public class StatusOfWork {
         @Getter
         private String status;
 
-        note(double rate, String status) {
+        Note(double rate, String status) {
             this.rate = rate;
             this.status = status;
         }

@@ -107,11 +107,14 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/members/**")
                 .addPathPatterns("/banks/**")
                 .addPathPatterns("/calculationofsalary")
-                .addPathPatterns("/companies")
-                .addPathPatterns("/salarystatements/**")
+                .addPathPatterns("/companies/**")
+                .addPathPatterns("/worker/**")
                 .addPathPatterns("/laborcontracts/**")
+                .addPathPatterns("/manager/**")
+                .addPathPatterns("/paystub/**")
+                .addPathPatterns("/salarystatements/**")
                 .addPathPatterns("/salarystatement")
-                .addPathPatterns("/statusofworks/**")
+                .addPathPatterns("/status/**")
                 .addPathPatterns("/memberbanks");
     }
 
