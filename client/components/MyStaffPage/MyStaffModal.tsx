@@ -1,16 +1,22 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import defaultcontract from "../public/defaultcontract.png";
+import { useRouter } from "next/router";
+import defaultcontract from "../../public/defaultcontract.png";
 import axios from "axios";
-import Link from "next/link";
+import { format } from "date-fns";
+import TabButton from "./TabButton";
+import StaffInput from "./StaffInput";
+import ContractInput from "./ContractInput";
+import ContractTimeInput from "./ContractTimeInput";
 
 type ModalProps = {
-  children: React.ReactNode;
   onClose: () => void;
+  selectedItemId: number;
 };
 
-interface MyStaffData {
+interface StaffProps {
+  id: number;
   staffnumber: number;
   name: string;
   department: string;
@@ -21,22 +27,40 @@ interface MyStaffData {
   grade: string;
   salary: number;
 }
-export default function StaffSelectModal({ onClose }: ModalProps) {
-  /*const [stafflist] = staffAxios(
-  `${process.env.REACT_APP_API_URL}/stafflist/${memberId}`
-);
 
+interface ContractsProps {
+  laborcontractid: number;
+  memberName: string;
+  companyName: string;
+  basicSalary: number;
+  startOfContract: string;
+  endOfContract: string;
+  startTime: string;
+  finishTime: string;
+  information: string;
+}
+
+export default function MyStaffModal({ onClose, selectedItemId }: ModalProps) {
+  /*const [stafflist] = staffAxios(
+  `${process.env.REACT_APP_API_URL}/stafflist/${selectedItemId}`
+);
 
 useEffect(() => {
   setStaffData(stafflist);
 }, [stafflist]);*/
 
-  const [staffData, setStaffData] = useState({
-    staffnumber: "",
-    membername: "",
-    department: "",
-    position: "",
-    grade: "",
+  //더미 데이터 집어넣음
+  const [staffData, setStaffData] = useState<StaffProps>({
+    id: 1,
+    staffnumber: 2023001,
+    name: "홍길동",
+    department: "회계팀",
+    position: "사원",
+    note: "지각",
+    startTime: "00:00",
+    finishTime: "00:00",
+    grade: "standard",
+    salary: 4000000,
   });
 
   const staffInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,10 +73,12 @@ useEffect(() => {
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
 
-  const staffEditClick = () => {
+  const router = useRouter();
+
+  /*const staffEditClick = (selectedItemId) => {
   axios
     .patch(
-      `http://localhost:8080/stafflists/1`,
+      `http://localhost:8080/stafflists/${selectedItemId}`,
       staffData,
       {
         headers: {
@@ -62,29 +88,30 @@ useEffect(() => {
       }
     )
     .then(() => {
-      return <Link href="/mystaff" ></Link>;
+      router.push("work/mystaff");
     })
     .catch((err) => {
       console.log(err);
     });
 };
+*/
 
-
-  const staffDeleteClick= () => {
+  /*const staffDeleteClick= (selectedItemId) => {
  
    axios
-      .delete(`http://localhost:8080/stafflists/1`, {
+      .delete(`http://localhost:8080/stafflists/${selectedItemId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
         },
       })
       .then(() => {
+        router.push("work/mystaff");
       })
       .catch((err) => {
         console.log(err);
       });
-};
+};*/
 
   //-------------------------------------------------
   const [file, setFile] = useState<File | null>(null);
@@ -100,7 +127,18 @@ useEffect(() => {
     information: "",
   });
 
-  const contractlist = true;
+  //더미데이터 집어넣음
+  const [contractlist, setContractlist] = useState<ContractsProps>({
+    laborcontractid: 1,
+    memberName: "홍길동",
+    companyName: "회사 이름",
+    basicSalary: 3000000,
+    startOfContract: "2023-05-08T13:06:46.724",
+    endOfContract: "2023-05-08T13:06:46.724",
+    startTime: "00:00",
+    finishTime: "00:00",
+    information: "근로계약서 정보",
+  });
 
   /* 
 const [contractlist] = staffAxios(`http://localhost:8080/laborcontracts/1`);
@@ -161,6 +199,7 @@ useEffect(() => {
       })
       .then(() => {
         setcontractEdit(false);
+        router.push("work/mystaff");
       })
       .catch((err) => {
         console.log(err);
@@ -198,6 +237,33 @@ useEffect(() => {
     }
   };
 
+  const staffinformationList = [
+    {
+      label: "사번",
+      value: staffData.staffnumber,
+      onChange: staffInputChange,
+      name: "staffnumber",
+    },
+    {
+      label: "이름",
+      value: staffData.name,
+      onChange: staffInputChange,
+      name: "name",
+    },
+    {
+      label: "권리권한",
+      value: staffData.grade,
+      onChange: staffInputChange,
+      name: "grade",
+    },
+    {
+      label: "부서",
+      value: staffData.position,
+      onChange: staffInputChange,
+      name: "position",
+    },
+  ];
+
   return (
     <div className="fixed pt-40 z-10 inset-0 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen px-4">
@@ -212,71 +278,33 @@ useEffect(() => {
           </div>
 
           <div className="flex justify-between mb-6">
-            <button
-              className={`tab-button ${
-                selectedTab === "edit" ? "bg-emerald-300" : "bg-white"
-              } p-5 px-10 rounded-md focus:outline-none hover:bg-emerald-200 transition-colors duration-300`}
+            <TabButton
+              selected={selectedTab === "edit"}
               onClick={() => setSelectedTab("edit")}
             >
               사원 정보
-            </button>
-
-            <button
-              className={`tab-button ${
-                selectedTab === "contract" ? "bg-emerald-300" : "bg-white"
-              } p-5 px-10 rounded-md focus:outline-none hover:bg-emerald-200 transition-colors duration-300`}
+            </TabButton>
+            <TabButton
+              selected={selectedTab === "contract"}
               onClick={() => setSelectedTab("contract")}
             >
-              근로계약서
-            </button>
+              근로계약서 정보
+            </TabButton>
           </div>
 
           {selectedTab === "edit" && (
             <div className="flex justify-between">
               <div>
-                <div>
-                  <div className="mt-2 mb-2 font-bold">사번</div>
-                  <input
-                    className="h-5 mb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                    type="text"
-                    value={staffData.staffnumber}
-                    onChange={staffInputChange}
-                    name="staffnumber"
-                  />
-                </div>
-                <div>
-                  <div className="mb-2 font-bold">이름</div>
-                  <input
-                    className="mb-2 h-5 border-b border-gray-300 focus:outline-none hover:outline-none"
-                    type="text"
-                    value={staffData.membername}
-                    onChange={staffInputChange}
-                    name="membername"
-                  />
+                <div className="grid grid-cols-2 gap-4">
+                  {staffinformationList.map((information, index) => (
+                    <div key={information.name}>
+                      <StaffInput {...information} />
+                    </div>
+                  ))}
                 </div>
               </div>
               <div>
-                <div>
-                  <div className="mt-2 mb-1 font-bold">권리권한</div>
-                  <input
-                    className="h-5 mb-3 border-b border-gray-300 focus:outline-none hover:outline-none"
-                    type="text"
-                    value={staffData.grade}
-                    onChange={staffInputChange}
-                    name="grade"
-                  />
-                </div>
-                <div>
-                  <div className="mb-1 font-bold">부서</div>
-                  <input
-                    className="h-5 border-b border-gray-300 focus:outline-none hover:outline-none"
-                    type="text"
-                    value={staffData.position}
-                    onChange={staffInputChange}
-                    name="position"
-                  />
-                </div>
-                <div className="modal-close pt-8 flex justify-end">
+                <div className="modal-close mt-5 pt-40 flex justify-end">
                   <button className="mr-3" onClick={() => staffEditClick()}>
                     submit
                   </button>
@@ -323,9 +351,8 @@ useEffect(() => {
 
                     <div>
                       <div>
-                        <div className="ml-7 font-bold">기본급:</div>
-                        <input
-                          className="w-40 h-5 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
+                        <ContractInput
+                          label="기본급"
                           type="text"
                           name="basicSalary"
                           value={requestData.basicSalary}
@@ -333,58 +360,29 @@ useEffect(() => {
                         />
                       </div>
 
-                      <div>
-                        <div className="mt-2 mb-2 ml-7 font-bold">계약기간</div>
-                        <div className="flex items-center ml-7">
-                          <input
-                            className="flex-1 h-5 mr-2 border-b pr-3 border-gray-300 focus:outline-none hover:outline-none"
-                            type="date"
-                            name="startOfContract"
-                            value={requestData.startOfContract}
-                            onChange={handleInputChange}
-                          />
-                          <div>~</div>
-                          <input
-                            className="flex-1 h-5 ml-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                            type="date"
-                            name="endOfContract"
-                            value={requestData.endOfContract}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      </div>
+                      <ContractTimeInput
+                        label="계약기간"
+                        type="date"
+                        startTime={requestData.startOfContract}
+                        finishTime={requestData.endOfContract}
+                        onChange={handleInputChange}
+                      />
 
-                      <div>
-                        <div className="mt-2 mb-2 ml-8 font-bold">근무시간</div>
-                        <div className="flex items-center ml-8">
-                          <input
-                            className="flex-1 h-5 mr-2 border-b pr-3 border-gray-300 focus:outline-none hover:outline-none"
-                            type="time"
-                            name="startTime"
-                            value={requestData.startTime}
-                            onChange={handleInputChange}
-                          />
-                          <div>~</div>
-                          <input
-                            className="flex-1 h-5 ml-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                            type="time"
-                            name="finishTime"
-                            value={requestData.finishTime}
-                            onChange={handleInputChange}
-                          />
-                        </div>
-                      </div>
+                      <ContractTimeInput
+                        label="근무시간"
+                        type="time"
+                        startTime={requestData.startTime}
+                        finishTime={requestData.finishTime}
+                        onChange={handleInputChange}
+                      />
 
-                      <div>
-                        <div className="ml-7 font-bold">근로계약서 정보</div>
-                        <input
-                          className="w-30 h-5 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                          type="text"
-                          name="information"
-                          value={requestData.information}
-                          onChange={handleInputChange}
-                        />
-                      </div>
+                      <ContractInput
+                        label="근로계약서 정보"
+                        type="text"
+                        name="information"
+                        value={requestData.information}
+                        onChange={handleInputChange}
+                      />
 
                       <div className="modal-close pt-8 flex justify-end">
                         <button onClick={contractEditClick}>Editsubmit</button>
@@ -426,30 +424,44 @@ useEffect(() => {
                     <div>
                       <div>
                         <div className="ml-7 font-bold">기본급:</div>
-                        <div className="ml-7">10000000</div>
+                        <div className="ml-7">{contractlist.basicSalary}</div>
                       </div>
 
                       <div>
                         <div className="mt-2 mb-2 ml-7 font-bold">계약기간</div>
                         <div className="flex items-center ml-7">
-                          <div>2023-05-02</div>
+                          <div>
+                            {format(
+                              new Date(contractlist.startOfContract),
+                              "yyyy-MM-dd"
+                            )}
+                          </div>
                           <div>~</div>
-                          <div>2023-05-02</div>
+                          <div>
+                            {format(
+                              new Date(contractlist.endOfContract),
+                              "yyyy-MM-dd"
+                            )}
+                          </div>
                         </div>
                       </div>
 
                       <div>
                         <div className="mt-2 mb-2 ml-7 font-bold">근무시간</div>
                         <div className="flex items-center ml-7">
-                          <div>9:00</div>
+                          <div>{contractlist.startTime}</div>
                           <div>~</div>
-                          <div>18:00</div>
+                          <div>{contractlist.finishTime}</div>
                         </div>
                       </div>
 
                       <div>
-                        <div className="ml-7 font-bold">근로계약서 정보</div>
-                        <div className="ml-7">xxxxxxxxxxx</div>
+                        <div className="mt-2 ml-7 font-bold">
+                          근로계약서 정보
+                        </div>
+                        <div className="mt-2 ml-7">
+                          {contractlist.information}
+                        </div>
                       </div>
 
                       <div className="modal-close pt-8 flex justify-end">
@@ -494,69 +506,37 @@ useEffect(() => {
                   </div>
 
                   <div>
-                    <div>
-                      <div className="ml-7 font-bold">기본급:</div>
-                      <input
-                        className="w-40 h-5 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                        type="text"
-                        name="basicSalary"
-                        value={requestData.basicSalary}
-                        onChange={handleInputChange}
-                      />
-                    </div>
+                    <ContractInput
+                      label="기본급:"
+                      type="text"
+                      name="basicSalary"
+                      value={requestData.basicSalary}
+                      onChange={handleInputChange}
+                    />
 
-                    <div>
-                      <div className="mt-2 mb-2 ml-7 font-bold">계약기간</div>
-                      <div className="flex items-center ml-7">
-                        <input
-                          className="flex-1 h-5 mr-2 border-b pr-3 border-gray-300 focus:outline-none hover:outline-none"
-                          type="date"
-                          name="startOfContract"
-                          value={requestData.startOfContract}
-                          onChange={handleInputChange}
-                        />
-                        <div>~</div>
-                        <input
-                          className="flex-1 h-5 ml-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                          type="date"
-                          name="endOfContract"
-                          value={requestData.endOfContract}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
+                    <ContractTimeInput
+                      label="계약기간"
+                      type="date"
+                      startTime={requestData.startOfContract}
+                      finishTime={requestData.endOfContract}
+                      onChange={handleInputChange}
+                    />
 
-                    <div>
-                      <div className="mt-2 mb-2 ml-8 font-bold">근무시간</div>
-                      <div className="flex items-center ml-8">
-                        <input
-                          className="flex-1 h-5 mr-2 border-b pr-3 border-gray-300 focus:outline-none hover:outline-none"
-                          type="time"
-                          name="startTime"
-                          value={requestData.startTime}
-                          onChange={handleInputChange}
-                        />
-                        <div>~</div>
-                        <input
-                          className="flex-1 h-5 ml-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                          type="time"
-                          name="finishTime"
-                          value={requestData.finishTime}
-                          onChange={handleInputChange}
-                        />
-                      </div>
-                    </div>
+                    <ContractTimeInput
+                      label="근무시간"
+                      type="time"
+                      startTime={requestData.startTime}
+                      finishTime={requestData.finishTime}
+                      onChange={handleInputChange}
+                    />
 
-                    <div>
-                      <div className="ml-7 font-bold">근로계약서 정보</div>
-                      <input
-                        className="w-30 h-5 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
-                        type="text"
-                        name="information"
-                        value={requestData.information}
-                        onChange={handleInputChange}
-                      />
-                    </div>
+                    <ContractInput
+                      label="근로계약서 정보"
+                      type="text"
+                      name="information"
+                      value={requestData.information}
+                      onChange={handleInputChange}
+                    />
 
                     <div className="modal-close pt-8 flex justify-end">
                       <button onClick={contractSubmitClick}>submit</button>

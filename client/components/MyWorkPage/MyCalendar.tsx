@@ -1,17 +1,14 @@
-"use client";
 import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Event as CalendarEvent } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-// import { Dialog, DialogTitle, DialogContent } from "@material-ui/core";
-import WorkRecordTable from "./WorkRecordTable";
+import WorkRecordTable from "../MyWorkPage/WorkRecordTable";
 
 const localizer = momentLocalizer(moment);
 
 interface Event {
   start: Date;
-
   end: Date;
   title: string;
 }
@@ -79,8 +76,12 @@ const MyCalendar = () => {
     };
   };
 
+  const closeDialog = () => {
+    setDialogIsOpen(false);
+  };
+
   return (
-    <div>
+    <div className="relative">
       <Calendar
         localizer={localizer}
         events={events}
@@ -92,26 +93,26 @@ const MyCalendar = () => {
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
       />
-      {/* <Dialog open={dialogIsOpen} onClose={() => setDialogIsOpen(false)}>
-        <DialogTitle className="font-bold">
-          근무 현황 기록표
-          <button
-            className="float-right font-bold"
-            onClick={() => setDialogIsOpen(false)}
-          >
-            X
-          </button>
-        </DialogTitle>
-        <DialogContent> */}
-      {/* <WorkRecordTable
-            date={selectedDate}
-            addEvent={addEvent}
-            deleteEvent={deleteEvent}
-          />
-        </DialogContent>
-      </Dialog> */}
+      {dialogIsOpen && (
+        <div className="z-10 fixed top-0 left-0 flex items-center justify-center w-screen h-screen bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg">
+            <div className="flex justify-between p-3">
+              <h3 className="font-bold">근무 현황 기록표</h3>
+              <button className="font-bold" onClick={closeDialog}>
+                X
+              </button>
+            </div>
+            <div className="p-3">
+              <WorkRecordTable
+                date={selectedDate}
+                addEvent={addEvent}
+                deleteEvent={deleteEvent}
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
-
 export default MyCalendar;
