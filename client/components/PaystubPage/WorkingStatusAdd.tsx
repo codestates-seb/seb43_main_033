@@ -63,7 +63,7 @@ export default function WorkingStatusAdd({
   };
   const handleSubmit = () => {
     let workStatusdata = {
-      companyId: 1,
+      companyId: 4,
       memberId: 2,
       startTime: statusDate,
       finishTime: statusFinishDate,
@@ -71,10 +71,14 @@ export default function WorkingStatusAdd({
     };
     console.log(workStatusdata);
     axios
-      .post(`${process.env.NEXT_PUBLIC_URL}/statusofworks`, workStatusdata)
+      .post(`${process.env.NEXT_PUBLIC_URL}/statusofworks`, workStatusdata, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
       .then((res) => {
         console.log(res);
-        setAdd(false);
+        setAdd && setAdd(false);
       })
       .catch((err) => console.log(err));
   };
@@ -161,3 +165,4 @@ export default function WorkingStatusAdd({
     </div>
   );
 }
+
