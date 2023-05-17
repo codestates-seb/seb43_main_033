@@ -2,7 +2,11 @@ package main.main.company.mapper;
 
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
+import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.mapper.CompanyMemberMapper;
 import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,6 +15,8 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface CompanyMapper {
+    CompanyMemberMapper companyMemberMapper = Mappers.getMapper(CompanyMemberMapper.class);
+
 
     default Company companyPostToCompany(CompanyDto.Post requestBody) {
         Company company = new Company();
@@ -37,7 +43,11 @@ public interface CompanyMapper {
 
     }
 
-    default CompanyDto.Response companyToCompanyResponse(Company company, BigDecimal[] salaryInfo) {
+    default CompanyDto.Response companyToCompanyResponse(Company company, BigDecimal[] salaryInfo, List<CompanyMember> companyMembers) {
+        List<CompanyMemberDto.ResponseForList> companyMemberDto = companyMembers.isEmpty() ? null :
+                company.getCompanyMembers().stream()
+                        .map(companyMember -> companyMemberMapper.companyMemberToCompanyMemberResponseForList(companyMember))
+                        .collect(Collectors.toList());
 
         BigDecimal totalSalaryOfCompanyThisMonth = salaryInfo[0];
         BigDecimal totalSalaryOfCompanyLastMonth = salaryInfo[1];
@@ -49,14 +59,17 @@ public interface CompanyMapper {
                 .businessNumber(company.getBusinessNumber())
                 .address(company.getAddress())
                 .information(company.getInformation())
+                .companyMembers(companyMemberDto)
                 .theSalaryOfTheCompanyThisMonth(totalSalaryOfCompanyThisMonth)
                 .theSalaryOfTheCompanyLastMonth(totalSalaryOfCompanyLastMonth)
                 .build();
     }
 
-    default CompanyDto.ResponseForList companyToCompanyResponseForList(Company company, BigDecimal[] salaryInfo) {
-        BigDecimal totalSalaryOfCompanyThisMonth = salaryInfo[0];
-        BigDecimal totalSalaryOfCompanyLastMonth = salaryInfo[1];
+    default CompanyDto.ResponseForList companyToCompanyResponseForList(Company company, List<CompanyMember> companyMembers) {
+        List<CompanyMemberDto.ResponseForList> companyMemberDto = companyMembers.isEmpty() ? null :
+                company.getCompanyMembers().stream()
+                        .map(companyMember -> companyMemberMapper.companyMemberToCompanyMemberResponseForList(companyMember))
+                        .collect(Collectors.toList());
 
         return CompanyDto.ResponseForList.builder()
                 .companyId(company.getCompanyId())
@@ -65,17 +78,13 @@ public interface CompanyMapper {
                 .businessNumber(company.getBusinessNumber())
                 .address(company.getAddress())
                 .information(company.getInformation())
-                .theSalaryOfTheCompanyThisMonth(totalSalaryOfCompanyThisMonth)
-                .theSalaryOfTheCompanyLastMonth(totalSalaryOfCompanyLastMonth)
+                .companyMembers(companyMemberDto)
                 .build();
     }
 
-    default List<CompanyDto.ResponseForList> companiesToCompaniesResponse(List<Company> companies, Map<Long, BigDecimal[]> salaryInfoMap) {
+    default List<CompanyDto.ResponseForList> companiesToCompaniesResponse(List<Company> companies) {
         return companies.stream()
-                .map(company -> {
-                    BigDecimal[] salaryInfo = salaryInfoMap.getOrDefault(company.getCompanyId(), new BigDecimal[]{BigDecimal.ZERO, BigDecimal.ZERO});
-                    return companyToCompanyResponseForList(company, salaryInfo);
-                })
+                .map(company -> companyToCompanyResponseForList(company, company.getCompanyMembers()))
                 .collect(Collectors.toList());
     }
 
