@@ -3,7 +3,7 @@ import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Event as CalendarEvent } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import WorkRecordTable from "./WorkRecordTable";
+import WorkRecordTable from "../MyWorkPage/WorkRecordTable";
 
 const localizer = momentLocalizer(moment);
 

@@ -40,7 +40,7 @@ export default function SignupFrom() {
     console.log(memberdata);
     axios
       .post<MemberData>(
-        "https://c49c-61-254-8-200.ngrok-free.app/members",
+        "http://ec2-13-125-206-238.ap-northeast-2.compute.amazonaws.com:8080/members",
         memberdata
       )
       .then((res) => console.log(res))

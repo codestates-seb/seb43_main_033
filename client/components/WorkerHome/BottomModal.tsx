@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function BottomModal(props) {
+export default function BottomModal(props : any) {
   const { handleOnBottomModal, bottomList, setBottomList } = props;
   const [value, setValue] = useState("");
 
