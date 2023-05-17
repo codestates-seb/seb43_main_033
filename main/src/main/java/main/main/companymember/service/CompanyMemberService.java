@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
@@ -92,10 +91,6 @@ public class CompanyMemberService {
         }
 
         return companyMemberRepository.save(companyMember);
-    }
-
-    public List<CompanyMember> getCompanyMembersByAuthority(Authority authority) {
-        return companyMemberRepository.findByAuthority(authority);
     }
 
     public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {

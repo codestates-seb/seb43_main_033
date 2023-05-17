@@ -16,7 +16,6 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
-        private Authority authority;
 
 
     }
@@ -30,7 +29,6 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
-        private Authority authority;
 
 
     }
@@ -48,7 +46,6 @@ public class CompanyMemberDto {
         private String team;
         private Status status;
         private List<String> roles;
-        private Authority authority;
 
 
     }
@@ -64,7 +61,6 @@ public class CompanyMemberDto {
         private String grade;
         private String team;
         private Status status;
-        private Authority authority;
 
 
     }

@@ -3,7 +3,6 @@ package main.main.companymember.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
 import main.main.statusofwork.entity.Vacation;
@@ -47,7 +46,6 @@ public class CompanyMember {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
     @Enumerated(EnumType.STRING)
-    private Authority authority;
 
     public void setCompany(Company company) {
         this.company = company;
