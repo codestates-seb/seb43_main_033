@@ -19,12 +19,12 @@ interface StaffProps {
   id: number;
   staffnumber: number;
   name: string;
-  department: string;
-  position: string;
+  team: string;
+  grade: string;
   note: string;
   startTime: string;
   finishTime: string;
-  grade: string;
+  role: string;
   salary: number;
 }
 
@@ -42,7 +42,7 @@ interface ContractsProps {
 
 export default function MyStaffModal({ onClose, selectedItemId }: ModalProps) {
   /*const [stafflist] = staffAxios(
-  `${process.env.REACT_APP_API_URL}/stafflist/${selectedItemId}`
+  `${process.env.REACT_APP_API_URL}/companymembers/${selectedItemId}`
 );
 
 useEffect(() => {
@@ -54,12 +54,12 @@ useEffect(() => {
     id: 1,
     staffnumber: 2023001,
     name: "홍길동",
-    department: "회계팀",
-    position: "사원",
+    team: "회계팀",
+    grade: "사원",
     note: "지각",
     startTime: "00:00",
     finishTime: "00:00",
-    grade: "standard",
+    role: "standard",
     salary: 4000000,
   });
 
@@ -78,7 +78,7 @@ useEffect(() => {
   /*const staffEditClick = (selectedItemId) => {
   axios
     .patch(
-      `http://localhost:8080/stafflists/${selectedItemId}`,
+      `http://localhost:8080/companymembers/${selectedItemId}`,
       staffData,
       {
         headers: {
@@ -99,7 +99,7 @@ useEffect(() => {
   /*const staffDeleteClick= (selectedItemId) => {
  
    axios
-      .delete(`http://localhost:8080/stafflists/${selectedItemId}`, {
+      .delete(`http://localhost:8080/companymembers/${selectedItemId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),
@@ -251,17 +251,17 @@ useEffect(() => {
       name: "name",
     },
     {
-      label: "권리권한",
+      label: "직급",
       value: staffData.grade,
       onChange: staffInputChange,
       name: "grade",
     },
     {
       label: "부서",
-      value: staffData.position,
+      value: staffData.team,
       onChange: staffInputChange,
-      name: "position",
-    },
+      name: "team",
+    }
   ];
 
   return (
