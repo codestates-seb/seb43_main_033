@@ -1,6 +1,7 @@
 import AuthenticatePageListLi from "./AuthenticatePageListLi";
 
 interface AuthenticatePageListProps {
+  prop: {
   p_nm: string;
   b_no: string;
   b_stt: string;
@@ -12,6 +13,7 @@ interface AuthenticatePageListProps {
   tax_type_change_dt: string;
   utcc_yn: string;
   handleOnDelete: (b_no: string) => void;
+}
 }
 
 export default function AuthenticatePageList({
@@ -36,7 +38,7 @@ export default function AuthenticatePageList({
       description: prop.tax_type,
     },
   ];
-
+  
   return (
     <li className="flex flex-wrap min-h-32">
       <label className="flex flex-wrap">

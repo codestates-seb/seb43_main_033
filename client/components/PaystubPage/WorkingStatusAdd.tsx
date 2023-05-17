@@ -56,7 +56,7 @@ export default function WorkingStatusAdd({
     const newDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
     setStatusDate(newDate);
   };
-  const handleTime2 = (date) => {
+  const handleTime2 = (date: any) => {
     setFinishDate(date);
     const newDate = format(date, "yyyy-MM-dd'T'HH:mm:ss.SSS");
     setStatusFinishDate(newDate);

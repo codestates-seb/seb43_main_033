@@ -101,7 +101,9 @@ export default function Mystaff() {
                     {showModal && (
                       <MyStaffModal
                         onClose={() => setShowModal(false)}
-                      ></MyStaffModal>
+                      >
+                        
+                      </MyStaffModal>
                     )}
                   </ListBox>
                 ))}
