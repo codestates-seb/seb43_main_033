@@ -1,3 +1,5 @@
+import MiddleInformationLi from "./MiddleInfo/MiddleInformationLi";
+
 interface MiddleInformationProps {}
 
 export default function MiddleInformation(props: MiddleInformationProps) {
