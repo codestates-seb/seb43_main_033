@@ -1,4 +1,4 @@
-import Logo from "./Logo";
+import Logo from "./logo";
 import Link from "next/link";
 
 export default function Footer() {
@@ -11,9 +11,9 @@ export default function Footer() {
         <nav className=" flex">
           <div className="box-border pr-12 flex-auto ">
             <h5 className="mb-8">
-              <a className="text-xs">
+              
                 <Link href="/">우리의 급여</Link>
-              </a>
+              
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
@@ -26,9 +26,9 @@ export default function Footer() {
           </div>
           <div className="box-border pr-12 flex-auto">
             <h5 className="mb-8">
-              <a>
-                <Link href="/manager">관리자 메뉴 </Link>
-              </a>
+              
+                <Link href="/manager">관리자 메뉴</Link>
+              
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
@@ -44,9 +44,9 @@ export default function Footer() {
           </div>
           <div className="box-border pr-12 flex-auto">
             <h5 className="mb-8">
-              <a>
+              
                 <Link href="/worker">근로자 메뉴</Link>
-              </a>
+             
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>

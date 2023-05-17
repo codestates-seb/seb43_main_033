@@ -70,7 +70,7 @@ export const workingStatusDummydata = [
   },
 ];
 
-export const koreanTime = (date) => {
+export const koreanTime = (date : any) => {
   const dateStr = new Date(date);
   const koreanTimeStr = dateStr.toLocaleString("ko-KR", {
     timeZone: "Asia/Seoul",

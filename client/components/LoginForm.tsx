@@ -18,7 +18,7 @@ export default function LoginForm() {
   };
   const loginAxios = () => {
     axios
-      .post("https://c49c-61-254-8-200.ngrok-free.app/login", {
+      .post("http://ec2-13-125-206-238.ap-northeast-2.compute.amazonaws.com:8080/login", {
         email,
         password,
       })
