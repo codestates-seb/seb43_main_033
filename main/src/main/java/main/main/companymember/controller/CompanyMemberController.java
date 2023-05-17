@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.mapper.CompanyMemberMapper;
-import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.companymember.service.CompanyMemberService;
 import main.main.dto.ListPageResponseDto;
 import org.springframework.data.domain.Page;

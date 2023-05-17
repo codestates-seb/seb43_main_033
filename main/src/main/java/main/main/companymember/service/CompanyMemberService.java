@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
@@ -14,6 +13,7 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.statusofwork.entity.Vacation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +40,7 @@ public class CompanyMemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         companyMember.setRoles(roles);
 
+        companyMember.setVacation(new Vacation());
         companyMember.setCompany(company);
         companyMember.setMember(member);
 
@@ -97,6 +98,7 @@ public class CompanyMemberService {
     }
 
     public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Patch requestBody) {
+    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
 
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));

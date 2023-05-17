@@ -3,15 +3,13 @@ package main.main.company.service;
 import lombok.RequiredArgsConstructor;
 import main.main.company.entity.Company;
 import main.main.company.repository.CompanyRepository;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
-import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.entity.SalaryStatement;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,6 +26,7 @@ import java.util.*;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final MemberService memberService;
+    private final CompanyMemberRepository companyMemberRepository;
 
     public Company createCompany(Company company) {
 
@@ -59,9 +58,10 @@ public class CompanyService {
     }
 
 
-    public Company updateCompany(Company company, String businessNumber) {
+    public Company updateCompany(Company company, String businessNumber, long authenticationMemberId) {
         Company findedCompany = findVerifiedCompany(company.getCompanyId());
 
+        checkPermission(authenticationMemberId, findedCompany);
 
         Optional.ofNullable(company.getCompanyName())
                 .ifPresent(CompanyName -> findedCompany.setCompanyName(company.getCompanyName()));
@@ -79,13 +79,18 @@ public class CompanyService {
     }
 
 
-    public void deleteCompany(long companyId) {
+    public void deleteCompany(long companyId, long authenticationMemberId) {
         Company findedCompany = findVerifiedCompany(companyId);
+
+        checkPermission(authenticationMemberId, findedCompany);
+
         companyRepository.delete(findedCompany);
     }
 
     public BigDecimal[] salaryOfCompany(long companyId) {
+
         Company company = findVerifiedCompany(companyId);
+
 
         BigDecimal salaryOfCompanyThisMonth = BigDecimal.ZERO;
         BigDecimal salaryOfCompanyLastMonth = BigDecimal.ZERO;
@@ -115,7 +120,11 @@ public class CompanyService {
     }
 
 
-    public Boolean comapanyuploading(MultipartFile file, long companyId, String url) {
+    public Boolean comapanyuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
+
+        Company company = findVerifiedCompany(companyId);
+
+        checkPermission(authenticationMemberId, company);
 
         Boolean result = Boolean.TRUE;
 
@@ -146,7 +155,11 @@ public class CompanyService {
         }
     }
 
-    public Boolean businessuploading(MultipartFile file, long companyId, String url) {
+    public Boolean businessuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
+
+        Company company = findVerifiedCompany(companyId);
+
+        checkPermission(authenticationMemberId, company);
 
         Boolean result = Boolean.TRUE;
 
@@ -178,8 +191,6 @@ public class CompanyService {
     }
 
 
-
-
     public String getExtension(MultipartFile file) {
         return Optional.ofNullable(file)
                 .map(MultipartFile::getOriginalFilename)
@@ -189,34 +200,58 @@ public class CompanyService {
     }
 
 
-    public List<Map<String, Object>> findBusinessNumbersByRole(long memberId) {
+    public List<Map<String, Object>> findBusinessNumbersByRole(long memberId, long authenticationMemberId) {
         Member member = memberService.findMember(memberId);
-        List<Map<String, Object>> bussiness = new ArrayList<>();
+        List<Map<String, Object>> business = new ArrayList<>();
 
         if (member.getCompanyMembers().isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND);
         }
 
         for (CompanyMember companyMember : member.getCompanyMembers()) {
-            if (companyMember.getAuthority() == Authority.ADMIN && companyMember.getCompany() != null) {
-                Company company = companyMember.getCompany();
-                String businessNumber = company.getBusinessNumber();
+            checkPermission(authenticationMemberId, companyMember.getCompany());
 
-                Map<String, Object> businessData = new HashMap<>();
-                businessData.put("companyId", company.getCompanyId());
-                businessData.put("companyName", company.getCompanyName());
-                businessData.put("businessNumber", businessNumber != null ? businessNumber : "아직 인증된 사업자등록증이 없습니다.");
+            Company company = companyMember.getCompany();
+            String businessNumber = company.getBusinessNumber();
 
-                bussiness.add(businessData);
-            }
+            Map<String, Object> businessData = new HashMap<>();
+            businessData.put("companyId", company.getCompanyId());
+            businessData.put("companyName", company.getCompanyName());
+            businessData.put("businessNumber", businessNumber != null ? businessNumber : "아직 인증된 사업자등록증이 없습니다.");
+
+            business.add(businessData);
         }
 
-        if (bussiness.isEmpty()) {
+        if (business.isEmpty()) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
 
-        return bussiness;
+        return business;
     }
 
 
+    private void checkPermission(long authenticationMemberId, Company company) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (companyMember == null || !companyMember.getRoles().contains("MANAGER")) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+
+
+
+//    public List<Map<String, Object>> statusOfWorkers(long companyId) {
+//        Company company = findCompany(companyId);
+//        CompanyMember companyMember = findCompanyMember();
+//        List<Map<String, Object>> status = new ArrayList<>();
+//
+//
+//
+//        return ;
+//    }
 }
+

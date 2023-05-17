@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.entity.CompanyMember;
+import main.main.laborcontract.entity.LaborContract;
 import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.entity.SalaryStatement;
 
@@ -35,6 +36,13 @@ public class Member {
     @ManyToOne
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
+
+    @OneToMany(mappedBy = "member")
+    @JsonIgnoreProperties
+    private List<LaborContract> laborContracts = new ArrayList<>();
+    public void addLaborContract(LaborContract laborContract) {
+        this.laborContracts.add(laborContract);
+    }
 
     @OneToMany(fetch =FetchType.EAGER ,mappedBy = "member")
     @JsonIgnore

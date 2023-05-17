@@ -3,6 +3,7 @@ package main.main.salarystatement.controller;
 import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.member.service.MemberService;
+import main.main.salarystatement.dto.PreDto;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.salarystatement.entity.SalaryStatement;
 import main.main.salarystatement.mapper.SalaryStatementMapper;
@@ -16,21 +17,37 @@ import org.springframework.web.bind.annotation.*;
 import java.io.ByteArrayOutputStream;
 
 @RestController
-@RequestMapping("/salarystatements")
 @RequiredArgsConstructor
 public class SalaryStatementController {
     private final SalaryStatementService salaryStatementService;
     private final SalaryStatementMapper salaryStatementMapper;
 
-    @PostMapping
-    public ResponseEntity postSalaryStatement(@RequestBody SalaryStatementDto.Post requestBody) {
+    @GetMapping("/manager/{company-id}/members/{companymember-id}/paystub")
+    public ResponseEntity preSalaryStatement(@RequestParam int year, @RequestParam int month,
+                                               @PathVariable("company-id") long companyId,
+                                               @PathVariable("companymember-id") long companyMemberId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        salaryStatementService.createSalaryStatement(salaryStatementMapper.postToSalaryStatement(requestBody), authenticationMemberId);
+        SalaryStatement salaryStatement = salaryStatementService.getPreContent(companyId, companyMemberId, year, month, authenticationMemberId);
+        Object[] check = salaryStatementService.check(salaryStatement);
+        SalaryStatement checkSalaryStatement = null;
+        if ((Boolean) check[0]) {
+            checkSalaryStatement = (SalaryStatement) check[1];
+        }
+        SalaryStatementDto.PreContent preContent = salaryStatementMapper.preContent(salaryStatement, (Boolean) check[0], checkSalaryStatement);
+        return new ResponseEntity<>(preContent, HttpStatus.OK);
+    }
+
+    @PostMapping("/manager/{company-id}/members/{companymember-id}/paystub")
+    public ResponseEntity postSalaryStatement(@RequestParam int year, @RequestParam int month,
+                                              @PathVariable("company-id") long companyId,
+                                              @PathVariable("companymember-id") long companyMemberId) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        salaryStatementService.createSalaryStatement(companyId, companyMemberId, year, month, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @GetMapping("/{salarystatement-id}")
+    @GetMapping("/paystub/{salarystatement-id}")
     public ResponseEntity getSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId, authenticationMemberId);
@@ -38,7 +55,7 @@ public class SalaryStatementController {
         return new ResponseEntity<>(salaryStatementMapper.salaryStatementToResponse(salaryStatement), HttpStatus.OK);
     }
 
-    @DeleteMapping("/{salarystatement-id}")
+    @DeleteMapping("/paystub/{salarystatement-id}")
     public ResponseEntity deleteSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         salaryStatementService.deleteSalaryStatement(salaryStatementId, authenticationMemberId);
@@ -46,7 +63,7 @@ public class SalaryStatementController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{salarystatement-id}/payslip")
+    @GetMapping("/paystub/{salarystatement-id}/file")
     public ResponseEntity<byte[]> generatePayslip(@PathVariable("salarystatement-id") long salaryStatementId ) throws Exception {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId, authenticationMemberId);
@@ -60,7 +77,7 @@ public class SalaryStatementController {
         return new ResponseEntity<>(baos.toByteArray(), headers, HttpStatus.OK);
     }
 
-    @PostMapping("/{salarystatement-id}/payslip")
+    @PostMapping("/paystub/{salarystatement-id}/email")
     public ResponseEntity sendSalaryStatement(@PathVariable("salarystatement-id") long salaryStatementId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         salaryStatementService.sendEmail(salaryStatementId, authenticationMemberId);

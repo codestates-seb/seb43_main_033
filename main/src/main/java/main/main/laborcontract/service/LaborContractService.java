@@ -5,6 +5,7 @@ import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.repository.CompanyMemberRepository;
+import main.main.companymember.service.CompanyMemberService;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.laborcontract.entity.LaborContract;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,10 +33,17 @@ public class LaborContractService {
     private final CompanyMemberRepository companyMemberRepository;
     private final MemberService memberService;
     private final CompanyService companyService;
+    private final CompanyMemberService companyMemberService;
 
     public void creatLaborContract(LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
-        Member member = memberService.findMember(laborContract.getMember().getMemberId());
         Company company = companyService.findCompany(laborContract.getCompany().getCompanyId());
+        CompanyMember companyMember = companyMemberService.findCompanyMember(laborContract.getCompanyMember().getCompanyMemberId());
+
+        if (!companyMember.getCompany().getCompanyId().equals(company.getCompanyId())) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
+        }
+
+        Member member = companyMember.getMember();
         MemberBank memberBank = member.getMemberBanks().stream()
                 .filter(mainMemberBank -> mainMemberBank.isMainAccount())
                 .findFirst()
@@ -44,6 +53,7 @@ public class LaborContractService {
 
         laborContract.setMember(member);
         laborContract.setCompany(company);
+        laborContract.setCompanyMember(companyMember);
         laborContract.setBankName(memberBank.getBank().getBankGroup().getBankName());
         laborContract.setAccountNumber(memberBank.getAccountNumber());
         laborContract.setAccountHolder(memberBank.getMember().getName());
@@ -56,6 +66,9 @@ public class LaborContractService {
     public void updateLaborContract(long laborContractId, LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
         LaborContract findedLaborContract = findVerifiedContract(laborContractId);
 
+        if (!laborContract.getCompany().getCompanyId().equals(findedLaborContract.getCompany().getCompanyId())) {
+           throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
+        }
         checkPermission(authenticationMemberId, findedLaborContract.getCompany());
 
         Optional.ofNullable(laborContract.getBasicSalary())
@@ -78,6 +91,12 @@ public class LaborContractService {
         checkGetPermission(authenticationMemberId, findedLaborContract);
 
         return findedLaborContract;
+    }
+
+    public List<LaborContract> findLaborContract(long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+
+        return member.getLaborContracts();
     }
 
     public LaborContract findLaborContractForSalaryStatement(Member member, Company company, int year, int month) {
