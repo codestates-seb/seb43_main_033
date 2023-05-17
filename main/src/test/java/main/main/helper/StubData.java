@@ -4,7 +4,6 @@ import main.main.auth.jwt.JwtTokenizer;
 import main.main.bank.dto.BankDto;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
@@ -265,6 +264,9 @@ public class StubData {
                     .businessNumber("사업자 등록 번호")
                     .address("회사 주소")
                     .information("회사 정보")
+                    .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
+                    .theSalaryOfTheCompanyLastMonth(BigDecimal.valueOf(100000))
+                    .theSalaryOfTheCompanyThisMonth(BigDecimal.valueOf(200000))
                     .build();
         }
 
@@ -286,6 +288,7 @@ public class StubData {
                             .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
+                            .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
                             .build(),
                     CompanyDto.ResponseForList.builder()
                             .companyId(2L)
@@ -294,9 +297,11 @@ public class StubData {
                             .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
+                            .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
                             .build()
             );
         }
+
     }
 
 
@@ -353,15 +358,15 @@ public class StubData {
             CompanyMemberDto.Post post = new CompanyMemberDto.Post();
             post.setCompanyId(1L);
             post.setMemberId(1L);
-            post.setGrade("회원 직급");
-            post.setTeam("회원 소속 부서");
+            post.setGrade("사원 직급");
+            post.setTeam("사원 소속 부서");
 
             CompanyMemberDto.Patch patch = new CompanyMemberDto.Patch();
             patch.setCompanyMemberId(1L);
             patch.setCompanyId(1L);
             patch.setMemberId(1L);
-            patch.setGrade("회원 직급");
-            patch.setTeam("회원 소속 부서");
+            patch.setGrade("사원 직급");
+            patch.setTeam("사원 소속 부서");
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);
@@ -383,10 +388,9 @@ public class StubData {
                     .companyMemberId(1L)
                     .companyId(1L)
                     .memberId(1L)
-                    .grade("회원 직급")
-                    .team("회원 소속 부서")
+                    .grade("사원 직급")
+                    .team("사원 소속 부서")
                     .status(Status.PENDING)
-                    .authority(Authority.MEMBER)
                     .build();
         }
 
@@ -396,19 +400,17 @@ public class StubData {
                             .companyMemberId(1L)
                             .companyId(1L)
                             .memberId(1L)
-                            .grade("회원 직급")
-                            .team("회원 소속 부서")
+                            .grade("사원 직급")
+                            .team("사원 소속 부서")
                             .status(Status.PENDING)
-                            .authority(Authority.MEMBER)
                             .build(),
                     CompanyMemberDto.ResponseForList.builder()
                             .companyMemberId(2L)
                             .companyId(1L)
                             .memberId(1L)
-                            .grade("회원 직급")
-                            .team("회원 소속 부서")
+                            .grade("사원 직급")
+                            .team("사원 소속 부서")
                             .status(Status.PENDING)
-                            .authority(Authority.MEMBER)
                             .build()
             );
         }
