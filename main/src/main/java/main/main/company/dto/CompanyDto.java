@@ -3,8 +3,10 @@ package main.main.company.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.companymember.dto.CompanyMemberDto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class CompanyDto {
     @Getter
@@ -40,6 +42,7 @@ public class CompanyDto {
         private String businessNumber;
         private String address;
         private String information;
+        private List<CompanyMemberDto.ResponseForList> companyMembers;
         private BigDecimal theSalaryOfTheCompanyThisMonth;
         private BigDecimal theSalaryOfTheCompanyLastMonth;
 
@@ -58,8 +61,8 @@ public class CompanyDto {
         private String businessNumber;
         private String address;
         private String information;
-        private BigDecimal theSalaryOfTheCompanyThisMonth;
-        private BigDecimal theSalaryOfTheCompanyLastMonth;
+        private List<CompanyMemberDto.ResponseForList> companyMembers;
+
 
     }
 
