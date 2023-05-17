@@ -1,5 +1,5 @@
 import React from "react";
-import MyCalendar from "../../components/MyCalendar";
+import MyCalendar from "../../components/MyWorkPage/MyCalendar";
 import Navi from "../../components/WorkerNavi";
 
 export default function Mywork() {

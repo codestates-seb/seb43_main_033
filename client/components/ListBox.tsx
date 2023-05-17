@@ -1,10 +1,7 @@
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
-type BoxProps = {
-  children: React.ReactNode;
-};
 
-export default function ListBox({ children }: BoxProps) {
+export default function ListBox({ children }: PropsWithChildren) {
   return (
     <div className="bg-white p-2 m-5 flex justify-between">
       {children}
