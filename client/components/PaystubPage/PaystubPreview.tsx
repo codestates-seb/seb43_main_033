@@ -14,6 +14,7 @@ interface SalaryData {
   nationalCoalition: number;
   healthInsurance: number;
   employmentInsurance: number;
+  totalSalary: number;
 }
 
 // async function getData() {
@@ -37,7 +38,11 @@ interface SalaryData {
 //   );
 // }
 
-export default function PaystubPreview() {
+export default function PaystubPreview({
+  isMyPaystub,
+}: {
+  isMyPaystub: boolean;
+}) {
   const data: SalaryData = {
     companyName: "난쟁컴퍼니",
     memberName: "난쟁이",
@@ -52,9 +57,10 @@ export default function PaystubPreview() {
     nationalCoalition: 20000,
     healthInsurance: 1000,
     employmentInsurance: 3000,
+    totalSalary: 20,
   };
   return (
-    <div className="w-[600px] pb-20 bg-white flex justify-start flex-col rounded-3xl shadow-xl">
+    <div className="w-[600px] ml-0 pb-20 bg-white flex justify-center flex-col rounded-xl shadow-xl">
       <div className="mt-10 mx-10 text-slate-500 font-semibold">
         {data.companyName}
       </div>
@@ -110,11 +116,16 @@ export default function PaystubPreview() {
                 Math.floor(data.employmentInsurance / 10) * 10}
             </div>
           </div>
+          <div className="flex flex-row p-3 justify-between mt-2 pt-2 border-t-2 border-dashed"></div>
+          <div className="flex flex-row p-3 justify-between mt-2 pt-2 border-t-2 border-dashed">
+            <div>실수령액</div>
+            <div>{data.totalSalary}</div>
+          </div>
         </div>
       </div>
       <div className="flex justify-end">
-        <button className="px-3 py-2 m-16 mb-0 rounded-lg w-fit text-white bg-green-300 hover:bg-green-200">
-          email
+        <button className="px-3 py-2 m-16 mb-0 rounded-lg w-fit text-white bg-green-300 hover:bg-green-500">
+          {isMyPaystub ? "pdf download" : "email"}
         </button>
       </div>
     </div>
