@@ -93,12 +93,17 @@ public class CompanyMemberService {
         return companyMemberRepository.save(companyMember);
     }
 
+    public List<CompanyMember> getCompanyMembersByAuthority(Authority authority) {
+        return companyMemberRepository.findByAuthority(authority);
+    }
+
+    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Patch requestBody) {
     public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
 
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
 
-        companyMember.setRoles(companyMemberMapper.companyMemberToRoles(roles));
+        companyMember.setRoles(requestBody.getRoles());
         return companyMemberRepository.save(companyMember);
     }
 }

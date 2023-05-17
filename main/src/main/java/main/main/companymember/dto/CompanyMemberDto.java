@@ -29,6 +29,8 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
+        private List<String> roles;
+        private Authority authority;
 
 
     }
@@ -61,14 +63,10 @@ public class CompanyMemberDto {
         private String grade;
         private String team;
         private Status status;
-
-
-    }
-
-    @Getter
-    @Setter
-    public static class Roles {
         private List<String> roles;
+        private Authority authority;
+
+
 
     }
 }

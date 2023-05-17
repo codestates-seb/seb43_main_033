@@ -41,6 +41,9 @@ public interface CompanyMemberMapper {
         companyMember.setCompanyMemberId(requestBody.getCompanyMemberId());
         companyMember.setGrade(requestBody.getGrade());
         companyMember.setTeam(requestBody.getTeam());
+        companyMember.setRoles(requestBody.getRoles());
+        companyMember.setAuthority(requestBody.getAuthority());
+
 
         return companyMember;
     }
@@ -74,9 +77,8 @@ public interface CompanyMemberMapper {
                 .collect(Collectors.toList());
     }
 
-    default List<String> companyMemberToRoles(CompanyMemberDto.Roles roles) {
+    default List<String> companyMemberToRoles(CompanyMemberDto.Patch roles) {
         return roles.getRoles();
     }
 
-    CompanyMemberDto.Roles companyMemberToRolesResponse(CompanyMember companyMember);
 }
