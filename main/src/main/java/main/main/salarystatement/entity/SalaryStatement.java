@@ -29,6 +29,13 @@ public class SalaryStatement {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    public void setMember(Member member) {
+        this.member = member;
+        if(!member.getSalaryStatements().contains(this)) {
+            member.addSalaryStatement(this);
+        }
+    }
+
     @ManyToOne
     @JoinColumn(name = "COMPANY_MEMBER_ID")
     private CompanyMember companyMember;

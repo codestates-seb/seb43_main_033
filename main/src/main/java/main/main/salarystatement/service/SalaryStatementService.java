@@ -35,10 +35,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -89,6 +88,15 @@ public class SalaryStatementService {
         checkGetPermission(authenticationMemberId, salaryStatement);
 
         return salaryStatement;
+    }
+
+    public List<SalaryStatement> findSalaryStatements(long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+        List<SalaryStatement> salaryStatements = member.getSalaryStatements();
+
+        return salaryStatements.stream()
+                .sorted(Comparator.comparing(SalaryStatement::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     public void deleteSalaryStatement(long salaryStatementId, long authenticationMemberId) {

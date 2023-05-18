@@ -29,6 +29,12 @@ public interface SalaryStatementMapper {
         return salaryStatement;
     }
 
+    default List<SalaryStatementDto.Response> salaryStatementToResponses(List<SalaryStatement> salaryStatements) {
+        return salaryStatements.stream()
+                .map(salaryStatement -> salaryStatementToResponse(salaryStatement))
+                .collect(Collectors.toList());
+    }
+
     default SalaryStatementDto.Response salaryStatementToResponse(SalaryStatement salaryStatement) {
         return SalaryStatementDto.Response.builder()
                 .id(salaryStatement.getId())

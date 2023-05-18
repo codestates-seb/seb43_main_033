@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.ByteArrayOutputStream;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -53,6 +54,14 @@ public class SalaryStatementController {
         SalaryStatement salaryStatement = salaryStatementService.findSalaryStatement(salaryStatementId, authenticationMemberId);
 
         return new ResponseEntity<>(salaryStatementMapper.salaryStatementToResponse(salaryStatement), HttpStatus.OK);
+    }
+
+    @GetMapping("/worker/mypaystub")
+    public ResponseEntity getSalaryStatements() {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        List<SalaryStatement> salaryStatements = salaryStatementService.findSalaryStatements(authenticationMemberId);
+
+        return new ResponseEntity<>(salaryStatementMapper.salaryStatementToResponses(salaryStatements), HttpStatus.OK);
     }
 
     @DeleteMapping("/paystub/{salarystatement-id}")
