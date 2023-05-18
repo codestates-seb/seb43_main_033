@@ -57,10 +57,6 @@ public class CompanyMemberService {
         return findedCompanyMember;
     }
 
-    public Page<CompanyMember> findCompanyMembers(int page, int size) {
-        return companyMemberRepository.findAll(PageRequest.of(page, size, Sort.by("companyMemberId").descending()));
-    }
-
     public void deleteCompanyMember(long companyMemberId) {
         CompanyMember findedCompanyMember = findVerifiedCompanyMember(companyMemberId);
         companyMemberRepository.delete(findedCompanyMember);
@@ -102,4 +98,23 @@ public class CompanyMemberService {
         companyMember.setRoles(requestBody.getRoles());
         return companyMemberRepository.save(companyMember);
     }
+
+    public Page<CompanyMember> findCompanyMembersByCompanyId(int page, String sortBy, Long companyId) {
+        Status status;
+        if (sortBy.equalsIgnoreCase("pending")) {
+            status = Status.PENDING;
+        } else if (sortBy.equalsIgnoreCase("approved")) {
+            status = Status.APPROVED;
+        } else if (sortBy.equalsIgnoreCase("refuse")) {
+            status = Status.REFUSE;
+        } else {
+            status = null;
+        }
+        if (status != null) {
+            return companyMemberRepository.findAllByCompanyCompanyIdAndStatus(companyId, status, PageRequest.of(page, 10, Sort.by("status").descending()));
+        } else {
+            return companyMemberRepository.findAllByCompanyCompanyId(companyId, PageRequest.of(page, 10, Sort.by("status").descending()));
+        }
+    }
+
 }
