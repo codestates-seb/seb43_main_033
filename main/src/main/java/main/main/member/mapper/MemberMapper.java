@@ -1,5 +1,7 @@
 package main.main.member.mapper;
 
+import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.entity.CompanyMember;
 import main.main.member.dto.MemberDto;
 import main.main.member.entity.Member;
 import main.main.memberbank.dto.MemberBankDto;
@@ -23,6 +25,7 @@ public interface MemberMapper {
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .bank(getMemberBankToMember(member.getMemberBanks()))
+                .companyMembers(getCompanyMemberToMember(member.getCompanyMembers()))
                 .build();
     }
 
@@ -34,6 +37,15 @@ public interface MemberMapper {
                         .accountNumber(memberBankList.getAccountNumber())
                         .bankCode(memberBankList.getBank().getBankGroup().getBankCode())
                         .bankId(memberBankList.getBank().getBankId())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    default List<CompanyMemberDto.CompanyMemberToMember> getCompanyMemberToMember (List<CompanyMember> companyMembers) {
+        return companyMembers.stream()
+                .map(companyMember -> CompanyMemberDto.CompanyMemberToMember.builder()
+                        .companyMemberId(companyMember.getCompanyMemberId())
+                        .companyId(companyMember.getCompany().getCompanyId())
                         .build())
                 .collect(Collectors.toList());
     }

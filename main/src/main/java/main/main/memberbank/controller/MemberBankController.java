@@ -2,6 +2,7 @@ package main.main.memberbank.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.dto.ListPageResponseDto;
 import main.main.memberbank.dto.MemberBankDto;
 import main.main.memberbank.entity.MemberBank;
@@ -27,7 +28,9 @@ public class MemberBankController {
 
     @PostMapping
     public  ResponseEntity postMemberBank(@Valid @RequestBody MemberBankDto.Post requestBody) {
-        MemberBank memberBank = memberBankService.createMemberBank(memberBankMapper.memberBankPostToMemberBank(requestBody));
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        MemberBank memberBank = memberBankService.createMemberBank(memberBankMapper.memberBankPostToMemberBank(requestBody), authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -35,9 +38,11 @@ public class MemberBankController {
     @PatchMapping("/{memberbank-id}")
     public ResponseEntity patchMemberBank(@Positive @PathVariable("memberbank-id") long memberBankId,
                                           @Valid @RequestBody MemberBankDto.Patch requestBody) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
         requestBody.setMemberBankId(memberBankId);
 
-        memberBankService.updateMemberBank(memberBankMapper.memberBankPathToMemberBank(requestBody));
+        memberBankService.updateMemberBank(memberBankMapper.memberBankPathToMemberBank(requestBody), authenticationMemberId);
 
         MemberBank memberBank = memberBankService.findMemberBank(memberBankId);
         return new ResponseEntity<>(memberBankMapper.memberBankToMemberBankResponse(memberBank), HttpStatus.OK);
@@ -62,7 +67,9 @@ public class MemberBankController {
 
     @DeleteMapping("/{memberbank-id}")
     public ResponseEntity deleteMemberBank(@Positive @PathVariable("memberbank-id") long memberBankId) {
-        memberBankService.deleteMemberBank(memberBankId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        memberBankService.deleteMemberBank(memberBankId, authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

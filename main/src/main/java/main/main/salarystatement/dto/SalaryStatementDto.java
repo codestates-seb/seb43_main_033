@@ -5,8 +5,20 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class SalaryStatementDto {
+    @Getter
+    @Setter
+    @Builder
+    public static class PreContent {
+        private PreDto.Member member;
+        private List<PreDto.Status> status;
+        private PreDto.Statement statement;
+        private boolean exist;
+        private long salaryStatementId;
+    }
+
     @Getter
     @Setter
     public static class Post {
@@ -23,7 +35,6 @@ public class SalaryStatementDto {
         private long companyId;
         private String companyName;
         private long memberId;
-        private String memberName;
         private int year;
         private int month;
         private String name;

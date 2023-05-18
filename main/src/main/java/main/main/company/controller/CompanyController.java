@@ -1,10 +1,12 @@
 package main.main.company.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import main.main.company.mapper.CompanyMapper;
 import main.main.company.service.CompanyService;
+import main.main.companymember.entity.CompanyMember;
 import main.main.dto.ListPageResponseDto;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
@@ -34,7 +36,8 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity postCompany(@Valid @RequestBody CompanyDto.Post requestBody) {
-        Company company = companyService.createCompany(companyMapper.companyPostToCompany(requestBody));
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        companyService.createCompany(companyMapper.companyPostToCompany(requestBody), authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -43,22 +46,27 @@ public class CompanyController {
     public ResponseEntity patchCompany(@Positive @PathVariable("company-id") long companyId,
                                        @Valid @RequestBody CompanyDto.Patch requestBody) {
 
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
         requestBody.setCompanyId(companyId);
 
-        companyService.updateCompany(companyMapper.companyPatchToCompany(requestBody), requestBody.getBusinessNumber());
-        BigDecimal[] SalaryOfCompany = companyService.salaryOfCompany(companyId);
-
-        Company company = companyService.findCompany(companyId);
-
-        return new ResponseEntity<>(companyMapper
-                .companyToCompanyResponse(company, SalaryOfCompany), HttpStatus.OK);
+        companyService.updateCompany(companyMapper.companyPatchToCompany(requestBody), requestBody.getBusinessNumber(), authenticationMemberId);
+//        BigDecimal[] SalaryOfCompany = companyService.salaryOfCompany(companyId);
+//
+//        Company company = companyService.findCompany(companyId);
+//        List<CompanyMember> companyMembers = company.getCompanyMembers();
+//        return new ResponseEntity<>(companyMapper
+//                .companyToCompanyResponse(company, SalaryOfCompany, companyMembers), HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/{company-id}")
     public ResponseEntity getCompany(@PathVariable("company-id") @Positive long companyId) {
         Company company = companyService.findCompany(companyId);
         BigDecimal[] SalaryOfCompany = companyService.salaryOfCompany(companyId);
-        return new ResponseEntity<>(companyMapper.companyToCompanyResponse(company, SalaryOfCompany), HttpStatus.OK);
+        List<CompanyMember> companyMembers = company.getCompanyMembers();
+
+        return new ResponseEntity<>(companyMapper.companyToCompanyResponse(company, SalaryOfCompany, companyMembers), HttpStatus.OK);
 
     }
 
@@ -67,12 +75,14 @@ public class CompanyController {
         Page<Company> pageCompanies = companyService.findCompanies(page - 1, size);
         List<Company> companies = pageCompanies.getContent();
 
-        return new ResponseEntity<>(new ListPageResponseDto<>(companies, pageCompanies), HttpStatus.OK);
+        return new ResponseEntity<>(new ListPageResponseDto<>(companyMapper.companiesToCompaniesResponse(companies), pageCompanies), HttpStatus.OK);
     }
 
     @DeleteMapping("/{company-id}")
     public ResponseEntity deleteCompany(@Positive @PathVariable("company-id") long companyId) {
-        companyService.deleteCompany(companyId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        companyService.deleteCompany(companyId, authenticationMemberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -82,7 +92,9 @@ public class CompanyController {
 
     @GetMapping("/businessnumber/{member-id}")
     public ResponseEntity<List<Map<String, Object>>> getBusinessNumberByMember(@PathVariable("member-id") @Positive long memberId) {
-        List<Map<String, Object>> business = companyService.findBusinessNumbersByRole(memberId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        List<Map<String, Object>> business = companyService.findBusinessNumbersByRole(memberId, authenticationMemberId);
         return new ResponseEntity<>(business, HttpStatus.OK);
     }
 
@@ -98,6 +110,8 @@ public class CompanyController {
 
         String dir = Long.toString(companyId);
         String extension = companyService.getExtension(file);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
 
         if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".jpeg")) {
 
@@ -105,9 +119,9 @@ public class CompanyController {
         }
 
         if (type.equals("companyimage")) {
-            companyService.comapanyuploading(file, companyId, dir);
+            companyService.comapanyuploading(file, companyId, dir, authenticationMemberId);
         } else if (type.equals("businessimage")) {
-            companyService.businessuploading(file, companyId, dir);
+            companyService.businessuploading(file, companyId, dir, authenticationMemberId);
         }
 
         return new ResponseEntity<>(HttpStatus.CREATED);

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
@@ -14,6 +13,7 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.statusofwork.entity.Vacation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -40,6 +40,7 @@ public class CompanyMemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         companyMember.setRoles(roles);
 
+        companyMember.setVacation(new Vacation());
         companyMember.setCompany(company);
         companyMember.setMember(member);
 
@@ -54,10 +55,6 @@ public class CompanyMemberService {
         Optional<CompanyMember> optionalCompanyMember = companyMemberRepository.findById(companyMemberId);
         CompanyMember findedCompanyMember = optionalCompanyMember.orElseThrow(()->new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findedCompanyMember;
-    }
-
-    public Page<CompanyMember> findCompanyMembers(int page, int size) {
-        return companyMemberRepository.findAll(PageRequest.of(page, size, Sort.by("companyMemberId").descending()));
     }
 
     public void deleteCompanyMember(long companyMemberId) {
@@ -92,16 +89,32 @@ public class CompanyMemberService {
         return companyMemberRepository.save(companyMember);
     }
 
-    public List<CompanyMember> getCompanyMembersByAuthority(Authority authority) {
-        return companyMemberRepository.findByAuthority(authority);
-    }
 
-    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Roles roles) {
+    public CompanyMember updateCompanyMemberRole(Long companyMemberId, CompanyMemberDto.Patch requestBody) {
 
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
 
-        companyMember.setRoles(companyMemberMapper.companyMemberToRoles(roles));
+        companyMember.setRoles(requestBody.getRoles());
         return companyMemberRepository.save(companyMember);
     }
+
+    public Page<CompanyMember> findCompanyMembersByCompanyId(int page, String sortBy, Long companyId) {
+        Status status;
+        if (sortBy.equalsIgnoreCase("pending")) {
+            status = Status.PENDING;
+        } else if (sortBy.equalsIgnoreCase("approved")) {
+            status = Status.APPROVED;
+        } else if (sortBy.equalsIgnoreCase("refuse")) {
+            status = Status.REFUSE;
+        } else {
+            status = null;
+        }
+        if (status != null) {
+            return companyMemberRepository.findAllByCompanyCompanyIdAndStatus(companyId, status, PageRequest.of(page, 10, Sort.by("status").descending()));
+        } else {
+            return companyMemberRepository.findAllByCompanyCompanyId(companyId, PageRequest.of(page, 10, Sort.by("status").descending()));
+        }
+    }
+
 }

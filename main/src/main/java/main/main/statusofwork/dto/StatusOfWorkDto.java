@@ -11,11 +11,9 @@ public class StatusOfWorkDto {
     @Getter
     @Setter
     public static class Post {
-        private long companyId;
-        private long memberId;
         private LocalDateTime startTime;
         private LocalDateTime finishTime;
-        private StatusOfWork.note note;
+        private StatusOfWork.Note note;
     }
 
     @Getter
@@ -23,7 +21,7 @@ public class StatusOfWorkDto {
     public static class Patch {
         private LocalDateTime startTime;
         private LocalDateTime finishTime;
-        private StatusOfWork.note note;
+        private StatusOfWork.Note note;
     }
 
     @Getter

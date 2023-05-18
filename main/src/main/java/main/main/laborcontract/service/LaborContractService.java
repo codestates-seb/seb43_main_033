@@ -5,6 +5,7 @@ import main.main.company.entity.Company;
 import main.main.company.service.CompanyService;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.repository.CompanyMemberRepository;
+import main.main.companymember.service.CompanyMemberService;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.laborcontract.entity.LaborContract;
@@ -12,16 +13,12 @@ import main.main.laborcontract.repository.LaborContractRepository;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.memberbank.entity.MemberBank;
-import org.apache.commons.io.IOUtils;
+import main.main.utils.AwsS3Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDateTime;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,10 +28,18 @@ public class LaborContractService {
     private final CompanyMemberRepository companyMemberRepository;
     private final MemberService memberService;
     private final CompanyService companyService;
+    private final CompanyMemberService companyMemberService;
+    private final AwsS3Service awsS3Service;
 
     public void creatLaborContract(LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
-        Member member = memberService.findMember(laborContract.getMember().getMemberId());
         Company company = companyService.findCompany(laborContract.getCompany().getCompanyId());
+        CompanyMember companyMember = companyMemberService.findCompanyMember(laborContract.getCompanyMember().getCompanyMemberId());
+
+        if (!companyMember.getCompany().getCompanyId().equals(company.getCompanyId())) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
+        }
+
+        Member member = companyMember.getMember();
         MemberBank memberBank = member.getMemberBanks().stream()
                 .filter(mainMemberBank -> mainMemberBank.isMainAccount())
                 .findFirst()
@@ -44,18 +49,24 @@ public class LaborContractService {
 
         laborContract.setMember(member);
         laborContract.setCompany(company);
+        laborContract.setCompanyMember(companyMember);
         laborContract.setBankName(memberBank.getBank().getBankGroup().getBankName());
         laborContract.setAccountNumber(memberBank.getAccountNumber());
         laborContract.setAccountHolder(memberBank.getMember().getName());
-
-        LaborContract savedLaborContract = laborContractRepository.save(laborContract);
-
-        uploadFile(file, savedLaborContract);
+        if (file != null) {
+            String[] uriList = awsS3Service.uploadFile(file);
+            laborContract.setLaborContractUri(uriList[0]);
+            laborContract.setPureUri(uriList[1]);
+        }
+        laborContractRepository.save(laborContract);
     }
 
     public void updateLaborContract(long laborContractId, LaborContract laborContract, MultipartFile file, long authenticationMemberId) {
         LaborContract findedLaborContract = findVerifiedContract(laborContractId);
 
+        if (!laborContract.getCompany().getCompanyId().equals(findedLaborContract.getCompany().getCompanyId())) {
+           throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
+        }
         checkPermission(authenticationMemberId, findedLaborContract.getCompany());
 
         Optional.ofNullable(laborContract.getBasicSalary())
@@ -66,10 +77,14 @@ public class LaborContractService {
                 .ifPresent(finishTime -> laborContract.setFinishTime(finishTime));
         Optional.ofNullable(laborContract.getInformation())
                 .ifPresent(information -> findedLaborContract.setInformation(information));
+        if (file != null) {
+            awsS3Service.deleteFile(findedLaborContract.getPureUri());
+            String[] uriList = awsS3Service.uploadFile(file);
+            findedLaborContract.setLaborContractUri(uriList[0]);
+            findedLaborContract.setPureUri(uriList[1]);
+        }
 
         laborContractRepository.save(findedLaborContract);
-
-        uploadFile(file, findedLaborContract);
     }
 
     public LaborContract findLaborContract(long laborContractId, long authenticationMemberId) {
@@ -78,6 +93,12 @@ public class LaborContractService {
         checkGetPermission(authenticationMemberId, findedLaborContract);
 
         return findedLaborContract;
+    }
+
+    public List<LaborContract> findLaborContract(long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+
+        return member.getLaborContracts();
     }
 
     public LaborContract findLaborContractForSalaryStatement(Member member, Company company, int year, int month) {
@@ -94,68 +115,12 @@ public class LaborContractService {
         laborContractRepository.delete(findVerifiedContract(laborContractId));
     }
 
-    public HashMap<byte[], String> getImage(long laborContractId, long authenticationMemberId) throws IOException {
-        checkGetPermission(authenticationMemberId, findVerifiedContract(laborContractId));
-
-        String dir = Long.toString(laborContractId);
-        File folder = new File("img" + File.separator + "근로계약서" + File.separator + dir);
-        File[] files = folder.listFiles();
-        String extension = "";
-        for (File file : files) {
-            if (file.isFile()) {
-                String fileName = file.getName();
-                int dotIndex = fileName.lastIndexOf('.');
-                if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
-                    extension = fileName.substring(dotIndex + 1);
-                    break;
-                }
-            }
-        }
-        File imageFile = new File(folder, dir + "." + extension);
-        InputStream inputStream = new FileInputStream(imageFile);
-        byte[] imageByteArray = IOUtils.toByteArray(inputStream);
-        inputStream.close();
-
-        HashMap<byte[], String> result = new HashMap<>();
-        result.put(imageByteArray, extension);
-
-        return result;
-    }
 
     private LaborContract findVerifiedContract(long laborContractId) {
         Optional<LaborContract> optionalLaborContract = laborContractRepository.findById(laborContractId);
         LaborContract laborContract = optionalLaborContract.orElseThrow(() -> new BusinessLogicException(ExceptionCode.LABORCONTRACT_NOT_FOUND));
 
         return laborContract;
-    }
-
-    private static void uploadFile(MultipartFile file, LaborContract savedLaborContract) {
-        if (file != null) {
-            String dir = Long.toString(savedLaborContract.getId());
-            String extension = Optional.ofNullable(file)
-                    .map(MultipartFile::getOriginalFilename)
-                    .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
-                    .orElse("default_extension");
-
-            String newFileName = dir + extension;
-
-            try {
-                File folder = new File("img" + File.separator + "근로계약서" + File.separator + dir);
-                File[] files = folder.listFiles();
-                if (!folder.exists()) {
-                    folder.mkdirs();
-                } else if (files != null) {
-                    for (File file1 : files) {
-                        file1.delete();
-                    }
-                }
-                File destination = new File(folder.getAbsolutePath() , newFileName);
-
-                file.transferTo(destination);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private void checkPermission(long authenticationMemberId, Company company) {

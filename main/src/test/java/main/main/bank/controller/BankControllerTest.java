@@ -73,7 +73,8 @@ public class BankControllerTest implements BankHelper {
                         responseFields(
                                 List.of(
                                         fieldWithPath("bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호").optional(),
-                                        fieldWithPath("bankName").type(JsonFieldType.STRING).description("은행명").optional()
+                                        fieldWithPath("bankName").type(JsonFieldType.STRING).description("은행명").optional(),
+                                        fieldWithPath("bankCode").type(JsonFieldType.STRING).description("은행 코드").optional()
                                 )
                         )
                 ));

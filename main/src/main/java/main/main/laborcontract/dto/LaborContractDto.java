@@ -3,6 +3,7 @@ package main.main.laborcontract.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.salarystatement.dto.PreDto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ public class LaborContractDto {
     @Getter
     @Setter
     public static class Post {
-        private long memberId;
+        private long companyMemberId;
         private long companyId;
         private BigDecimal basicSalary;
         private LocalDateTime startOfContract;
@@ -34,6 +35,7 @@ public class LaborContractDto {
     @Getter
     @Builder
     public static class Response {
+        private long laborContactId;
         private String memberName;
         private String companyName;
         private String bankName;
@@ -43,5 +45,6 @@ public class LaborContractDto {
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
+        private String uri;
     }
 }

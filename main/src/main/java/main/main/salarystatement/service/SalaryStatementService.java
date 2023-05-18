@@ -19,6 +19,7 @@ import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.salarystatement.entity.SalaryStatement;
 import main.main.salarystatement.repository.SalaryStatementRepository;
+import main.main.salarystatement.utils.Calculator;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.service.StatusOfWorkService;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -34,8 +35,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -44,100 +46,37 @@ public class SalaryStatementService {
     private final SalaryStatementRepository salaryStatementRepository;
     private final CompanyMemberRepository companyMemberRepository;
     private final MemberService memberService;
-    private final CompanyService companyService;
-    private final StatusOfWorkService statusOfWorkService;
-    private final LaborContractService laborContractService;
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
+    private final Calculator calculator;
 
-    public void createSalaryStatement(SalaryStatement salaryStatement, long authenticationMemberId) {
-        Member member = memberService.findMember(salaryStatement.getMember().getMemberId());
-        Company company = companyService.findCompany(salaryStatement.getCompany().getCompanyId());
-        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
-        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(salaryStatement.getYear(), salaryStatement.getMonth(), member.getMemberId());
-        LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, salaryStatement.getYear(), salaryStatement.getMonth());
-        BigDecimal basicSalary = laborContract.getBasicSalary();
-        BigDecimal hourlyWage = basicSalary.divide(BigDecimal.valueOf(209), RoundingMode.HALF_UP);
-        int time;
-        BigDecimal overtimePay = BigDecimal.ZERO;
-        int overtimePayBasis = 0;
-        BigDecimal nightWorkAllowance = BigDecimal.ZERO;
-        int nightWorkAllowanceBasis = 0;
-        BigDecimal holidayWorkAllowance = BigDecimal.ZERO;
-        int holidayWorkAllowanceBasis = 0;
-        BigDecimal unpaidLeave = BigDecimal.ZERO;
+    public SalaryStatement getPreContent(long companyId, long companyMemberId, int year, int month, long authenticationMemberId) {
+        SalaryStatement salaryStatement = calculator.makeContent(companyId, companyMemberId, year, month);
 
-        checkPermission(authenticationMemberId, company);
+        checkPermission(authenticationMemberId, salaryStatement.getCompany());
 
-        for (StatusOfWork statusOfWork : statusOfWorks) {
-            switch (statusOfWork.getNote()) {
-                case 연장근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    overtimePayBasis += time;
-                    overtimePay = overtimePay.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 야간근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    nightWorkAllowanceBasis += time;
-                    nightWorkAllowance = nightWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 휴일근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    holidayWorkAllowanceBasis += time;
-                    holidayWorkAllowance = holidayWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 무급휴가:
-                    unpaidLeave = unpaidLeave.add(hourlyWage.multiply(BigDecimal.valueOf(8)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-            }
+        return  salaryStatement;
+    }
+
+    public Object[] check(SalaryStatement salaryStatement) {
+        Object[] result = new Object[2];
+        boolean isSuccess = false;
+        SalaryStatement statement = salaryStatementRepository.findByYearAndMonthAndCompanyMember(salaryStatement.getYear(), salaryStatement.getMonth(), salaryStatement.getCompanyMember()).orElse(null);
+
+        if (statement != null) {
+            isSuccess = true;
+            result[1] = statement;
         }
 
-        salaryStatement.setMember(member);
-        salaryStatement.setCompany(company);
-        salaryStatement.setCompanyMember(companyMember);
-        salaryStatement.setLaborContract(laborContract);
-        salaryStatement.setStatusOfWorks(statusOfWorks);
-        salaryStatement.setName(member.getName());
-        salaryStatement.setTeam(companyMember.getTeam());
-        salaryStatement.setGrade(companyMember.getGrade());
-        salaryStatement.setHourlyWage(hourlyWage);
-        salaryStatement.setBasePay(basicSalary);
-        salaryStatement.setOvertimePay(overtimePay);
-        salaryStatement.setOvertimePayBasis(overtimePayBasis);
-        salaryStatement.setNightWorkAllowance(nightWorkAllowance);
-        salaryStatement.setNightWorkAllowanceBasis(nightWorkAllowanceBasis);
-        salaryStatement.setHolidayWorkAllowance(holidayWorkAllowance);
-        salaryStatement.setHolidayWorkAllowanceBasis(holidayWorkAllowanceBasis);
-        salaryStatement.setUnpaidLeave(unpaidLeave);
-        salaryStatement.setSalary();
+        result[0] = isSuccess;
+        return result;
+    }
 
-        BigDecimal taxBase = basicSalary.subtract(basicSalary.multiply(BigDecimal.valueOf(0.0873))).multiply(BigDecimal.valueOf(12));
-        BigDecimal incomeTex;
-        if (taxBase.compareTo(BigDecimal.valueOf(14000000)) < 1 ) {
-            incomeTex = taxBase.multiply(BigDecimal.valueOf(0.06)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(50000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(14000000)).multiply(BigDecimal.valueOf(0.15)).add(BigDecimal.valueOf(840000)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(88000000)) < 1 ) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.24)).add(BigDecimal.valueOf(6240000)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(150000000)) <  1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(88000000)).multiply(BigDecimal.valueOf(0.35)).add(BigDecimal.valueOf(15360000)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(300000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(150000000)).multiply(BigDecimal.valueOf(0.38)).add(BigDecimal.valueOf(37060000)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(500000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(300000000)).multiply(BigDecimal.valueOf(0.4)).add(BigDecimal.valueOf(94060000)).divide(BigDecimal.valueOf(12));
-        } else if (taxBase.compareTo(BigDecimal.valueOf(1000000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.42)).add(BigDecimal.valueOf(174060000)).divide(BigDecimal.valueOf(12));
-        } else {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(1000000000)).multiply(BigDecimal.valueOf(0.45)).add(BigDecimal.valueOf(384060000)).divide(BigDecimal.valueOf(12));
-        }
+    public void createSalaryStatement(long companyId, long companyMemberId, int year, int month, long authenticationMemberId) {
+        SalaryStatement salaryStatement = calculator.makeContent(companyId, companyMemberId, year, month);
+        List<StatusOfWork> statusOfWorks = salaryStatement.getStatusOfWorks();
 
-        salaryStatement.setIncomeTax(incomeTex);
-        salaryStatement.setNationalCoalition(basicSalary.multiply(BigDecimal.valueOf(0.045)));
-        salaryStatement.setHealthInsurance(basicSalary.multiply(BigDecimal.valueOf(0.0343)));
-        salaryStatement.setEmploymentInsurance(basicSalary.multiply(BigDecimal.valueOf(0.008)));
-        salaryStatement.setTotalSalary();
-        salaryStatement.setBankName(laborContract.getBankName());
-        salaryStatement.setAccountNumber(laborContract.getAccountNumber());
-        salaryStatement.setAccountHolder(laborContract.getAccountHolder());
+        checkPermission(authenticationMemberId, salaryStatement.getCompany());
 
         SalaryStatement savedSalaryStatement = salaryStatementRepository.save(salaryStatement);
         statusOfWorks.stream().forEach(statusOfWork -> statusOfWork.setSalaryStatement(savedSalaryStatement));
@@ -149,6 +88,15 @@ public class SalaryStatementService {
         checkGetPermission(authenticationMemberId, salaryStatement);
 
         return salaryStatement;
+    }
+
+    public List<SalaryStatement> findSalaryStatements(long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+        List<SalaryStatement> salaryStatements = member.getSalaryStatements();
+
+        return salaryStatements.stream()
+                .sorted(Comparator.comparing(SalaryStatement::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     public void deleteSalaryStatement(long salaryStatementId, long authenticationMemberId) {
@@ -541,7 +489,7 @@ public class SalaryStatementService {
         table.addCell(cell54);
 
         PdfPCell cell55 = new PdfPCell(new Phrase("연장근로시간 수(" + overtimePayBasis +"시간)*" +
-                formatter.format(hourlyWage) + "원*" + StatusOfWork.note.연장근로.getRate(), objFont));
+                formatter.format(hourlyWage) + "원*" + StatusOfWork.Note.연장근로.getRate(), objFont));
         cell55.setColspan(2);
         cell55.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell55.setPadding(10);
@@ -560,7 +508,7 @@ public class SalaryStatementService {
         table.addCell(cell57);
 
         PdfPCell cell58 = new PdfPCell(new Phrase("야간근로시간 수(" + nightWorkAllowanceBasis +"시간)*" +
-                formatter.format(hourlyWage) + "원*" + StatusOfWork.note.야간근로.getRate(), objFont));
+                formatter.format(hourlyWage) + "원*" + StatusOfWork.Note.야간근로.getRate(), objFont));
         cell58.setColspan(2);
         cell58.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell58.setPadding(10);
@@ -579,7 +527,7 @@ public class SalaryStatementService {
         table.addCell(cell60);
 
         PdfPCell cell61 = new PdfPCell(new Phrase("휴일근로시간 수(" + holidayWorkAllowanceBasis +"시간)*" +
-                formatter.format(hourlyWage) + "원*" + StatusOfWork.note.휴일근로.getRate(), objFont));
+                formatter.format(hourlyWage) + "원*" + StatusOfWork.Note.휴일근로.getRate(), objFont));
         cell61.setColspan(2);
         cell61.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell61.setPadding(10);

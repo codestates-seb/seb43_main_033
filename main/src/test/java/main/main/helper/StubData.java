@@ -5,9 +5,11 @@ import main.main.bank.dto.BankDto;
 import main.main.company.dto.CompanyDto;
 import main.main.company.entity.Company;
 import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.memberbank.dto.MemberBankDto;
+import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.entity.StatusOfWork;
@@ -52,7 +54,7 @@ public class StubData {
             LocalDateTime time = LocalDateTime.now();
 
             LaborContractDto.Post post = new LaborContractDto.Post();
-            post.setMemberId(1L);
+            post.setCompanyMemberId(1L);
             post.setCompanyId(1L);
             post.setBasicSalary(BigDecimal.valueOf(3000000));
             post.setStartOfContract(time);
@@ -78,12 +80,46 @@ public class StubData {
 
         public static LaborContractDto.Response getResponseBody() {
             return LaborContractDto.Response.builder()
+                    .laborContactId(1L)
                     .memberName("직원 이름")
                     .companyName("회사 이름")
+                    .bankName("은행 이름")
+                    .accountNumber("계좌 번호")
+                    .accountHolder("예금주")
                     .basicSalary(BigDecimal.valueOf(3000000))
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
-                    .information("근로계약서 정보").build();
+                    .information("근로계약서 정보")
+                    .uri("파일uri").build();
+        }
+
+        public static List<LaborContractDto.Response> getMultiResponseBody() {
+            return List.of(
+                    LaborContractDto.Response.builder()
+                            .laborContactId(2L)
+                            .memberName("직원 이름")
+                            .companyName("회사 이름")
+                            .bankName("은행 이름")
+                            .accountNumber("계좌 번호")
+                            .accountHolder("예금주")
+                            .basicSalary(BigDecimal.valueOf(3000000))
+                            .startTime(LocalTime.MIDNIGHT)
+                            .finishTime(LocalTime.MIDNIGHT)
+                            .information("근로계약서 정보")
+                            .uri("파일uri").build(),
+                    LaborContractDto.Response.builder()
+                            .laborContactId(1L)
+                            .memberName("직원 이름")
+                            .companyName("회사 이름")
+                            .bankName("은행 이름")
+                            .accountNumber("계좌 번호")
+                            .accountHolder("예금주")
+                            .basicSalary(BigDecimal.valueOf(3000000))
+                            .startTime(LocalTime.MIDNIGHT)
+                            .finishTime(LocalTime.MIDNIGHT)
+                            .information("근로계약서 정보")
+                            .uri("파일uri").build()
+            );
         }
 
         public static HashMap<byte[], String> getImage() throws IOException {
@@ -103,16 +139,14 @@ public class StubData {
             LocalDateTime time = LocalDateTime.now();
 
             StatusOfWorkDto.Post post = new StatusOfWorkDto.Post();
-            post.setCompanyId(1L);
-            post.setMemberId(1L);
             post.setStartTime(time);
             post.setFinishTime(time);
-            post.setNote(StatusOfWork.note.지각);
+            post.setNote(StatusOfWork.Note.지각);
 
             StatusOfWorkDto.Patch patch = new StatusOfWorkDto.Patch();
             patch.setStartTime(time);
             patch.setFinishTime(time);
-            patch.setNote(StatusOfWork.note.결근);
+            patch.setNote(StatusOfWork.Note.결근);
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);
@@ -191,9 +225,11 @@ public class StubData {
                     .companyId(1L)
                     .companyName("회사 이름")
                     .memberId(1L)
-                    .memberName("직원 이름")
                     .year(2023)
                     .month(1)
+                    .name("직원 이름")
+                    .team("직원 부서명")
+                    .grade("직원 직급명")
                     .hourlyWage(BigDecimal.valueOf(10000))
                     .basePay(BigDecimal.valueOf(2090000))
                     .overtimePay(BigDecimal.valueOf(0))
@@ -212,6 +248,67 @@ public class StubData {
                     .bankName("국민")
                     .accountNumber("111-111111-11-11")
                     .build();
+        }
+
+        public static List<SalaryStatementDto.Response> getMultiResponseBody() {
+            return List.of(
+                    SalaryStatementDto.Response.builder()
+                            .id(2L)
+                            .companyId(1L)
+                            .companyName("회사 이름")
+                            .memberId(1L)
+                            .year(2023)
+                            .month(2)
+                            .name("직원 이름")
+                            .team("직원 부서명")
+                            .grade("직원 직급명")
+                            .hourlyWage(BigDecimal.valueOf(10000))
+                            .basePay(BigDecimal.valueOf(2090000))
+                            .overtimePay(BigDecimal.valueOf(0))
+                            .overtimePayBasis(0)
+                            .nightWorkAllowance(BigDecimal.valueOf(0))
+                            .nightWorkAllowanceBasis(0)
+                            .holidayWorkAllowance(BigDecimal.valueOf(0))
+                            .holidayWorkAllowanceBasis(0)
+                            .unpaidLeave(BigDecimal.valueOf(0))
+                            .salary(BigDecimal.valueOf(2090000))
+                            .incomeTax(BigDecimal.valueOf(10000))
+                            .nationalCoalition(BigDecimal.valueOf(10000))
+                            .healthInsurance(BigDecimal.valueOf(10000))
+                            .employmentInsurance(BigDecimal.valueOf(10000))
+                            .totalSalary(BigDecimal.valueOf(2050000))
+                            .bankName("국민")
+                            .accountNumber("111-111111-11-11")
+                            .build(),
+                    SalaryStatementDto.Response.builder()
+                            .id(1L)
+                            .companyId(1L)
+                            .companyName("회사 이름")
+                            .memberId(1L)
+                            .year(2023)
+                            .month(1)
+                            .name("직원 이름")
+                            .team("직원 부서명")
+                            .grade("직원 직급명")
+                            .hourlyWage(BigDecimal.valueOf(10000))
+                            .basePay(BigDecimal.valueOf(2090000))
+                            .overtimePay(BigDecimal.valueOf(0))
+                            .overtimePayBasis(0)
+                            .nightWorkAllowance(BigDecimal.valueOf(0))
+                            .nightWorkAllowanceBasis(0)
+                            .holidayWorkAllowance(BigDecimal.valueOf(0))
+                            .holidayWorkAllowanceBasis(0)
+                            .unpaidLeave(BigDecimal.valueOf(0))
+                            .salary(BigDecimal.valueOf(2090000))
+                            .incomeTax(BigDecimal.valueOf(10000))
+                            .nationalCoalition(BigDecimal.valueOf(10000))
+                            .healthInsurance(BigDecimal.valueOf(10000))
+                            .employmentInsurance(BigDecimal.valueOf(10000))
+                            .totalSalary(BigDecimal.valueOf(2050000))
+                            .bankName("국민")
+                            .accountNumber("111-111111-11-11")
+                            .build()
+            );
         }
     }
 
@@ -258,6 +355,9 @@ public class StubData {
                     .businessNumber("사업자 등록 번호")
                     .address("회사 주소")
                     .information("회사 정보")
+                    .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
+                    .theSalaryOfTheCompanyLastMonth(BigDecimal.valueOf(100000))
+                    .theSalaryOfTheCompanyThisMonth(BigDecimal.valueOf(200000))
                     .build();
         }
 
@@ -279,6 +379,7 @@ public class StubData {
                             .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
+                            .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
                             .build(),
                     CompanyDto.ResponseForList.builder()
                             .companyId(2L)
@@ -287,9 +388,11 @@ public class StubData {
                             .businessNumber("사업자 등록 번호")
                             .address("회사 주소")
                             .information("회사 정보")
+                            .companyMembers(MockCompanyMember.getCompanyMembersToCompanyMembersResponse())
                             .build()
             );
         }
+
     }
 
 
@@ -301,29 +404,64 @@ public class StubData {
             post.setMemberId(1L);
             post.setBankId(1L);
             post.setAccountNumber("회원 계좌 번호");
+            post.setMainAccount(true);
 
             MemberBankDto.Patch patch = new MemberBankDto.Patch();
             patch.setMemberBankId(1L);
             patch.setMemberId(1L);
             patch.setBankId(1L);
             patch.setAccountNumber("회원 계좌 번호");
+            patch.setMainAccount(true);
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);
             stubRequestBody.put(HttpMethod.PATCH, patch);
         }
 
-        public static Object getRequestBody(HttpMethod method) { return stubRequestBody.get(method); }
+        public static Object getRequestBody(HttpMethod method) {
+            return stubRequestBody.get(method);
+        }
 
+        public static Page<MemberBank> getMemberBanksByPage() {
+            MemberBank memberBank1 = new MemberBank();
+            MemberBank memberBank2 = new MemberBank();
+
+            return new PageImpl<>(List.of(memberBank1, memberBank2), PageRequest.of(0, 5, Sort.by("memberBankId").descending()), 2);
+        }
 
         public static MemberBankDto.Response getMemberBankResponse() {
             return MemberBankDto.Response.builder()
                     .memberBankId(1L)
                     .memberId(1L)
                     .bankId(1L)
+                    .bankCode("회원 계좌 은행코드")
                     .bankName("회원 계좌 은행명")
                     .accountNumber("회원 계좌 번호")
+                    .mainAccount(true)
                     .build();
+        }
+
+        public static List<MemberBankDto.ResponseForList> getmemberBanksToMemberBanksResponse() {
+            return List.of(
+                    MemberBankDto.ResponseForList.builder()
+                            .memberBankId(1L)
+                            .memberId(1L)
+                            .bankId(1L)
+                            .bankCode("회원 계좌 은행코드")
+                            .bankName("회원 계좌 은행명")
+                            .accountNumber("회원 계좌 번호")
+                            .mainAccount(true)
+                            .build(),
+                    MemberBankDto.ResponseForList.builder()
+                            .memberBankId(1L)
+                            .memberId(1L)
+                            .bankId(1L)
+                            .bankCode("회원 계좌 은행코드")
+                            .bankName("회원 계좌 은행명")
+                            .accountNumber("회원 계좌 번호")
+                            .mainAccount(true)
+                            .build()
+            );
         }
     }
 
@@ -346,15 +484,15 @@ public class StubData {
             CompanyMemberDto.Post post = new CompanyMemberDto.Post();
             post.setCompanyId(1L);
             post.setMemberId(1L);
-            post.setGrade("회원 직급");
-            post.setTeam("회원 소속 부서");
+            post.setGrade("사원 직급");
+            post.setTeam("사원 소속 부서");
 
             CompanyMemberDto.Patch patch = new CompanyMemberDto.Patch();
             patch.setCompanyMemberId(1L);
             patch.setCompanyId(1L);
             patch.setMemberId(1L);
-            patch.setGrade("회원 직급");
-            patch.setTeam("회원 소속 부서");
+            patch.setGrade("사원 직급");
+            patch.setTeam("사원 소속 부서");
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);
@@ -376,8 +514,9 @@ public class StubData {
                     .companyMemberId(1L)
                     .companyId(1L)
                     .memberId(1L)
-                    .grade("회원 직급")
-                    .team("회원 소속 부서")
+                    .grade("사원 직급")
+                    .team("사원 소속 부서")
+                    .status(Status.PENDING)
                     .build();
         }
 
@@ -387,15 +526,17 @@ public class StubData {
                             .companyMemberId(1L)
                             .companyId(1L)
                             .memberId(1L)
-                            .grade("회원 직급")
-                            .team("회원 소속 부서")
+                            .grade("사원 직급")
+                            .team("사원 소속 부서")
+                            .status(Status.PENDING)
                             .build(),
                     CompanyMemberDto.ResponseForList.builder()
                             .companyMemberId(2L)
                             .companyId(1L)
                             .memberId(1L)
-                            .grade("회원 직급")
-                            .team("회원 소속 부서")
+                            .grade("사원 직급")
+                            .team("사원 소속 부서")
+                            .status(Status.PENDING)
                             .build()
             );
         }

@@ -1,8 +1,10 @@
 package main.main.statusofwork.mapper;
 
 import main.main.company.entity.Company;
-import main.main.member.entity.Member;
+import main.main.companymember.entity.CompanyMember;
 import main.main.statusofwork.dto.StatusOfWorkDto;
+import main.main.statusofwork.dto.VacationDto;
+import main.main.statusofwork.entity.RequestVacation;
 import main.main.statusofwork.entity.StatusOfWork;
 import org.mapstruct.Mapper;
 
@@ -12,13 +14,9 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface StatusOfWorkMapper {
     default StatusOfWork postToStatusOfWork(StatusOfWorkDto.Post requestBody) {
-        Member member = new Member();
-        member.setMemberId(requestBody.getMemberId());
-        Company company = new Company();
-        company.setCompanyId(requestBody.getCompanyId());
         StatusOfWork statusOfWork = new StatusOfWork();
-        statusOfWork.setMember(member);
-        statusOfWork.setCompany(company);
+        statusOfWork.setCompanyMember(new CompanyMember());
+        statusOfWork.setCompany(new Company());
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
         statusOfWork.setNote(requestBody.getNote());
@@ -42,5 +40,36 @@ public interface StatusOfWorkMapper {
                 .startTime(statusOfWork.getStartTime())
                 .finishTime(statusOfWork.getFinishTime())
                 .note(statusOfWork.getNote().getStatus()).build();
+    }
+
+
+
+    default RequestVacation postToRequestVacation(VacationDto.Post requestBody) {
+        RequestVacation requestVacation = new RequestVacation();
+        CompanyMember companyMember = new CompanyMember();
+        Company company = new Company();
+        company.setCompanyId(requestBody.getCompanyId());
+        companyMember.setCompany(company);
+
+        requestVacation.setVacationStart(requestBody.getVacationStart());
+        requestVacation.setVacationEnd(requestBody.getVacationEnd());
+        requestVacation.setCompanyMember(companyMember);
+
+        return requestVacation;
+    }
+
+    default List<VacationDto.Response> requestResponses(List<RequestVacation> requestVacations) {
+        return requestVacations.stream()
+                .map(requestVacation -> requestResponse(requestVacation))
+                .collect(Collectors.toList());
+    }
+    default VacationDto.Response requestResponse(RequestVacation requestVacation) {
+        return VacationDto.Response.builder()
+                .requestId(requestVacation.getId())
+                .companyMemberId(requestVacation.getCompanyMember().getCompanyMemberId())
+                .name(requestVacation.getCompanyMember().getMember().getName())
+                .vacationStart(requestVacation.getVacationStart())
+                .vacationEnd(requestVacation.getVacationEnd())
+                .build();
     }
 }

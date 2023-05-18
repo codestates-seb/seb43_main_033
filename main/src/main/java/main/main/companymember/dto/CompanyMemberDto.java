@@ -16,7 +16,6 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
-        private Authority authority;
 
 
     }
@@ -30,7 +29,7 @@ public class CompanyMemberDto {
         private Long memberId;
         private String grade;
         private String team;
-        private Authority authority;
+        private List<String> roles;
 
 
     }
@@ -44,11 +43,11 @@ public class CompanyMemberDto {
         private Long companyMemberId;
         private Long companyId;
         private Long memberId;
+        private String name;
         private String grade;
         private String team;
         private Status status;
         private List<String> roles;
-        private Authority authority;
 
 
     }
@@ -61,18 +60,19 @@ public class CompanyMemberDto {
         private Long companyMemberId;
         private Long companyId;
         private Long memberId;
+        private String name;
         private String grade;
         private String team;
         private Status status;
-        private Authority authority;
-
+        private List<String> roles;
 
     }
 
     @Getter
     @Setter
-    public static class Roles {
-        private List<String> roles;
-
+    @Builder
+    public static class CompanyMemberToMember {
+        private Long companyMemberId;
+        private Long companyId;
     }
 }

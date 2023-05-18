@@ -3,9 +3,9 @@ package main.main.companymember.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
-import main.main.companymember.dto.Authority;
 import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
+import main.main.statusofwork.entity.Vacation;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -35,6 +35,9 @@ public class CompanyMember {
     @JsonIgnoreProperties("companyMembers")
     private Member member;
 
+    @OneToOne(mappedBy = "companyMember", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Vacation vacation;
+
     private String grade;
     private String team;
 
@@ -43,12 +46,18 @@ public class CompanyMember {
     @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roles = new ArrayList<>();
     @Enumerated(EnumType.STRING)
-    private Authority authority;
 
     public void setCompany(Company company) {
         this.company = company;
         if(!company.getCompanyMembers().contains(this)) {
             company.getCompanyMembers().add(this);
+        }
+    }
+
+    public void setVacation(Vacation vacation) {
+        this.vacation = vacation;
+        if (vacation.getCompanyMember() != this) {
+            vacation.setCompanyMember(this);
         }
     }
 }
