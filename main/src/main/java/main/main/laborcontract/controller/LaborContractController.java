@@ -13,9 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,18 +68,6 @@ public class LaborContractController {
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(laborContractMapper.laborContractsToResponses(laborContracts), HttpStatus.OK);
-    }
-
-    @GetMapping("laborcontracts/{laborcontract-id}/file")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable("laborcontract-id") long laborContractId) throws IOException {
-        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-
-        HashMap<byte[], String> image = laborContractService.getImage(laborContractId, authenticationMemberId);
-        byte[] imageByteArray = image.keySet().iterator().next();
-        String imageType = image.get(imageByteArray);
-
-        HttpHeaders httpHeaders = getContentType(imageType);
-        return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
     }
 
     @DeleteMapping("/laborcontracts/{laborcontract-id}")
