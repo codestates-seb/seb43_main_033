@@ -36,7 +36,8 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity postCompany(@Valid @RequestBody CompanyDto.Post requestBody) {
-        Company company = companyService.createCompany(companyMapper.companyPostToCompany(requestBody));
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        companyService.createCompany(companyMapper.companyPostToCompany(requestBody), authenticationMemberId);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
