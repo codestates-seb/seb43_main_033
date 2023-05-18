@@ -45,5 +45,6 @@ public class LaborContractDto {
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
+        private String uri;
     }
 }

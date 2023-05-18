@@ -49,5 +49,7 @@ public class LaborContract {
 
     private String information;
 
-//    private File loborContractFile
+    private String laborContractUri;
+
+    private String pureUri;
 }

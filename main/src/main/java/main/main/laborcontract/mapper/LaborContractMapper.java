@@ -55,6 +55,7 @@ public interface LaborContractMapper {
                 .startTime(laborContract.getStartTime())
                 .finishTime(laborContract.getFinishTime())
                 .information(laborContract.getInformation())
+                .uri(laborContract.getLaborContractUri())
                 .build();
     }
 

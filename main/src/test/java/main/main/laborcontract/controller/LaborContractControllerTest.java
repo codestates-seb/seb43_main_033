@@ -183,7 +183,8 @@ public class LaborContractControllerTest implements LaborContractHelper {
                                         fieldWithPath("basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
                                         fieldWithPath("startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
                                         fieldWithPath("finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
-                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                        fieldWithPath("information").type(JsonFieldType.STRING).description("근로계약서 정보"),
+                                        fieldWithPath("uri").type(JsonFieldType.STRING).description("업로드 된 파일 URI")
                                 )
                         )
                 ));
@@ -218,27 +219,10 @@ public class LaborContractControllerTest implements LaborContractHelper {
                                         fieldWithPath("[].basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
                                         fieldWithPath("[].startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
                                         fieldWithPath("[].finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
-                                        fieldWithPath("[].information").type(JsonFieldType.STRING).description("근로계약서 정보")
+                                        fieldWithPath("[].information").type(JsonFieldType.STRING).description("근로계약서 정보"),
+                                        fieldWithPath("[].uri").type(JsonFieldType.STRING).description("업로드 된 파일 URI")
                                 )
                         )));
-    }
-
-    @Test
-    @DisplayName("LaborContract Image Get Test")
-    public void getLaborContractImageTest() throws Exception {
-        given(laborContractService.getImage(Mockito.anyLong(), Mockito.anyLong())).willReturn(StubData.MockLaborContract.getImage());
-
-        mockMvc.perform(getImageRequestBuilder(LABORCONTRACT_IMAGE_URI, 1L))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("get-LaborContract_IMAGE",
-                        getRequestPreProcessor(),
-                        getResponsePreProcessor(),
-                        pathParameters(
-                                getRequestPathParameterDescriptor()
-                        )
-                ));
-
     }
 
     @Test

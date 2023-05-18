@@ -89,7 +89,8 @@ public class StubData {
                     .basicSalary(BigDecimal.valueOf(3000000))
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
-                    .information("근로계약서 정보").build();
+                    .information("근로계약서 정보")
+                    .uri("파일uri").build();
         }
 
         public static List<LaborContractDto.Response> getMultiResponseBody() {
@@ -104,7 +105,8 @@ public class StubData {
                             .basicSalary(BigDecimal.valueOf(3000000))
                             .startTime(LocalTime.MIDNIGHT)
                             .finishTime(LocalTime.MIDNIGHT)
-                            .information("근로계약서 정보").build(),
+                            .information("근로계약서 정보")
+                            .uri("파일uri").build(),
                     LaborContractDto.Response.builder()
                             .laborContactId(1L)
                             .memberName("직원 이름")
@@ -115,7 +117,8 @@ public class StubData {
                             .basicSalary(BigDecimal.valueOf(3000000))
                             .startTime(LocalTime.MIDNIGHT)
                             .finishTime(LocalTime.MIDNIGHT)
-                            .information("근로계약서 정보").build()
+                            .information("근로계약서 정보")
+                            .uri("파일uri").build()
             );
         }
 
