@@ -211,7 +211,21 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
 //                .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(
+                        document(
+                                "vacation-request",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                requestFields(
+                                        List.of(
+                                                fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                                fieldWithPath("vacationStart").type(JsonFieldType.STRING).description("휴가 시작일"),
+                                                fieldWithPath("vacationEnd").type(JsonFieldType.STRING).description("휴가 종료일")
+                                        )
+                                )
+                        )
+                );
 
     }
 
@@ -223,7 +237,16 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         mockMvc.perform(post("/manager/vacations/{vacation-id}/{status}", 1L, "approved", accessToken)
                 .header("Authorization", "Bearer ".concat(accessToken)))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document(
+                        "review-vacation",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("vacation-id").description("휴가 신청 식별 번호"),
+                                parameterWithName("status").description("승인, 거절 (approved / refuse)")
+                        )
+                ));
     }
 
     @Test
@@ -252,6 +275,23 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                 .header("Authorization", "Bearer ".concat(accessToken))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andDo(print());
+                .andDo(print())
+                .andDo(
+                        document(
+                                "get-requestList",
+                                getRequestPreProcessor(),
+                                getResponsePreProcessor(),
+                                pathParameters(
+                                        parameterWithName("company-id").description("회사 식별 번호")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[].requestId").type(JsonFieldType.NUMBER).description("휴가 신청 식별 번호"),
+                                        fieldWithPath("[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호"),
+                                        fieldWithPath("[].name").type(JsonFieldType.STRING).description("근로자 이름"),
+                                        fieldWithPath("[].vacationStart").type(JsonFieldType.STRING).description("휴가 시작 일자"),
+                                        fieldWithPath("[].vacationEnd").type(JsonFieldType.STRING).description("휴가 종료 일자")
+                                )
+                        )
+                );
     }
 }
