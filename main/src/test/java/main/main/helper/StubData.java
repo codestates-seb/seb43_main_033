@@ -9,6 +9,7 @@ import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.laborcontract.dto.LaborContractDto;
 import main.main.memberbank.dto.MemberBankDto;
+import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.dto.SalaryStatementDto;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.entity.StatusOfWork;
@@ -339,29 +340,64 @@ public class StubData {
             post.setMemberId(1L);
             post.setBankId(1L);
             post.setAccountNumber("회원 계좌 번호");
+            post.setMainAccount(true);
 
             MemberBankDto.Patch patch = new MemberBankDto.Patch();
             patch.setMemberBankId(1L);
             patch.setMemberId(1L);
             patch.setBankId(1L);
             patch.setAccountNumber("회원 계좌 번호");
+            patch.setMainAccount(true);
 
             stubRequestBody = new HashMap<>();
             stubRequestBody.put(HttpMethod.POST, post);
             stubRequestBody.put(HttpMethod.PATCH, patch);
         }
 
-        public static Object getRequestBody(HttpMethod method) { return stubRequestBody.get(method); }
+        public static Object getRequestBody(HttpMethod method) {
+            return stubRequestBody.get(method);
+        }
 
+        public static Page<MemberBank> getMemberBanksByPage() {
+            MemberBank memberBank1 = new MemberBank();
+            MemberBank memberBank2 = new MemberBank();
+
+            return new PageImpl<>(List.of(memberBank1, memberBank2), PageRequest.of(0, 5, Sort.by("memberBankId").descending()), 2);
+        }
 
         public static MemberBankDto.Response getMemberBankResponse() {
             return MemberBankDto.Response.builder()
                     .memberBankId(1L)
                     .memberId(1L)
                     .bankId(1L)
+                    .bankCode("회원 계좌 은행코드")
                     .bankName("회원 계좌 은행명")
                     .accountNumber("회원 계좌 번호")
+                    .mainAccount(true)
                     .build();
+        }
+
+        public static List<MemberBankDto.ResponseForList> getmemberBanksToMemberBanksResponse() {
+            return List.of(
+                    MemberBankDto.ResponseForList.builder()
+                            .memberBankId(1L)
+                            .memberId(1L)
+                            .bankId(1L)
+                            .bankCode("회원 계좌 은행코드")
+                            .bankName("회원 계좌 은행명")
+                            .accountNumber("회원 계좌 번호")
+                            .mainAccount(true)
+                            .build(),
+                    MemberBankDto.ResponseForList.builder()
+                            .memberBankId(1L)
+                            .memberId(1L)
+                            .bankId(1L)
+                            .bankCode("회원 계좌 은행코드")
+                            .bankName("회원 계좌 은행명")
+                            .accountNumber("회원 계좌 번호")
+                            .mainAccount(true)
+                            .build()
+            );
         }
     }
 
