@@ -21,7 +21,7 @@ public class Company {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long companyId;
-
+    private Long memberId;
     private String companyName;
     private String companySize;
     private String businessNumber;

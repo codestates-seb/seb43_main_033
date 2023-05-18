@@ -28,8 +28,9 @@ public class CompanyService {
     private final MemberService memberService;
     private final CompanyMemberRepository companyMemberRepository;
 
-    public Company createCompany(Company company) {
-
+    public Company createCompany(Company company, long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+        company.setMemberId(member.getMemberId());
         return companyRepository.save(company);
     }
 

@@ -5,6 +5,7 @@ import main.main.company.entity.Company;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.mapper.CompanyMemberMapper;
+import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -20,11 +21,13 @@ public interface CompanyMapper {
 
     default Company companyPostToCompany(CompanyDto.Post requestBody) {
         Company company = new Company();
+        Member member = new Member();
 
         company.setCompanyName(requestBody.getCompanyName());
         company.setCompanySize(requestBody.getCompanySize());
         company.setAddress(requestBody.getAddress());
         company.setInformation(requestBody.getInformation());
+        company.setMemberId(member.getMemberId());
 
         return company;
     }
@@ -54,6 +57,7 @@ public interface CompanyMapper {
 
         return CompanyDto.Response.builder()
                 .companyId(company.getCompanyId())
+                .memberId(company.getMemberId())
                 .companyName(company.getCompanyName())
                 .companySize(company.getCompanySize())
                 .businessNumber(company.getBusinessNumber())
@@ -73,6 +77,7 @@ public interface CompanyMapper {
 
         return CompanyDto.ResponseForList.builder()
                 .companyId(company.getCompanyId())
+                .memberId(company.getMemberId())
                 .companyName(company.getCompanyName())
                 .companySize(company.getCompanySize())
                 .businessNumber(company.getBusinessNumber())

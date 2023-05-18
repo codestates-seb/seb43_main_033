@@ -37,6 +37,7 @@ public class CompanyDto {
     public static class Response {
 
         private Long companyId;
+        private Long memberId;
         private String companyName;
         private String companySize;
         private String businessNumber;
@@ -56,6 +57,7 @@ public class CompanyDto {
     public static class ResponseForList {
 
         private Long companyId;
+        private Long memberId;
         private String companyName;
         private String companySize;
         private String businessNumber;
