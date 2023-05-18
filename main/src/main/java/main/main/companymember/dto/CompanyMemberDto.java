@@ -66,7 +66,13 @@ public class CompanyMemberDto {
         private Status status;
         private List<String> roles;
 
+    }
 
-
+    @Getter
+    @Setter
+    @Builder
+    public static class CompanyMemberToMember {
+        private Long companyMemberId;
+        private Long companyId;
     }
 }
