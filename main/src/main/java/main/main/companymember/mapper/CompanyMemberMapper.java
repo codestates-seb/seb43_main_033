@@ -42,7 +42,6 @@ public interface CompanyMemberMapper {
         companyMember.setGrade(requestBody.getGrade());
         companyMember.setTeam(requestBody.getTeam());
         companyMember.setRoles(requestBody.getRoles());
-        companyMember.setAuthority(requestBody.getAuthority());
 
 
         return companyMember;
