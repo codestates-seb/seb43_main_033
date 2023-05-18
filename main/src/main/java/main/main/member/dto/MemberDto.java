@@ -3,6 +3,7 @@ package main.main.member.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.companymember.dto.CompanyMemberDto;
 import main.main.memberbank.dto.MemberBankDto;
 
 import java.util.List;
@@ -48,5 +49,6 @@ public class MemberDto {
         private String residentNumber;
         private String address;
         private List<MemberBankDto.MemberBankList> bank;
+        private List<CompanyMemberDto.CompanyMemberToMember> companyMembers;
     }
 }
