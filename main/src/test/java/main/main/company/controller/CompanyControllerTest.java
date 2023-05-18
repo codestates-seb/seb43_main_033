@@ -327,7 +327,8 @@ public class CompanyControllerTest implements CompanyHelper {
 
         actions
                 .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("post-companyimage"));
     }
 
     @Test
@@ -350,6 +351,7 @@ public class CompanyControllerTest implements CompanyHelper {
 
         actions
                 .andExpect(status().isCreated())
-                .andDo(print());
+                .andDo(print())
+                .andDo(document("post-businessnumberimage"));
     }
 }
