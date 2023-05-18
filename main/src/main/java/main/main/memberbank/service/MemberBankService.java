@@ -3,6 +3,10 @@ package main.main.memberbank.service;
 import lombok.RequiredArgsConstructor;
 import main.main.bank.entity.Bank;
 import main.main.bank.service.BankService;
+import main.main.company.entity.Company;
+import main.main.company.service.CompanyService;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.repository.CompanyMemberRepository;
 import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
@@ -24,9 +28,12 @@ public class MemberBankService {
     private final MemberBankRepository memberBankRepository;
     private final MemberService memberService;
     private final BankService bankService;
+    private final CompanyMemberRepository companyMemberRepository;
+    private final CompanyService companyService;
 
 
-    public MemberBank createMemberBank(MemberBank memberBank) {
+    public MemberBank createMemberBank(MemberBank memberBank, long authenticationMemberId) {
+        checkIdentity(authenticationMemberId);
         verifyExistAccountNumber(memberBank.getAccountNumber());
         createMainAccount(memberBank);
 
@@ -50,8 +57,12 @@ public class MemberBankService {
     }
 
 
-    public MemberBank updateMemberBank(MemberBank memberBank) {
+    public MemberBank updateMemberBank(MemberBank memberBank, long authenticationMemberId) {
+
         MemberBank findedMemberBank = findVerifiedMemberBank(memberBank.getMemberBankId());
+        Member member = findedMemberBank.getMember();
+        Company company = companyService.findCompany(member.getCompany().getCompanyId());
+        checkPermission(authenticationMemberId, company);
 
         if (!findedMemberBank.getAccountNumber().equals(memberBank.getAccountNumber())) {
             verifyExistAccountNumber(memberBank.getAccountNumber());
@@ -146,9 +157,11 @@ public class MemberBankService {
 
     }
 
-    public void deleteMemberBank(long memberBankId) {
+    public void deleteMemberBank(long memberBankId, long authenticationMemberId) {
         MemberBank findedMemberBank = findVerifiedMemberBank(memberBankId);
         Member member = findedMemberBank.getMember();
+        Company company = companyService.findCompany(member.getCompany().getCompanyId());
+        checkPermission(authenticationMemberId, company);
         List<MemberBank> memberBanks = member.getMemberBanks();
 
         if (memberBanks.size() == 1) {
@@ -175,8 +188,39 @@ public class MemberBankService {
         }
     }
 
-}
+    private void checkPermission(long authenticationMemberId, Company company) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
 
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isAuthorizedMember(member, authenticationMemberId) || !isManager(companyMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkIdentity(long authenticationMemberId) {
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        Member member = memberService.findMember(authenticationMemberId);
+        if (!isAuthorizedMember(member, authenticationMemberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        }
+
+
+    private boolean isAuthorizedMember(Member member, long authenticationMemberId) {
+        return member != null && member.getMemberId().equals(authenticationMemberId);
+    }
+
+    private boolean isManager(CompanyMember companyMember) {
+        return companyMember != null && companyMember.getRoles().contains("MANAGER");
+    }
+
+}
 
 
 
