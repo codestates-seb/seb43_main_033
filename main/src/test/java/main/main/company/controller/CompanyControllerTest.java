@@ -177,13 +177,15 @@ public class CompanyControllerTest implements CompanyHelper {
                                         fieldWithPath("information").type(JsonFieldType.STRING).description("회사 정보"),
                                         fieldWithPath("theSalaryOfTheCompanyThisMonth").type(JsonFieldType.NUMBER).description("이번 달 총 급여"),
                                         fieldWithPath("theSalaryOfTheCompanyLastMonth").type(JsonFieldType.NUMBER).description("지난 달 총 급여"),
-                                        fieldWithPath("companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호"),
-                                        fieldWithPath("companyMembers[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("companyMembers[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("companyMembers[].grade").type(JsonFieldType.STRING).description("사원 직급"),
-                                        fieldWithPath("companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호"),
-                                        fieldWithPath("companyMembers[].team").type(JsonFieldType.STRING).description("회원 소속 부서"),
-                                        fieldWithPath("companyMembers[].status").type(JsonFieldType.STRING).description("현재 소속 상태")
+                                        fieldWithPath("companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호").optional(),
+                                        fieldWithPath("companyMembers[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호").optional(),
+                                        fieldWithPath("companyMembers[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호").optional(),
+                                        fieldWithPath("companyMembers[].name").type(JsonFieldType.STRING).description("사원명").optional(),
+                                        fieldWithPath("companyMembers[].grade").type(JsonFieldType.STRING).description("사원 직급").optional(),
+                                        fieldWithPath("companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호").optional(),
+                                        fieldWithPath("companyMembers[].team").type(JsonFieldType.STRING).description("사원 소속 부서").optional(),
+                                        fieldWithPath("companyMembers[].roles").type(JsonFieldType.STRING).description("사원 역할 상태").optional(),
+                                        fieldWithPath("companyMembers[].status").type(JsonFieldType.STRING).description("현재 소속 상태").optional()
 
                                 )
                         )
@@ -228,13 +230,15 @@ public class CompanyControllerTest implements CompanyHelper {
                                         fieldWithPath("data[].businessNumber").type(JsonFieldType.STRING).description("사업자 등록 번호"),
                                         fieldWithPath("data[].address").type(JsonFieldType.STRING).description("회사 주소"),
                                         fieldWithPath("data[].information").type(JsonFieldType.STRING).description("회사 정보"),
-                                        fieldWithPath("data[].companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호"),
-                                        fieldWithPath("data[].companyMembers[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("data[].companyMembers[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("data[].companyMembers[].grade").type(JsonFieldType.STRING).description("사원 직급"),
-                                        fieldWithPath("data[].companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호"),
-                                        fieldWithPath("data[].companyMembers[].team").type(JsonFieldType.STRING).description("회원 소속 부서"),
-                                        fieldWithPath("data[].companyMembers[].status").type(JsonFieldType.STRING).description("현재 소 상태"),
+                                        fieldWithPath("data[].companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호").optional(),
+                                        fieldWithPath("data[].companyMembers[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호").optional(),
+                                        fieldWithPath("data[].companyMembers[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호").optional(),
+                                        fieldWithPath("data[].companyMembers[].name").type(JsonFieldType.STRING).description("사원명").optional().optional(),
+                                        fieldWithPath("data[].companyMembers[].grade").type(JsonFieldType.STRING).description("사원 직급").optional(),
+                                        fieldWithPath("data[].companyMembers[].companyMemberId").type(JsonFieldType.NUMBER).description("사원 식별 번호").optional(),
+                                        fieldWithPath("data[].companyMembers[].team").type(JsonFieldType.STRING).description("사원 소속 부서").optional(),
+                                        fieldWithPath("data[].companyMembers[].roles").type(JsonFieldType.STRING).description("사원 역할 상태").optional(),
+                                        fieldWithPath("data[].companyMembers[].status").type(JsonFieldType.STRING).description("현재 소속 상태").optional(),
                                         fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
                                         fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회사 수"),
                                         fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
@@ -261,7 +265,7 @@ public class CompanyControllerTest implements CompanyHelper {
 
 
     @Test
-    @DisplayName("Get Business Numbers by Role Test")
+    @DisplayName("Get BusinessNumbers by Role Test")
     public void getBusinessNumberByMemberTest() throws Exception {
         long memberId = 1L;
         long authenticationMemberId = 1L;
