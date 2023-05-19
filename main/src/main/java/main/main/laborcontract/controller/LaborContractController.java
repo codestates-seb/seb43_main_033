@@ -51,6 +51,14 @@ public class LaborContractController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/manager/laborcontracts/{companymember-id}")
+    public ResponseEntity getLaboContractList(@PathVariable("companymember-id") long companyMemberId) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        List<LaborContract> laborContracts = laborContractService.findLaborContractList(companyMemberId, authenticationMemberId);
+
+        return new ResponseEntity<>(laborContractMapper.laborContractsToResponses(laborContracts), HttpStatus.OK);
+    }
+
     @GetMapping("/manager/{company-id}/laborcontracts/{laborcontract-id}")
     public ResponseEntity getLaborContract(@PathVariable("laborcontract-id") long laborContractId) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
