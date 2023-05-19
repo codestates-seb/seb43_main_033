@@ -26,7 +26,10 @@ public enum ExceptionCode {
     BUSINESS_NOT_FOUND(404, "등록된 사업자가 없습니다."),
     INVALID_BANK_UPDATE(999,"은행을 변경하려면 계좌 삭제 후 다시 진행해 주세요."),
     MEMBERBANK_ONLY_ONE(007,"적어도 하나의 계좌를 주계좌로 지정해야합니다."),
-    MEMBERBANK_ACCOUNTNUM_EXISTS(409, "이미 존재하는 계좌입니다.");
+    MEMBERBANK_ACCOUNTNUM_EXISTS(409, "이미 존재하는 계좌입니다."),
+    IMAGE_ALREADY_EXISTS(409, "이미 등록된 이미지가 있습니다."),
+    IMAGE_NOT_FOUND(404, "이미지를 찾을 수 없습니다");
+
     @Getter
     private int status;
     @Getter
