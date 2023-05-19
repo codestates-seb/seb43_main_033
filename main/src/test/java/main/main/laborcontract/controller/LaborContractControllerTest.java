@@ -92,6 +92,10 @@ public class LaborContractControllerTest implements LaborContractHelper {
                 .andDo(document("post-LaborContract",
                         getRequestPreProcessor(),
                         getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("company-id").description("회사 식별 번호"),
+                                parameterWithName("companymember-id").description("사원 식별 번호")
+                        ),
                         requestParts(
                                 partWithName("requestPart").description("내용"),
                                 partWithName("file").description("PDF / PNG / JPEG 파일")
