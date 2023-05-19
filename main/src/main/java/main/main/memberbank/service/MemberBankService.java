@@ -188,19 +188,19 @@ public class MemberBankService {
         }
     }
 
-    private void checkPermission(long authenticationMemberId, Company company) {
+    private void checkPermission(long authenticationMemberId, Company company) { // 본인이거나 매니저일경우 패스
         if (authenticationMemberId == -1) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
 
         Member member = memberService.findMember(authenticationMemberId);
-        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
-        if (!isAuthorizedMember(member, authenticationMemberId) || !isManager(companyMember)) {
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isAuthorizedMember(member, authenticationMemberId) && !isManager(companyAndMember)) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
     }
 
-    private void checkIdentity(long authenticationMemberId) {
+    private void checkIdentity(long authenticationMemberId) { // 본인일때만 패스
         if (authenticationMemberId == -1) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
@@ -209,7 +209,18 @@ public class MemberBankService {
         if (!isAuthorizedMember(member, authenticationMemberId)) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
+    }
+
+    private void checkManager(long authenticationMemberId, Company company) { // 매니저일때만 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isManager(companyAndMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
 
 
     private boolean isAuthorizedMember(Member member, long authenticationMemberId) {

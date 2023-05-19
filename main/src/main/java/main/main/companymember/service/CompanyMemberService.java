@@ -32,11 +32,11 @@ public class CompanyMemberService {
     private final CustomAuthorityUtils authorityUtils;
     private final CompanyMemberMapper companyMemberMapper;
 
-    public CompanyMember createCompanyMember(CompanyMember companyMember) {
+    public CompanyMember createCompanyMember(CompanyMember companyMember, long authenticationMemberId) {
 
         Company company = companyService.findCompany(companyMember.getCompany().getCompanyId());
         Member member = memberService.findMember(companyMember.getMember().getMemberId());
-
+        checkPermission(authenticationMemberId, company);
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         companyMember.setRoles(roles);
 
@@ -57,15 +57,20 @@ public class CompanyMemberService {
         return findedCompanyMember;
     }
 
-    public void deleteCompanyMember(long companyMemberId) {
+    public void deleteCompanyMember(long companyMemberId, long authenticationMemberId) {
+
         CompanyMember findedCompanyMember = findVerifiedCompanyMember(companyMemberId);
+        Company company = companyService.findCompany(findedCompanyMember.getCompany().getCompanyId());
+        checkPermission(authenticationMemberId, company);
         companyMemberRepository.delete(findedCompanyMember);
     }
 
 
-    public CompanyMember updateCompanyMember(CompanyMember companyMember) {
+    public CompanyMember updateCompanyMember(CompanyMember companyMember, long authenticationMemberId) {
+
         CompanyMember findedCompanyMember = findVerifiedCompanyMember(companyMember.getCompanyMemberId());
 
+        checkIdentity(authenticationMemberId);
         Optional.ofNullable(companyMember.getGrade())
                 .ifPresent(grade -> findedCompanyMember.setGrade(grade));
         Optional.ofNullable(companyMember.getTeam())
@@ -74,8 +79,11 @@ public class CompanyMemberService {
         return companyMemberRepository.save(findedCompanyMember);
     }
 
-    public CompanyMember companyMemberUpdate(long companyMemberId, String status) {
+    public CompanyMember companyMemberUpdate(long companyMemberId, String status, long authenticationMemberId) {
         CompanyMember companyMember = findCompanyMember(companyMemberId);
+        Company company = companyService.findCompany(companyMember.getCompany().getCompanyId());
+        checkManager(authenticationMemberId, company);
+
         if (status.equals("pending")) {
             companyMember.setStatus(Status.PENDING);
         } else if (status.equals("approved")) {
@@ -115,6 +123,49 @@ public class CompanyMemberService {
         } else {
             return companyMemberRepository.findAllByCompanyCompanyId(companyId, PageRequest.of(page, 10, Sort.by("status").descending()));
         }
+    }
+
+    private void checkPermission(long authenticationMemberId, Company company) { // 본인이거나 매니저일경우 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isAuthorizedMember(member, authenticationMemberId) && !isManager(companyAndMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkIdentity(long authenticationMemberId) { // 본인일때만 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        Member member = memberService.findMember(authenticationMemberId);
+        if (!isAuthorizedMember(member, authenticationMemberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkManager(long authenticationMemberId, Company company) { // 매니저일때만 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isManager(companyAndMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+
+    private boolean isAuthorizedMember(Member member, long authenticationMemberId) {
+        return member != null && member.getMemberId().equals(authenticationMemberId);
+    }
+
+    private boolean isManager(CompanyMember companyMember) {
+        return companyMember != null && companyMember.getRoles().contains("MANAGER");
     }
 
 }
