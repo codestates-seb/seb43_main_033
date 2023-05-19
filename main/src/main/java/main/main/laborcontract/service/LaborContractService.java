@@ -95,6 +95,15 @@ public class LaborContractService {
         return findedLaborContract;
     }
 
+    public List<LaborContract> findLaborContractList(long companyMemberId, long authenticationMemberId) {
+        CompanyMember companyMember = companyMemberService.findCompanyMember(companyMemberId);
+        List<LaborContract> laborContracts = laborContractRepository.findLaborContractByCompanyMember(companyMember);
+
+        laborContracts.stream().forEach(laborContract -> checkGetPermission(authenticationMemberId, laborContract));
+
+        return laborContracts;
+    }
+
     public List<LaborContract> findLaborContract(long authenticationMemberId) {
         Member member = memberService.findMember(authenticationMemberId);
 

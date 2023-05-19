@@ -196,6 +196,43 @@ public class LaborContractControllerTest implements LaborContractHelper {
     }
 
     @Test
+    @DisplayName("LaborContract Get Test In manager")
+    public void getLaborContractListTest() throws Exception {
+        List<LaborContract> list = List.of(
+                new LaborContract()
+        );
+
+        given(laborContractService.findLaborContract(Mockito.anyLong())).willReturn(list);
+        given(laborContractMapper.laborContractsToResponses(Mockito.anyList())).willReturn(StubData.MockLaborContract.getMultiResponseBody());
+
+        mockMvc.perform(get("/manager/laborcontracts/{companymember-id}",1L, accessToken)
+                        .header("Authorization", "Bearer ".concat(accessToken)))
+                .andExpect(status().isOk())
+                .andDo(document("get-LaborContract-in-manager",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("companymember-id").description("사원 식별 번호")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("근로계약서 리스트"),
+                                        fieldWithPath("[].laborContactId").type(JsonFieldType.NUMBER).description("근로계약서 식별 번호"),
+                                        fieldWithPath("[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("[].bankName").type(JsonFieldType.STRING).description("은행 이름"),
+                                        fieldWithPath("[].accountNumber").type(JsonFieldType.STRING).description("계좌 번호"),
+                                        fieldWithPath("[].accountHolder").type(JsonFieldType.STRING).description("예금주"),
+                                        fieldWithPath("[].basicSalary").type(JsonFieldType.NUMBER).description("기본급"),
+                                        fieldWithPath("[].startTime").type(JsonFieldType.STRING).description("업무 시작 시간"),
+                                        fieldWithPath("[].finishTime").type(JsonFieldType.STRING).description("업무 마감 시간"),
+                                        fieldWithPath("[].information").type(JsonFieldType.STRING).description("근로계약서 정보"),
+                                        fieldWithPath("[].uri").type(JsonFieldType.STRING).description("업로드 된 파일 URI")
+                                )
+                        )));
+    }
+
+    @Test
     @DisplayName("LaborContract Get Test In MyPage")
     public void getLaborContractList() throws Exception {
         List<LaborContract> list = List.of(
