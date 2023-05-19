@@ -2,6 +2,7 @@ package main.main.statusofwork.mapper;
 
 import main.main.company.entity.Company;
 import main.main.companymember.entity.CompanyMember;
+import main.main.member.entity.Member;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.dto.VacationDto;
 import main.main.statusofwork.entity.RequestVacation;
@@ -17,6 +18,18 @@ public interface StatusOfWorkMapper {
         StatusOfWork statusOfWork = new StatusOfWork();
         statusOfWork.setCompanyMember(new CompanyMember());
         statusOfWork.setCompany(new Company());
+        statusOfWork.setStartTime(requestBody.getStartTime());
+        statusOfWork.setFinishTime(requestBody.getFinishTime());
+        statusOfWork.setNote(requestBody.getNote());
+
+        return statusOfWork;
+    }
+
+    default StatusOfWork postToStatusOfWork(StatusOfWorkDto.WPost requestBody) {
+        StatusOfWork statusOfWork = new StatusOfWork();
+        Company company = new Company();
+        company.setCompanyId(requestBody.getCompanyId());
+        statusOfWork.setCompany(company);
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
         statusOfWork.setNote(requestBody.getNote());
@@ -40,6 +53,24 @@ public interface StatusOfWorkMapper {
                 .startTime(statusOfWork.getStartTime())
                 .finishTime(statusOfWork.getFinishTime())
                 .note(statusOfWork.getNote().getStatus()).build();
+    }
+
+    default StatusOfWorkDto.MyWork statusOfWorkToMyWork(List<StatusOfWork> statusOfWorks) {
+        return StatusOfWorkDto.MyWork.builder()
+                .company(toCompanyInfoList(statusOfWorks.get(0).getMember().getCompanyMembers()))
+                .status(statusOfWorksToResponses(statusOfWorks)).build();
+    }
+
+    default List<StatusOfWorkDto.CompanyInfo> toCompanyInfoList(List<CompanyMember> companyMemberList) {
+        return companyMemberList.stream()
+                .map(companyMember -> toCompanyInfo(companyMember))
+                .collect(Collectors.toList());
+    }
+
+    default StatusOfWorkDto.CompanyInfo toCompanyInfo(CompanyMember companyMember) {
+        return StatusOfWorkDto.CompanyInfo.builder()
+                .companyId(companyMember.getCompany().getCompanyId())
+                .companyName(companyMember.getCompany().getCompanyName()).build();
     }
 
 

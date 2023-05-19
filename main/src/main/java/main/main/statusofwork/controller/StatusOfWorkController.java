@@ -31,6 +31,15 @@ public class StatusOfWorkController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/worker/mywork")
+    public ResponseEntity postStatusOfWorkWorker(@RequestBody StatusOfWorkDto.WPost requestBody) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        StatusOfWork statusOfWork = statusOfWorkMapper.postToStatusOfWork(requestBody);
+        statusOfWorkService.createStatusOfWork(statusOfWork, authenticationMemberId);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @PostMapping("/worker/mywork/vacations")
     public ResponseEntity requestVacation(@RequestBody VacationDto.Post requestBody) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
@@ -70,7 +79,7 @@ public class StatusOfWorkController {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, 1, authenticationMemberId);
 
-        return new ResponseEntity<>(statusOfWorkMapper.statusOfWorksToResponses(statusOfWorks), HttpStatus.OK);
+        return new ResponseEntity<>(statusOfWorkMapper.statusOfWorkToMyWork(statusOfWorks), HttpStatus.OK);
     }
 
     @DeleteMapping("/status/{statusofwork-id}")

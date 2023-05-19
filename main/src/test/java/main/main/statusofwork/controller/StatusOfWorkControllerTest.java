@@ -30,6 +30,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static main.main.utils.ApiDocumentUtils.getRequestPreProcessor;
@@ -101,6 +102,40 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
     }
 
     @Test
+    @DisplayName("StatusOfWork Post Test in mywork")
+    public void postStatusOfWorkWorker() throws Exception {
+        StatusOfWorkDto.WPost post = new StatusOfWorkDto.WPost();
+        post.setCompanyId(1L);
+        post.setStartTime(LocalDateTime.now());
+        post.setFinishTime(LocalDateTime.now());
+        post.setNote(StatusOfWork.Note.조퇴);
+        String content = toJsonContent(post);
+
+        given(statusOfWorkMapper.postToStatusOfWork(Mockito.any(StatusOfWorkDto.WPost.class))).willReturn(new StatusOfWork());
+        doNothing().when(statusOfWorkService).createStatusOfWork(Mockito.any(StatusOfWork.class), Mockito.anyLong());
+
+        mockMvc.perform(post("/worker/mywork", accessToken)
+                .header("Authorization", "Bearer ".concat(accessToken))
+                .content(content)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andDo(print())
+                .andDo(document("post-StatusOfWorkMyWork",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        requestFields(
+                                List.of(
+                                        fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                        fieldWithPath("finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                        fieldWithPath("note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
+                                )
+                        )
+                ));
+
+    }
+
+    @Test
     @DisplayName("StatusOfWork Patch Test")
     public void patchStatusOfWorkTest() throws Exception {
         StatusOfWorkDto.Patch patch = (StatusOfWorkDto.Patch) StubData.MockStatusOfWork.getRequestBody(HttpMethod.PATCH);
@@ -142,7 +177,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         params.add("month", month);
 
         given(statusOfWorkService.findStatusOfWorks(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyLong())).willReturn(StubData.MockStatusOfWork.getStatusOfWorkList());
-        given(statusOfWorkMapper.statusOfWorksToResponses(Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getMultiResponseBody());
+        given(statusOfWorkMapper.statusOfWorkToMyWork(Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getMultiResponseBody());
 
         mockMvc.perform(get("/worker/mywork", 1L, accessToken)
                 .header("Authorization", "Bearer ".concat(accessToken))
@@ -160,14 +195,17 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                         ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("특이사항 식별 번호"),
-                                        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
-                                        fieldWithPath("[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
-                                        fieldWithPath("[].startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
-                                        fieldWithPath("[].finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
-                                        fieldWithPath("[].note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
+                                        fieldWithPath("company[]").type(JsonFieldType.ARRAY).description("소속 회사 리스트"),
+                                        fieldWithPath("company[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("company[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("status[].id").type(JsonFieldType.NUMBER).description("특이사항 식별 번호"),
+                                        fieldWithPath("status[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("status[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                        fieldWithPath("status[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                        fieldWithPath("status[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("status[].startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                        fieldWithPath("status[].finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                        fieldWithPath("status[].note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가")
                                 )
                         )
                 ));
