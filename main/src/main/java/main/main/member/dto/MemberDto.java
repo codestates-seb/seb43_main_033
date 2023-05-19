@@ -19,7 +19,6 @@ public class MemberDto {
         private String email;
         private String password;
         private String residentNumber;
-        private String grade;
         private String address;
 
     }
@@ -35,7 +34,6 @@ public class MemberDto {
         private String email;
         private String password;
         private String residentNumber;
-        private String grade;
         private String address;
     }
 
