@@ -523,6 +523,7 @@ public class StubData {
                     .companyMemberId(1L)
                     .companyId(1L)
                     .memberId(1L)
+                    .name("test")
                     .grade("사원 직급")
                     .team("사원 소속 부서")
                     .status(Status.PENDING)

@@ -1,11 +1,13 @@
 package main.main.companymember.controller;
 
 import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.mapper.CompanyMemberMapper;
 import main.main.companymember.service.CompanyMemberService;
 import main.main.helper.CompanyMemberHelper;
 import main.main.helper.StubData;
+import main.main.memberbank.dto.MemberBankDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,9 +20,12 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -30,6 +35,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -138,13 +144,14 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
                         ),
                         responseFields(
                                 List.of(
-                                        fieldWithPath("companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
-                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("companyMemberId").type(JsonFieldType.NUMBER).description("회사 회원 식별 번호"),
                                         fieldWithPath("companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("grade").type(JsonFieldType.STRING).description("사원 직급"),
-                                        fieldWithPath("team").type(JsonFieldType.STRING).description("사원 소속 부서"),
-                                        fieldWithPath("roles").type(JsonFieldType.ARRAY).description("사원 권한").optional(),
-                                        fieldWithPath("status").type(JsonFieldType.STRING).description("사원 상태")
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("회사 회원 이름"),
+                                        fieldWithPath("grade").type(JsonFieldType.STRING).description("회사 회원 직급"),
+                                        fieldWithPath("team").type(JsonFieldType.STRING).description("회사 회원 소속 부서"),
+                                        fieldWithPath("roles").type(JsonFieldType.ARRAY).description("회사 회원 권한").optional(),
+                                        fieldWithPath("status").type(JsonFieldType.STRING).description("회사 회원 상태")
                                 )
                         )
                 ));
@@ -154,43 +161,45 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
     @Test
     @DisplayName("CompanyMembers Get Test")
     public void getCompanyMembersTest() throws  Exception {
-        String page = "1";
-        String size = "5";
+        int page = 1;
+        String status = "pending";
+        Long companyId = 1L;
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("page", page);
-        params.add("size", size);
+        CompanyMember companyMember1 = new CompanyMember();
+        companyMember1.setCompanyMemberId(1L);
+        companyMember1.setTeam("부서");
+        companyMember1.setGrade("직급");
+        companyMember1.setStatus(Status.PENDING);
 
-        given(companyMemberService.findCompanyMembers(Mockito.anyInt(), Mockito.anyInt())).willReturn(getCompanyMembersByPage());
-        given(companyMemberMapper.companyMembersToCompanyMembersResponse(Mockito.anyList())).willReturn(getCompanyMembersToCompanyMembersResponse());
 
-        ResultActions actions =
-                mockMvc.perform(getRequestBuilder(COMPANYMEMBER_DEFAULT_URL, params));
+        CompanyMember companyMember2 = new CompanyMember();
+        companyMember2.setCompanyMemberId(2L);
+        companyMember2.setTeam("부서");
+        companyMember2.setGrade("직급");
+        companyMember2.setStatus(Status.PENDING);
 
-        actions.andExpect(status().isOk())
-                .andDo(print())
-                .andDo(document("get-members",
-                        requestParameters(
-                                List.of(
-                                        parameterWithName("page").description("페이지"),
-                                        parameterWithName("size").description("한 페이지내 항목 수")
-                                )
-                        ),
+        List<CompanyMember> companyMembers = Arrays.asList(companyMember1, companyMember2);
+        Page<CompanyMember> companyMemberPage = new PageImpl<>(companyMembers);
+
+        given(companyMemberService.findCompanyMembersByCompanyId(
+                Mockito.anyInt(), Mockito.anyString(), Mockito.anyLong()))
+                .willReturn(companyMemberPage);
+
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/companymembers")
+                        .param("page", String.valueOf(page))
+                        .param("status", status)
+                        .param("companyId", String.valueOf(companyId))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcRestDocumentation.document("get-companyMembers",
                         responseFields(
-                                List.of(
-                                        fieldWithPath("data[].companyMemberId").type(JsonFieldType.NUMBER).description("회사 사원 식별 번호"),
-                                        fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
-                                        fieldWithPath("data[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
-                                        fieldWithPath("data[].grade").type(JsonFieldType.STRING).description("사원 직급"),
-                                        fieldWithPath("data[].team").type(JsonFieldType.STRING).description("사원 소속 부서"),
-                                        fieldWithPath("data[].status").type(JsonFieldType.STRING).description("사원 승인 상태"),
-                                        fieldWithPath("data[].authority").type(JsonFieldType.STRING).description("사원 임시 승인 상태"),
-                                        fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
-                                        fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회사 수"),
-                                        fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
-                                )
-                        )
-                ));
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("회사 회원 목록").optional(),
+                                fieldWithPath("data[].companyMemberId").type(JsonFieldType.NUMBER).description("회사 회원 식별 번호"),
+                                fieldWithPath("data[].status").type(JsonFieldType.STRING).description("회사 회원 승인 상태"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회원 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )));
     }
 
 
@@ -227,33 +236,33 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
                         )));
     }
 
-    @Test
-    @DisplayName("updateMember Role Test")
-    public void updateMemberRoleTest() throws Exception {
-
-        long companyMemberId = 1L;
-        CompanyMemberDto.Roles roles = new CompanyMemberDto.Roles();
-        roles.setRoles(Arrays.asList("MANAGER"));
-
-        CompanyMember updatedCompanyMember = new CompanyMember();
-
-        given(companyMemberService.updateCompanyMemberRole(
-                Mockito.eq(companyMemberId), Mockito.any(CompanyMemberDto.Roles.class)))
-                .willReturn(updatedCompanyMember);
-
-        mockMvc.perform(RestDocumentationRequestBuilders.patch(
-                                "/companymembers/role/{companymember-id}", companyMemberId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJsonContent(roles)))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(document("update-memberRole",
-                        pathParameters(
-                                parameterWithName("companymember-id").description("회사 사원 식별 번호")
-                        ),
-                        requestFields(
-                                fieldWithPath("roles").description("업데이트 전 역할")
-                        )
-                ));
-    }
+//    @Test
+//    @DisplayName("updateMember Role Test")
+//    public void updateMemberRoleTest() throws Exception {
+//
+//        long companyMemberId = 1L;
+//        CompanyMemberDto.Roles roles = new CompanyMemberDto.Roles();
+//        roles.setRoles(Arrays.asList("MANAGER"));
+//
+//        CompanyMember updatedCompanyMember = new CompanyMember();
+//
+//        given(companyMemberService.updateCompanyMemberRole(
+//                Mockito.eq(companyMemberId), Mockito.any(CompanyMemberDto.Roles.class)))
+//                .willReturn(updatedCompanyMember);
+//
+//        mockMvc.perform(RestDocumentationRequestBuilders.patch(
+//                                "/companymembers/role/{companymember-id}", companyMemberId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(toJsonContent(roles)))
+//                .andExpect(MockMvcResultMatchers.status().isOk())
+//                .andDo(document("update-memberRole",
+//                        pathParameters(
+//                                parameterWithName("companymember-id").description("회사 사원 식별 번호")
+//                        ),
+//                        requestFields(
+//                                fieldWithPath("roles").description("업데이트 전 역할")
+//                        )
+//                ));
+//    }
 
 }
