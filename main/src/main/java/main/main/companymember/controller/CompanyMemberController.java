@@ -1,6 +1,7 @@
 package main.main.companymember.controller;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.companymember.dto.CompanyMemberDto;
 import main.main.companymember.entity.CompanyMember;
 import main.main.companymember.mapper.CompanyMemberMapper;
@@ -25,16 +26,19 @@ public class CompanyMemberController {
 
     @PostMapping
     public ResponseEntity postCompanyMember(@Valid @RequestBody CompanyMemberDto.Post requestBody) {
-        CompanyMember companyMember = companyMemberService.createCompanyMember(companyMemberMapper.companyMemberPostToCompanyMember(requestBody));
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        CompanyMember companyMember = companyMemberService.createCompanyMember(companyMemberMapper.companyMemberPostToCompanyMember(requestBody), authenticationMemberId);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PatchMapping("/{companymember-id}")
     public ResponseEntity patchCompanyMember(@Positive @PathVariable("companymember-id") long companyMemberId,
                                              @Valid @RequestBody CompanyMemberDto.Patch requestBody) {
-        System.out.println("1번지점");
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
         requestBody.setCompanyMemberId(companyMemberId);
-        companyMemberService.updateCompanyMember(companyMemberMapper.companyMemberPacthToCompanyMember(requestBody));
+        companyMemberService.updateCompanyMember(companyMemberMapper.companyMemberPacthToCompanyMember(requestBody), authenticationMemberId);
         companyMemberService.updateCompanyMemberRole(companyMemberId, requestBody);
 
         return new ResponseEntity<>(companyMemberMapper.companyMemberToCompanyMemberResponse(companyMemberService.findCompanyMember(companyMemberId)), HttpStatus.OK);
@@ -57,15 +61,18 @@ public class CompanyMemberController {
 
     @DeleteMapping("/{companymember-id}")
     public ResponseEntity deleteCompanyMember(@Positive @PathVariable("companymember-id") long companyMemberId) {
-        companyMemberService.deleteCompanyMember(companyMemberId);
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+
+        companyMemberService.deleteCompanyMember(companyMemberId, authenticationMemberId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PostMapping("/pending/{companymember-id}/{status}") // 승인 대기, 승인, 승인 거절
     public void pendingCompanyMember(@PathVariable("companymember-id") long companyMemberId
             , @PathVariable("status") String status) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
 
-        companyMemberService.companyMemberUpdate(companyMemberId, status);
+        companyMemberService.companyMemberUpdate(companyMemberId, status, authenticationMemberId);
     }
 
 }

@@ -60,7 +60,6 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                         .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("MEMBER")
                         .antMatchers(HttpMethod.GET, "/members/**").hasRole("MEMBER")
                         .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("MEMBER")
-                        .antMatchers(HttpMethod.DELETE, "/companymembers/**").hasRole("ADMIN")
                         .anyRequest().permitAll());
 
         return http.build();
@@ -119,8 +118,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .addPathPatterns("/statusofworks/**")
                 .addPathPatterns("/memberbanks/**")
                 .addPathPatterns("/companymembers/**")
-                .addPathPatterns("/status/**")
-                .addPathPatterns("/memberbanks");
+                .addPathPatterns("/status/**");
 
     }
 
