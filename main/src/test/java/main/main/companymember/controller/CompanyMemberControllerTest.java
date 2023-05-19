@@ -7,8 +7,6 @@ import main.main.companymember.mapper.CompanyMemberMapper;
 import main.main.companymember.service.CompanyMemberService;
 import main.main.helper.CompanyMemberHelper;
 import main.main.helper.StubData;
-import main.main.memberbank.dto.MemberBankDto;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -30,22 +28,19 @@ import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static main.main.helper.StubData.MockCompanyMember.*;
+import static main.main.helper.StubData.MockCompanyMember.getCompanyMemberResponse;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -71,7 +66,7 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
         String content = toJsonContent(post);
 
         given(companyMemberMapper.companyMemberPostToCompanyMember(Mockito.any(CompanyMemberDto.Post.class))).willReturn(new CompanyMember());
-        given(companyMemberService.createCompanyMember(Mockito.any(CompanyMember.class))).willReturn(new CompanyMember());
+        given(companyMemberService.createCompanyMember(Mockito.any(CompanyMember.class), Mockito.anyLong())).willReturn(new CompanyMember());
 
         ResultActions action =
                 mockMvc.perform(postRequestBuilder(COMPANYMEMBER_DEFAULT_URL, 1L, content));
@@ -98,7 +93,7 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
         String content = toJsonContent(patch);
 
         given(companyMemberMapper.companyMemberPacthToCompanyMember(Mockito.any(CompanyMemberDto.Patch.class))).willReturn(new CompanyMember());
-        given(companyMemberService.updateCompanyMember(Mockito.any(CompanyMember.class))).willReturn(new CompanyMember());
+        given(companyMemberService.updateCompanyMember(Mockito.any(CompanyMember.class), Mockito.anyLong())).willReturn(new CompanyMember());
         given(companyMemberMapper.companyMemberToCompanyMemberResponse(Mockito.any(CompanyMember.class))).willReturn(getCompanyMemberResponse());
 
         ResultActions actions =
@@ -207,7 +202,7 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
     @Test
     @DisplayName("CompanyMember Delete Test")
     public void deleteCompanyMemberTest() throws Exception {
-        doNothing().when(companyMemberService).deleteCompanyMember(anyLong());
+        doNothing().when(companyMemberService).deleteCompanyMember(anyLong(), Mockito.anyLong());
 
         mockMvc.perform(deleteRequestBuilder(COMPANYMEMBER_RESOURCE_URI, 1L))
                 .andExpect(status().isNoContent())
