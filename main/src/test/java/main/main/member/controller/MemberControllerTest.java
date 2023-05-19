@@ -2,10 +2,12 @@ package main.main.member.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import main.main.auth.jwt.JwtTokenizer;
+import main.main.companymember.dto.CompanyMemberDto;
 import main.main.member.dto.MemberDto;
 import main.main.member.entity.Member;
 import main.main.member.mapper.MemberMapper;
 import main.main.member.service.MemberService;
+import main.main.memberbank.dto.MemberBankDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -28,6 +32,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -146,9 +151,6 @@ class MemberControllerTest {
                 .andDo(print())
                 .andDo(document("회원 생성",
                         requestFields(
-//                                fieldWithPath("memberId").description("회원 식별 번호"),
-//                                fieldWithPath("roles").description("회원 권한"),
-//                                fieldWithPath("company").description("회원 소속 회사 식별 번호"),
                                 fieldWithPath("name").description("회원 이름"),
                                 fieldWithPath("phoneNumber").description("회원 전화번호"),
                                 fieldWithPath("email").description("회원 이메일"),
@@ -167,6 +169,20 @@ class MemberControllerTest {
     @DisplayName("회원 조회 테스트 성공")
     public void findMemberTest() throws Exception {
 
+        List<MemberBankDto.MemberBankList> getMemberBankToMember = new ArrayList<>();
+        MemberBankDto.MemberBankList.builder()
+                .bankId(1L)
+                .bankCode("1")
+                .bankName("우리은행")
+                .build();
+
+        List<CompanyMemberDto.CompanyMemberToMember> getCompanyMemberToMember = new ArrayList<>();
+        CompanyMemberDto.CompanyMemberToMember.builder()
+                .companyMemberId(1L)
+                .companyId(1L)
+                .build();
+
+
         MemberDto.Response response = MemberDto.Response.builder()
                 .memberId(1L)
                 .name("test")
@@ -174,6 +190,8 @@ class MemberControllerTest {
                 .email("test@gmail.com")
                 .residentNumber("001111-1111111")
                 .address("서울특별시 관악구 신림동 신림역")
+                .bank(getMemberBankToMember)
+                .companyMembers(getCompanyMemberToMember)
                 .build();
 
 
@@ -188,34 +206,34 @@ class MemberControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                 );
 
-        // then
-//        actions
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.memberId").value(response.getMemberId()))
-//                .andExpect(jsonPath("$.name").value(response.getName()))
-//                .andExpect(jsonPath("$.phoneNumber").value(response.getPhoneNumber()))
-//                .andExpect(jsonPath("$.email").value(response.getEmail()))
-//                .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
-//                .andExpect(jsonPath("$.address").value(response.getAddress()))
-//                .andDo(print())
-//                .andDo(document("회원 조회",
-//                        pathParameters(
-//                                parameterWithName("memberId").description("회원 식별 번호")
-//                        ),
-//                        responseFields(
-//                                fieldWithPath("memberId").description("회원 식별 번호"),
-////                                fieldWithPath("roles").description("회원 권한"),
-////                                fieldWithPath("company").description("회원 소속 회사 식별 번호"),
-//                                fieldWithPath("name").description("회원 이름"),
-//                                fieldWithPath("phoneNumber").description("회원 전화번호"),
-//                                fieldWithPath("email").description("회원 이메일"),
-//                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
-//                                fieldWithPath("grade").description("회원 직급"),
-//                                fieldWithPath("address").description("회원 주소"),
-//                                fieldWithPath("position").description("회원 직급"),
-//                                fieldWithPath("roles").description("회원 권한")
-//                        )
-//                ));
+//         then
+        actions
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberId").value(response.getMemberId()))
+                .andExpect(jsonPath("$.name").value(response.getName()))
+                .andExpect(jsonPath("$.phoneNumber").value(response.getPhoneNumber()))
+                .andExpect(jsonPath("$.email").value(response.getEmail()))
+                .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
+                .andExpect(jsonPath("$.address").value(response.getAddress()))
+                .andExpect(jsonPath("$.bank").value(response.getBank()))
+                .andExpect(jsonPath("$.companyMembers").value(response.getCompanyMembers()))
+                .andDo(print())
+                .andDo(document("회원 조회",
+                        pathParameters(
+                                parameterWithName("memberId").description("회원 식별 번호")
+                        ),
+                        responseFields(
+                                fieldWithPath("memberId").description("회원 식별 번호"),
+                                fieldWithPath("name").description("회원 이름"),
+                                fieldWithPath("phoneNumber").description("회원 전화번호"),
+                                fieldWithPath("email").description("회원 이메일"),
+                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
+                                fieldWithPath("address").description("회원 주소"),
+                                fieldWithPath("bank").description("회원 계좌정보"),
+                                fieldWithPath("companyMembers").description("회원 회사정보")
+
+                        )
+                ));
     }
 
     @Test
@@ -230,7 +248,6 @@ class MemberControllerTest {
                 .email("test@gmail.com")
                 .password("1234")
                 .residentNumber("001111-1111111")
-                .grade("매니저")
                 .address("서울특별시 금천구 독산동 독산역")
                 .build();
 
@@ -280,12 +297,8 @@ class MemberControllerTest {
                                                         .description("회원 비밀번호"),
                                                 fieldWithPath("residentNumber").type(JsonFieldType.STRING)
                                                         .description("회원 주민등록번호"),
-                                                fieldWithPath("grade").type(JsonFieldType.STRING)
-                                                        .description("회원 ??"),
                                                 fieldWithPath("address").type(JsonFieldType.STRING)
-                                                        .description("회원 주소"),
-                                                fieldWithPath("position").type(JsonFieldType.STRING)
-                                                        .description("회원 직급")
+                                                        .description("회원 주소")
                                         )
                                 )
                 ));
@@ -328,6 +341,51 @@ class MemberControllerTest {
                 .andExpect(status().isCreated())
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("회원 전체 조회 테스트")
+    public void getMembers() throws Exception {
+        int page = 1;
+        int size = 10;
+
+        Member member1 = new Member();
+        member1.setMemberId(1L);
+        member1.setName("test1");
+        member1.setPhoneNumber("010-1111-1111");
+        member1.setEmail("test1@gmail.com");
+
+        Member member2 = new Member();
+        member2.setMemberId(2L);
+        member2.setName("test2");
+        member2.setPhoneNumber("010-2222-2222");
+        member2.setEmail("test2@gmail.com");
+
+
+        List<Member> members = Arrays.asList(member1, member2);
+        Page<Member> pageMembers = new PageImpl<>(members);
+
+        given(memberService.findMembers(Mockito.anyInt(), Mockito.anyInt())).willReturn(pageMembers);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/members")
+                        .param("page", String.valueOf(page))
+                        .param("size", String.valueOf(size))
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(document("get-members",
+                        responseFields(
+                                fieldWithPath("data").type(JsonFieldType.ARRAY).description("회원 목록").optional(),
+                                fieldWithPath("data[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                fieldWithPath("data[].name").type(JsonFieldType.STRING).description("회원 이름"),
+                                fieldWithPath("data[].phoneNumber").type(JsonFieldType.STRING).description("회원 전화번호"),
+                                fieldWithPath("data[].email").type(JsonFieldType.STRING).description("회원 이메일"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지 번호"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 회원 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체페이지 수")
+                        )));
+    }
+
+
+
 
     }
 
