@@ -62,7 +62,7 @@ public class CompanyService {
     public Company updateCompany(Company company, String businessNumber, long authenticationMemberId) {
         Company findedCompany = findVerifiedCompany(company.getCompanyId());
 
-        checkPermission(authenticationMemberId, findedCompany);
+        checkManager(authenticationMemberId, findedCompany);
 
         Optional.ofNullable(company.getCompanyName())
                 .ifPresent(CompanyName -> findedCompany.setCompanyName(company.getCompanyName()));
@@ -82,8 +82,7 @@ public class CompanyService {
 
     public void deleteCompany(long companyId, long authenticationMemberId) {
         Company findedCompany = findVerifiedCompany(companyId);
-
-        checkPermission(authenticationMemberId, findedCompany);
+        checkManager(authenticationMemberId, findedCompany);
 
         companyRepository.delete(findedCompany);
     }
@@ -153,16 +152,50 @@ public class CompanyService {
     }
 
 
-    private void checkPermission(long authenticationMemberId, Company company) {
+    private void checkPermission(long authenticationMemberId, Company company) { // 본인이거나 매니저일경우 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        Member member = memberService.findMember(authenticationMemberId);
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isAuthorizedMember(member, authenticationMemberId) && !isManager(companyAndMember)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkIdentity(long authenticationMemberId) { // 본인일때만 패스
+        if (authenticationMemberId == -1) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+
+        Member member = memberService.findMember(authenticationMemberId);
+        if (!isAuthorizedMember(member, authenticationMemberId)) {
+            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+        }
+    }
+
+    private void checkManager(long authenticationMemberId, Company company) { // 매니저일때만 패스
         if (authenticationMemberId == -1) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
         Member member = memberService.findMember(authenticationMemberId);
-        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
-        if (companyMember == null || !companyMember.getRoles().contains("MANAGER")) {
+        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+        if (!isManager(companyAndMember)) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
     }
+
+
+    private boolean isAuthorizedMember(Member member, long authenticationMemberId) {
+        return member != null && member.getMemberId().equals(authenticationMemberId);
+    }
+
+    private boolean isManager(CompanyMember companyMember) {
+        return companyMember != null && companyMember.getRoles().contains("MANAGER");
+    }
+
+}
 
 
 
@@ -246,5 +279,5 @@ public class CompanyService {
 //                .orElse("default_extension");
 //
 //    }
-}
+
 
