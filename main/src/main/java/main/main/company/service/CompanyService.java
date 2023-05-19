@@ -10,13 +10,12 @@ import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.salarystatement.entity.SalaryStatement;
+import main.main.utils.AwsS3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -27,6 +26,7 @@ public class CompanyService {
     private final CompanyRepository companyRepository;
     private final MemberService memberService;
     private final CompanyMemberRepository companyMemberRepository;
+    private final AwsS3Service awsS3Service;
 
     public Company createCompany(Company company, long authenticationMemberId) {
         Member member = memberService.findMember(authenticationMemberId);
@@ -121,84 +121,6 @@ public class CompanyService {
     }
 
 
-    public Boolean comapanyuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
-
-        Company company = findVerifiedCompany(companyId);
-
-        checkPermission(authenticationMemberId, company);
-
-        Boolean result = Boolean.TRUE;
-
-        String dir = Long.toString(companyId);
-        String extension = getExtension(file);
-
-        String newFileName = dir + extension;
-
-
-        try {
-            File folder = new File("img" + File.separator + "회사_이미지" + File.separator + dir + File.separator + "회사_대표_이미지");
-            File[] files = folder.listFiles();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            } else if (files != null) {
-                for (File file1 : files) {
-                    file1.delete();
-                }
-            }
-            File destination = new File(folder.getAbsolutePath(), newFileName);
-            file.transferTo(destination);
-            result = Boolean.FALSE;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
-        }
-    }
-
-    public Boolean businessuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
-
-        Company company = findVerifiedCompany(companyId);
-
-        checkPermission(authenticationMemberId, company);
-
-        Boolean result = Boolean.TRUE;
-
-        String dir = Long.toString(companyId);
-        String extension = getExtension(file);
-
-        String newFileName = dir + extension;
-
-
-        try {
-            File folder = new File("img" + File.separator + "회사_이미지" + File.separator + dir + File.separator + "사업자_등록증_이미지");
-            File[] files = folder.listFiles();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            } else if (files != null) {
-                for (File file1 : files) {
-                    file1.delete();
-                }
-            }
-            File destination = new File(folder.getAbsolutePath(), newFileName);
-            file.transferTo(destination);
-            result = Boolean.FALSE;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
-        }
-    }
-
-
-    public String getExtension(MultipartFile file) {
-        return Optional.ofNullable(file)
-                .map(MultipartFile::getOriginalFilename)
-                .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
-                .orElse("default_extension");
-
-    }
 
 
     public List<Map<String, Object>> findBusinessNumbersByRole(long memberId, long authenticationMemberId) {
@@ -245,14 +167,84 @@ public class CompanyService {
 
 
 
-//    public List<Map<String, Object>> statusOfWorkers(long companyId) {
-//        Company company = findCompany(companyId);
-//        CompanyMember companyMember = findCompanyMember();
-//        List<Map<String, Object>> status = new ArrayList<>();
+//
+//    public Boolean comapanyuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
+//
+//        Company company = findVerifiedCompany(companyId);
+//
+//        checkPermission(authenticationMemberId, company);
+//
+//        Boolean result = Boolean.TRUE;
+//
+//        String dir = Long.toString(companyId);
+//        String extension = getExtension(file);
+//
+//        String newFileName = dir + extension;
 //
 //
+//        try {
+//            File folder = new File("img" + File.separator + "회사_이미지" + File.separator + dir + File.separator + "회사_대표_이미지");
+//            File[] files = folder.listFiles();
+//            if (!folder.exists()) {
+//                folder.mkdirs();
+//            } else if (files != null) {
+//                for (File file1 : files) {
+//                    file1.delete();
+//                }
+//            }
+//            File destination = new File(folder.getAbsolutePath(), newFileName);
+//            file.transferTo(destination);
+//            result = Boolean.FALSE;
 //
-//        return ;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            return result;
+//        }
+//    }
+//
+//    public Boolean businessuploading(MultipartFile file, long companyId, String url, long authenticationMemberId) {
+//
+//        Company company = findVerifiedCompany(companyId);
+//
+//        checkPermission(authenticationMemberId, company);
+//
+//        Boolean result = Boolean.TRUE;
+//
+//        String dir = Long.toString(companyId);
+//        String extension = getExtension(file);
+//
+//        String newFileName = dir + extension;
+//
+//
+//        try {
+//            File folder = new File("img" + File.separator + "회사_이미지" + File.separator + dir + File.separator + "사업자_등록증_이미지");
+//            File[] files = folder.listFiles();
+//            if (!folder.exists()) {
+//                folder.mkdirs();
+//            } else if (files != null) {
+//                for (File file1 : files) {
+//                    file1.delete();
+//                }
+//            }
+//            File destination = new File(folder.getAbsolutePath(), newFileName);
+//            file.transferTo(destination);
+//            result = Boolean.FALSE;
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            return result;
+//        }
+//    }
+//
+//
+//    public String getExtension(MultipartFile file) {
+//        return Optional.ofNullable(file)
+//                .map(MultipartFile::getOriginalFilename)
+//                .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
+//                .orElse("default_extension");
+//
 //    }
 }
 

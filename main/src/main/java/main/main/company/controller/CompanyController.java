@@ -8,20 +8,13 @@ import main.main.company.mapper.CompanyMapper;
 import main.main.company.service.CompanyService;
 import main.main.companymember.entity.CompanyMember;
 import main.main.dto.ListPageResponseDto;
-import main.main.exception.BusinessLogicException;
-import main.main.exception.ExceptionCode;
-import org.apache.commons.io.IOUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.io.*;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -100,73 +93,73 @@ public class CompanyController {
 
 
 
+}
 
-
-    @PostMapping(path = "/{type}/{company-id}")
-    public ResponseEntity<Void> postImageUpload(
-            @PathVariable("type") String type,
-            @PathVariable("company-id") Long companyId,
-            @RequestPart(required = false) MultipartFile file) {
-
-        String dir = Long.toString(companyId);
-        String extension = companyService.getExtension(file);
-        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-
-
-        if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".jpeg")) {
-
-            throw new BusinessLogicException(ExceptionCode.IMAGE_NOT_SUPPORT);
-        }
-
-        if (type.equals("companyimage")) {
-            companyService.comapanyuploading(file, companyId, dir, authenticationMemberId);
-        } else if (type.equals("businessimage")) {
-            companyService.businessuploading(file, companyId, dir, authenticationMemberId);
-        }
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @GetMapping("/{type}/{company-id}")
-    public ResponseEntity<byte[]> getImage(@PathVariable("type") String imageType,
-                                           @PathVariable("company-id") long companyId) throws IOException {
-        String dir = Long.toString(companyId);
-        String filePath = "img" + "/" + "회사_이미지" + "/" + dir + "/";
-
-        if (imageType.equals("companyimage")) {
-            filePath += "회사_대표_이미지" + "/" + dir;
-        } else if (imageType.equals("businessimage")) {
-            filePath += "사업자_등록증_이미지" + "/" + dir;
-        }
-
-        File file = new File(filePath + ".jpeg");
-        if (!file.exists()) {
-            file = new File(filePath + ".png");
-        }
-
-        String fileName = file.getName();
-        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
-
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream(file);
-        } catch (Exception e) {
-            throw new FileNotFoundException("사진을 찾을 수 없습니다.");
-        } finally {
-            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
-            inputStream.close();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            if ("png".equals(fileExtension)) {
-                httpHeaders.setContentType(MediaType.IMAGE_PNG);
-            } else if ("jpeg".equals(fileExtension)) {
-                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
-            }
-
-            return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
-        }
-
-    }
+//    @PostMapping(path = "/{type}/{company-id}")
+//    public ResponseEntity<Void> postImageUpload(
+//            @PathVariable("type") String type,
+//            @PathVariable("company-id") Long companyId,
+//            @RequestPart(required = false) MultipartFile file) {
+//
+//        String dir = Long.toString(companyId);
+//        String extension = companyService.getExtension(file);
+//        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+//
+//
+//        if (!extension.equalsIgnoreCase(".png") && !extension.equalsIgnoreCase(".jpeg")) {
+//
+//            throw new BusinessLogicException(ExceptionCode.IMAGE_NOT_SUPPORT);
+//        }
+//
+//        if (type.equals("companyimage")) {
+//            companyService.comapanyuploading(file, companyId, dir, authenticationMemberId);
+//        } else if (type.equals("businessimage")) {
+//            companyService.businessuploading(file, companyId, dir, authenticationMemberId);
+//        }
+//
+//        return new ResponseEntity<>(HttpStatus.CREATED);
+//    }
+//
+//    @GetMapping("/{type}/{company-id}")
+//    public ResponseEntity<byte[]> getImage(@PathVariable("type") String imageType,
+//                                           @PathVariable("company-id") long companyId) throws IOException {
+//        String dir = Long.toString(companyId);
+//        String filePath = "img" + "/" + "회사_이미지" + "/" + dir + "/";
+//
+//        if (imageType.equals("companyimage")) {
+//            filePath += "회사_대표_이미지" + "/" + dir;
+//        } else if (imageType.equals("businessimage")) {
+//            filePath += "사업자_등록증_이미지" + "/" + dir;
+//        }
+//
+//        File file = new File(filePath + ".jpeg");
+//        if (!file.exists()) {
+//            file = new File(filePath + ".png");
+//        }
+//
+//        String fileName = file.getName();
+//        String fileExtension = fileName.substring(fileName.lastIndexOf(".") + 1);
+//
+//        InputStream inputStream = null;
+//        try {
+//            inputStream = new FileInputStream(file);
+//        } catch (Exception e) {
+//            throw new FileNotFoundException("사진을 찾을 수 없습니다.");
+//        } finally {
+//            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
+//            inputStream.close();
+//
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            if ("png".equals(fileExtension)) {
+//                httpHeaders.setContentType(MediaType.IMAGE_PNG);
+//            } else if ("jpeg".equals(fileExtension)) {
+//                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
+//            }
+//
+//            return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
+//        }
+//
+//    }
 
 
 //    @GetMapping("/salary/{company-id}")
@@ -224,4 +217,4 @@ public class CompanyController {
 //            return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
 //        }
 //    }
-}
+//}
