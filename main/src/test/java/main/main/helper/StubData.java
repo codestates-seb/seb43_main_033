@@ -178,28 +178,37 @@ public class StubData {
                     .note("지각").build();
         }
 
-        public static List<StatusOfWorkDto.Response> getMultiResponseBody() {
+        public static StatusOfWorkDto.MyWork getMultiResponseBody() {
             LocalDateTime time = LocalDateTime.now();
 
-            return List.of(
-                    StatusOfWorkDto.Response.builder()
-                    .id(1L)
-                    .memberId(1L)
-                    .memberName("직원 이름")
-                    .companyId(1L)
-                    .companyName("회사 이름")
-                    .startTime(time)
-                    .finishTime(time)
-                    .note("지각").build(),
-                    StatusOfWorkDto.Response.builder()
-                    .id(2L)
-                    .memberId(1L)
-                    .memberName("직원 이름")
-                    .companyId(1L)
-                    .companyName("회사 이름")
-                    .startTime(time)
-                    .finishTime(time)
-                    .note("지각").build());
+            return StatusOfWorkDto.MyWork.builder()
+                    .company(List.of(
+                            StatusOfWorkDto.CompanyInfo.builder()
+                                    .companyId(1L)
+                                    .companyName("회사 이름").build(),
+                            StatusOfWorkDto.CompanyInfo.builder()
+                                    .companyId(2L)
+                                    .companyName("회사 이름").build()
+                    ))
+                    .status(List.of(
+                            StatusOfWorkDto.Response.builder()
+                                    .id(1L)
+                                    .memberId(1L)
+                                    .memberName("직원 이름")
+                                    .companyId(1L)
+                                    .companyName("회사 이름")
+                                    .startTime(time)
+                                    .finishTime(time)
+                                    .note("지각").build(),
+                            StatusOfWorkDto.Response.builder()
+                                    .id(2L)
+                                    .memberId(1L)
+                                    .memberName("직원 이름")
+                                    .companyId(1L)
+                                    .companyName("회사 이름")
+                                    .startTime(time)
+                                    .finishTime(time)
+                                    .note("지각").build())).build();
         }
     }
     public static class MockSalaryStatement {

@@ -51,6 +51,18 @@ public class StatusOfWorkService {
         statusOfWorkRepository.save(statusOfWork);
     }
 
+    public void createStatusOfWork(StatusOfWork statusOfWork, long authenticationMemberId) {
+        Member member = memberService.findMember(authenticationMemberId);
+        Company company = companyService.findCompany(statusOfWork.getCompany().getCompanyId());
+        CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(member, company);
+
+        statusOfWork.setCompanyMember(companyMember);
+        statusOfWork.setMember(member);
+        statusOfWork.setCompany(company);
+
+        statusOfWorkRepository.save(statusOfWork);
+    }
+
     private void createStatusOfWork(StatusOfWork statusOfWork) {
         CompanyMember companyMember = statusOfWork.getCompanyMember();
         Member member = companyMember.getMember();
