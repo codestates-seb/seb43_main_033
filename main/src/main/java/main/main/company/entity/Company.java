@@ -28,6 +28,10 @@ public class Company {
     private String address;
     private String information;
 
+    private String companyImageUri;
+    private String companyImageFile;
+    private String businessImageUri;
+    private String businessImageFile;
 
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
