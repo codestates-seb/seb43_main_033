@@ -52,6 +52,8 @@ public interface LaborContractMapper {
                 .accountNumber(laborContract.getAccountNumber())
                 .accountHolder(laborContract.getAccountHolder())
                 .basicSalary(laborContract.getBasicSalary())
+                .startOfContract(laborContract.getStartOfContract())
+                .endOfContract(laborContract.getEndOfContract())
                 .startTime(laborContract.getStartTime())
                 .finishTime(laborContract.getFinishTime())
                 .information(laborContract.getInformation())

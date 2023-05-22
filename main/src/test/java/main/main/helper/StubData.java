@@ -79,6 +79,7 @@ public class StubData {
         }
 
         public static LaborContractDto.Response getResponseBody() {
+            LocalDateTime time = LocalDateTime.now();
             return LaborContractDto.Response.builder()
                     .laborContactId(1L)
                     .memberName("직원 이름")
@@ -87,6 +88,8 @@ public class StubData {
                     .accountNumber("계좌 번호")
                     .accountHolder("예금주")
                     .basicSalary(BigDecimal.valueOf(3000000))
+                    .startOfContract(time)
+                    .endOfContract(time)
                     .startTime(LocalTime.MIDNIGHT)
                     .finishTime(LocalTime.MIDNIGHT)
                     .information("근로계약서 정보")
@@ -94,6 +97,7 @@ public class StubData {
         }
 
         public static List<LaborContractDto.Response> getMultiResponseBody() {
+            LocalDateTime time = LocalDateTime.now();
             return List.of(
                     LaborContractDto.Response.builder()
                             .laborContactId(2L)
@@ -103,6 +107,8 @@ public class StubData {
                             .accountNumber("계좌 번호")
                             .accountHolder("예금주")
                             .basicSalary(BigDecimal.valueOf(3000000))
+                            .startOfContract(time)
+                            .endOfContract(time)
                             .startTime(LocalTime.MIDNIGHT)
                             .finishTime(LocalTime.MIDNIGHT)
                             .information("근로계약서 정보")
@@ -115,6 +121,8 @@ public class StubData {
                             .accountNumber("계좌 번호")
                             .accountHolder("예금주")
                             .basicSalary(BigDecimal.valueOf(3000000))
+                            .startOfContract(time)
+                            .endOfContract(time)
                             .startTime(LocalTime.MIDNIGHT)
                             .finishTime(LocalTime.MIDNIGHT)
                             .information("근로계약서 정보")

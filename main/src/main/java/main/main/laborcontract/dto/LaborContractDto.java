@@ -42,6 +42,8 @@ public class LaborContractDto {
         private String accountNumber;
         private String accountHolder;
         private BigDecimal basicSalary;
+        private LocalDateTime startOfContract;
+        private LocalDateTime endOfContract;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
