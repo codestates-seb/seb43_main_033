@@ -164,8 +164,8 @@ public class CompanyMemberService {
         return member != null && member.getMemberId().equals(authenticationMemberId);
     }
 
-    private boolean isManager(CompanyMember companyMember) {
-        return companyMember != null && companyMember.getRoles().contains("MANAGER");
+    private boolean isManager(CompanyMember companyMember) { // 매니저이거나 관리자일때 패스
+        return companyMember.getRoles().contains("MANAGER") || companyMember.getRoles().contains("ADMIN") ;
     }
 
 }
