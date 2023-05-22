@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import TopInformationLi from "./TopInfo/TopInformationLi";
+import axios from "axios";
 
 interface Data {
-  image: string;
+  companyId: number | string;
   companyName: string;
   companySize: string;
   businessNumber: string;
@@ -13,10 +14,15 @@ interface Data {
   information: string;
 }
 
+interface InformationItem {
+  label: string;
+  description: string;
+}
+
 export default function TopInformation() {
-  const [isModal, setIsModal] = useState(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
   const [data, setData] = useState<Data>({
-    image: "",
+    companyId: "",
     companyName: "법인명 예시",
     companySize: "기업분류 예시",
     businessNumber: "사업자 등록번호 예시",
@@ -26,7 +32,7 @@ export default function TopInformation() {
   const patchInfo = () => {
     setIsModal(!isModal);
   };
-  const informationList = [
+  const informationList: InformationItem[] = [
     {
       label: "법인명:",
       description: data.companyName,
@@ -48,19 +54,26 @@ export default function TopInformation() {
       description: data.information,
     },
   ];
-  // useEffect(() => {
-  //   axios
-  //     .get("")
-  //     .then((res) => setData(res.data))
-  //     .catch((err) => console.log(err));
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_API_URL}/companies/1`)
+      .then((res) => console.log(res.data))
+      .catch((err) => console.log(err));
+  }, []);
 
-  // useEffect(() => {
-  //   axios
-  //     .post("")
-  //     .then((res) => setData(res.data))
-  //     .catch((err) => console.log(err));
-  // }, [data]);
+  useEffect(() => {
+    axios
+      .post(`${process.env.NEXT_PUBLIC_API_URL}/companies`, {
+        companyId: "",
+        companyName: "법인명 예시",
+        companySize: "기업분류 예시",
+        businessNumber: "사업자 등록번호 예시",
+        address: "회사주소 예시",
+        information: "회사정보 예시",
+      })
+      .then((res) => setData(res.data))
+      .catch((err) => console.log(err));
+  }, [data]);
   return (
     <>
       {isModal && <Modal setData={setData} data={data} patchInfo={patchInfo} />}

@@ -1,7 +1,7 @@
 "use client";
 
 import MiddleInformationLi from "./MiddleInfo/MiddleInformationLi";
-
+import { useState } from "react";
 interface MiddleInformationProps {}
 
 export default function MiddleInformation() {
