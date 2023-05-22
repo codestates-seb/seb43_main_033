@@ -2,14 +2,13 @@ package main.main.auth.config;
 
 import main.main.auth.filter.JwtAuthenticationFilter;
 import main.main.auth.filter.JwtVerificationFilter;
-import main.main.auth.handler.UserAccessDeniedHandler;
-import main.main.auth.handler.UserAuthenticationEntryPoint;
-import main.main.auth.handler.UserAuthenticationFailureHandler;
-import main.main.auth.handler.UserAuthenticationSuccessHandler;
+import main.main.auth.handler.*;
 import main.main.auth.interceptor.JwtParseInterceptor;
 import main.main.auth.jwt.JwtTokenizer;
 import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.auth.utils.JwtUtils;
+import main.main.member.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -37,11 +36,20 @@ import java.util.Arrays;
 public class SecurityConfiguration implements WebMvcConfigurer {
 
     private final long MAX_AGE_SECS = 3600;
+    private final MemberService memberService;
+
+    public SecurityConfiguration(@Lazy MemberService memberService) {
+        this.memberService = memberService;
+    }
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .headers().frameOptions().sameOrigin()
+                .and()
+                .oauth2Login()
+                .successHandler(new OAuth2MemberSuccessHandler(jwtTokenizer(), authorityUtils(), memberService))
                 .and()
                 .csrf().disable()
                 .cors().configurationSource(corsConfigurationSource())
