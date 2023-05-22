@@ -1,6 +1,6 @@
 //import { useState } from 'react';
 // "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Greenheader from "../../components/PaystubPage/GreenTop";
 import StaffSelect from "../../components/StaffSelect";
 import StaffSelectModal from "../../components/StaffSelectModal";
@@ -9,19 +9,35 @@ import WorkingStatus from "../../components/PaystubPage/WorkingStatus";
 import Navi from "../../components/ManagerNavi";
 import AccountAdd from "../../components/PaystubPage/AccountAdd";
 import AccountList from "../../components/PaystubPage/AccountList";
+import axios from "axios";
 
 const Paystub = () => {
   const [showModal, setShowModal] = useState(false);
   // const [selectedStaff, setSelectedStaff] = useState('');
 
   //  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [nameArr, setNameArr] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=1&size=200`)
+      .then((res) => {
+        setNameArr(res.data.data[4].companyMembers);
+        console.log(res.data.data[4].companyMembers);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  console.log(nameArr);
   return (
     <>
       <Navi />
       <div className="w-full">
         <Greenheader>직원선택</Greenheader>
         <div className="bg-white p-3 m-5 flex justify-between">
-          <StaffSelect>홍길동</StaffSelect>
+          {nameArr &&
+            nameArr.map((el, idx) => (
+              <StaffSelect key={idx}>{el.member.name}</StaffSelect>
+            ))}
           <button
             className="text-sm font-bold hover:bg-gray-300 px-2"
             onClick={() => setShowModal(true)}
@@ -31,14 +47,10 @@ const Paystub = () => {
         </div>
         {showModal && (
           <StaffSelectModal onClose={() => setShowModal(false)}>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
+            {nameArr &&
+              nameArr.map((el, idx) => (
+                <StaffSelect key={idx}>{el.member.name}</StaffSelect>
+              ))}
           </StaffSelectModal>
         )}
         <Greenheader>계좌번호</Greenheader>

@@ -91,7 +91,7 @@ export default function WorkingStatusAdd({
     console.log(workStatusdata);
     axios
       .patch(
-        `https://c49c-61-254-8-200.ngrok-free.app/statusofworks/${editId}`,
+        `${process.env.NEXT_PUBLIC_URL}/statusofworks/${editId}`,
         workStatusdata
       )
       .then((res) => {
@@ -111,8 +111,8 @@ export default function WorkingStatusAdd({
             <button
               className="ml-5 fond-bold mb-3"
               onClick={() => {
-                setAdd(false);
-                editId ? setEditId(null) : null;
+                setAdd && setAdd(false);
+                setEditId ? setEditId(null) : null;
               }}
             >
               X
@@ -165,4 +165,3 @@ export default function WorkingStatusAdd({
     </div>
   );
 }
-

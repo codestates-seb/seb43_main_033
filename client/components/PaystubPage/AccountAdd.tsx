@@ -1,4 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { AccountSearch } from "./AccountSeach";
+import { bankData } from "./AccountList";
 
 export default function AccountAdd({
   setAccountAdd,
@@ -12,9 +14,17 @@ export default function AccountAdd({
   accoutEdit?: string | null;
 }) {
   const [account, setAccount] = useState<string>("");
+  const [bankId, setBankId] = useState<number | null>(null);
+  const [filteredBank, setFilteredBank] = useState({});
   useEffect(() => {
     accoutEdit ? setAccount(accoutEdit) : setAccount("");
   }, [accoutEdit]);
+  useEffect(() => {
+    if (bankId) {
+      const filteredbank = bankData.filter((bank) => bank.bankId === bankId);
+      setFilteredBank(filteredbank[0]);
+    }
+  }, [bankId]);
   return (
     <div className="ml-10">
       <div className="fixed pt-40 z-10 inset-0 overflow-y-auto">
@@ -36,11 +46,22 @@ export default function AccountAdd({
               </button>
             </div>
             <div>
-              <label htmlFor="bankName" className="mr-5 bg-gray-200 p-2 ">
+              <div>
+                <AccountSearch bankId={bankId} setBankId={setBankId} />
+              </div>
+              <div className="my-5 flex">
+                <div className="mr-5 bg-gray-200 p-2 w-fit">bankName</div>
+                <div>
+                  {Object.keys(filteredBank).length
+                    ? filteredBank["bankName"]
+                    : null}
+                </div>
+              </div>
+              <label htmlFor="accountNumber" className="mr-5 bg-gray-200 p-2 ">
                 AccountNumber
               </label>
               <input
-                id="bankName"
+                id="accountNumber"
                 className="borer border-b-2 outline-none"
                 value={account}
                 onChange={(e) => setAccount(e.target.value)}

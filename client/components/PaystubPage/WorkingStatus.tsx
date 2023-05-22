@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -8,31 +9,38 @@ export default function WorkingStatus() {
   const [add, setAdd] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   // const [deletedId,setDeletedId] = useState<number|null>(null);
+  const [workdata, setWorkData] = useState<WorkingStatusData[]>([]);
   const handleDelete = (deletedId: number) => {
     axios
       .delete(`${process.env.NEXT_PUBLIC_URL}/statusofworks/${deletedId}`)
-      .then((res) => console.log(res))
+      .then((res) => {
+        console.log(res);
+      })
       .catch((err) => console.log(err));
   };
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    console.log(token);
     const currentDate = new Date();
     const month = currentDate
       .toLocaleString("default", { month: "long" })
       .slice(0, 1);
     const year = currentDate.getFullYear();
     axios
-      .get(
-        `${process.env.NEXT_PUBLIC_URL}/statusofworks/2?year=${year}&month=${month}`
-      )
-      .then((res) => console.log(res))
+      .get(`${process.env.NEXT_PUBLIC_URL}/worker/mywork?year=2023&month=1`, {
+        headers: { Authorization: `${token}` },
+      })
+      .then((res) => {
+        setWorkData(res.data);
+      })
       .catch((err) => console.log(err));
   }, []);
 
   return (
     <div className="flex flex-col mb-20 ml-10">
       <div>
-        {workingStatusDummydata.map((el, idx) => {
+        {workdata.map((el, idx) => {
           return (
             <div key={el.id} className="flex mb-5 flex-col">
               <div className="flex">
