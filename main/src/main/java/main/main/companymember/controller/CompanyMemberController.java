@@ -51,7 +51,7 @@ public class CompanyMemberController {
     }
 
     @GetMapping
-    public ResponseEntity getCompanyMembers(@Positive @RequestParam int page, @RequestParam String status, Long companyId) {
+    public ResponseEntity getCompanyMembers(@Positive @RequestParam int page, @RequestParam String status, @RequestParam Long companyId) {
         Page<CompanyMember> pageCompanyMembers = companyMemberService.findCompanyMembersByCompanyId(page - 1, status, companyId);
         List<CompanyMember> companyMembers = pageCompanyMembers.getContent();
 

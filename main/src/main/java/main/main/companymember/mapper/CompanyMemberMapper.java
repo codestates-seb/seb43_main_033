@@ -68,6 +68,7 @@ public interface CompanyMemberMapper {
                 .grade(companyMember.getGrade())
                 .team(companyMember.getTeam())
                 .status(companyMember.getStatus())
+                .roles(companyMember.getRoles())
                 .build();
     }
 
