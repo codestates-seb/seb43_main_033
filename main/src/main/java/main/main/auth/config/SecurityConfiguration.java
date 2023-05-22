@@ -65,9 +65,9 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .apply(new CustomFilterConfigurer())
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
-                        .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("MEMBER")
-                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("MEMBER")
-                        .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("MEMBER")
+//                        .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("MEMBER")
+//                        .antMatchers(HttpMethod.GET, "/members/**").hasRole("MEMBER")
+//                        .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("MEMBER")
                         .anyRequest().permitAll());
 
         return http.build();
