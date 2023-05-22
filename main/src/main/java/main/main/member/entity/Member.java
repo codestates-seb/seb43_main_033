@@ -62,4 +62,10 @@ public class Member {
     private List<MemberBank> memberBanks = new ArrayList<>();
     public void addMemberBank(MemberBank memberBank) { this.memberBanks.add(memberBank); }
 
+    public Member(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
+
 }

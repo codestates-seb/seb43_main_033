@@ -46,6 +46,9 @@ public class MemberService {
         return findVerifiedMember(memberId);
     }
 
+    public Member findMember(String email) {
+        return memberRepository.findByEmail(email).get();
+    }
     public Member createMember(Member member) {
         verifiyExitstEmail(member.getEmail());
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
