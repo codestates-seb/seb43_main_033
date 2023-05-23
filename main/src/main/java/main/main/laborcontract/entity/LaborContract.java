@@ -28,7 +28,7 @@ public class LaborContract {
     private Company company;
 
     @ManyToOne
-    @JoinColumn(name = "COMPNAY_MEMEBER_ID")
+    @JoinColumn(name = "COMPANY_MEMEBER_ID")
     private CompanyMember companyMember;
 
     private String bankName;
