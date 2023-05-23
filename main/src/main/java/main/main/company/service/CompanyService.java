@@ -1,6 +1,7 @@
 package main.main.company.service;
 
 import lombok.RequiredArgsConstructor;
+import main.main.auth.utils.CustomAuthorityUtils;
 import main.main.company.entity.Company;
 import main.main.company.repository.CompanyRepository;
 import main.main.companymember.entity.CompanyMember;
@@ -10,6 +11,7 @@ import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.salarystatement.entity.SalaryStatement;
+import main.main.statusofwork.entity.Vacation;
 import main.main.utils.AwsS3Service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,11 +29,21 @@ public class CompanyService {
     private final MemberService memberService;
     private final CompanyMemberRepository companyMemberRepository;
     private final AwsS3Service awsS3Service;
+    private final CustomAuthorityUtils authorityUtils;
 
     public Company createCompany(Company company, long authenticationMemberId) {
         Member member = memberService.findMember(authenticationMemberId);
         company.setMemberId(member.getMemberId());
-        return companyRepository.save(company);
+        Company createdCompany = companyRepository.save(company);
+
+        CompanyMember companyMember = new CompanyMember();
+        companyMember.setCompany(createdCompany);
+        companyMember.setMember(member);
+        companyMember.setRoles(authorityUtils.createRoles(member.getEmail()));
+        companyMember.setVacation(new Vacation());
+
+        companyMemberRepository.save(companyMember);
+        return createdCompany;
     }
 
     public Company findCompany(String name) {
