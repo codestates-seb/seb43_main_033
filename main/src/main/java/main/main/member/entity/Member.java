@@ -50,7 +50,7 @@ public class Member {
     private List<CompanyMember> companyMembers = new ArrayList<>();
     public void addCompanyMember(CompanyMember companyMember) {this.companyMembers.add(companyMember); }
 
-    @OneToMany
+    @OneToMany(mappedBy = "member")
     private List<SalaryStatement> salaryStatements = new ArrayList<>();
     public void addSalaryStatement(SalaryStatement salaryStatement) {
         this.salaryStatements.add(salaryStatement);
