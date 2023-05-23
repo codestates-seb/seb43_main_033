@@ -90,14 +90,6 @@ class MemberControllerTest {
                 .build();
     }
 
-//    @BeforeEach
-//    public void setUp(WebApplicationContext context, RestDocumentationContextProvider restDocumentationContextProvider) {
-//        this.mockMvc = MockMvcBuilders
-//                .webAppContextSetup(context)
-//                .apply(documentationConfiguration(restDocumentationContextProvider))
-//                .build();
-//    }
-
     public static String getValidAccessToken(String secretKey) {
         JwtTokenizer jwtTokenizer = new JwtTokenizer();
         Map<String, Object> claims = new HashMap<>();
@@ -141,7 +133,6 @@ class MemberControllerTest {
                                         "\"email\": \"test@gmail.com\",\n" +
                                         "\"password\": \"1234\",\n" +
                                         "\"residentNumber\": \"1111-1111\",\n" +
-                                        "\"grade\": \"직원\",\n" +
                                         "\"address\": \"서울특별시 관악구 신림동 신림역\"\n" +
                                         "}")
                 );
@@ -156,7 +147,6 @@ class MemberControllerTest {
                                 fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("password").description("회원 비밀번호"),
                                 fieldWithPath("residentNumber").description("회원 주민등록번호"),
-                                fieldWithPath("grade").description("회원 직급"),
                                 fieldWithPath("address").description("회원 주소")
                         ),
                         responseHeaders(
@@ -170,18 +160,23 @@ class MemberControllerTest {
     public void findMemberTest() throws Exception {
 
         List<MemberBankDto.MemberBankList> getMemberBankToMember = new ArrayList<>();
-        MemberBankDto.MemberBankList.builder()
+        MemberBankDto.MemberBankList memberBankList = (MemberBankDto.MemberBankList.builder()
+                .memberBankId(1L)
                 .bankId(1L)
-                .bankCode("1")
                 .bankName("우리은행")
-                .build();
+                .accountNumber("12344441122")
+                .bankCode("1")
+                .mainAccount(false)
+                .build());
+        getMemberBankToMember.add(memberBankList);
 
         List<CompanyMemberDto.CompanyMemberToMember> getCompanyMemberToMember = new ArrayList<>();
-        CompanyMemberDto.CompanyMemberToMember.builder()
+        CompanyMemberDto.CompanyMemberToMember companyMemberToMember = (CompanyMemberDto.CompanyMemberToMember.builder()
                 .companyMemberId(1L)
                 .companyId(1L)
-                .build();
+                .build());
 
+        getCompanyMemberToMember.add(companyMemberToMember);
 
         MemberDto.Response response = MemberDto.Response.builder()
                 .memberId(1L)
@@ -215,8 +210,19 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.email").value(response.getEmail()))
                 .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
                 .andExpect(jsonPath("$.address").value(response.getAddress()))
-                .andExpect(jsonPath("$.bank").value(response.getBank()))
-                .andExpect(jsonPath("$.companyMembers").value(response.getCompanyMembers()))
+                .andExpect(jsonPath("$.bank").isArray())
+                .andExpect(jsonPath("$.bank.length()").value(getMemberBankToMember.size()))
+                .andExpect(jsonPath("$.bank[0].memberBankId").value(getMemberBankToMember.get(0).getMemberBankId()))
+                .andExpect(jsonPath("$.bank[0].bankId").value(getMemberBankToMember.get(0).getBankId()))
+                .andExpect(jsonPath("$.bank[0].bankName").value(getMemberBankToMember.get(0).getBankName()))
+                .andExpect(jsonPath("$.bank[0].accountNumber").value(getMemberBankToMember.get(0).getAccountNumber()))
+                .andExpect(jsonPath("$.bank[0].bankCode").value(getMemberBankToMember.get(0).getBankCode()))
+                .andExpect(jsonPath("$.bank[0].mainAccount").value(getMemberBankToMember.get(0).isMainAccount()))
+                .andExpect(jsonPath("$.companyMembers").isArray())
+                .andExpect(jsonPath("$.companyMembers.length()").value(getCompanyMemberToMember.size()))
+                .andExpect(jsonPath("$.companyMembers[0].companyMemberId").value(getCompanyMemberToMember.get(0).getCompanyMemberId()))
+                .andExpect(jsonPath("$.companyMembers[0].companyId").value(getCompanyMemberToMember.get(0).getCompanyId()))
+                .andDo(print())
                 .andDo(print())
                 .andDo(document("회원 조회",
                         pathParameters(
@@ -229,8 +235,14 @@ class MemberControllerTest {
                                 fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("residentNumber").description("회원 주민등록번호"),
                                 fieldWithPath("address").description("회원 주소"),
-                                fieldWithPath("bank").description("회원 계좌정보"),
-                                fieldWithPath("companyMembers").description("회원 회사정보")
+                                fieldWithPath("bank[].memberBankId").description("계좌 식별 번호"),
+                                fieldWithPath("bank[].bankId").description("은행 식별 번호"),
+                                fieldWithPath("bank[].bankName").description("은행 이름"),
+                                fieldWithPath("bank[].accountNumber").description("계좌 번호"),
+                                fieldWithPath("bank[].bankCode").description("은행 코드"),
+                                fieldWithPath("bank[].mainAccount").description("주요 계좌 여부"),
+                                fieldWithPath("companyMembers[].companyMemberId").description("회원 회사정보 식별 번호"),
+                                fieldWithPath("companyMembers[].companyId").description("회원 회사정보 식별 번호")
 
                         )
                 ));
