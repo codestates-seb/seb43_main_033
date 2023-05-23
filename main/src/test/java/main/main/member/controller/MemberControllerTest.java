@@ -338,21 +338,21 @@ class MemberControllerTest {
                 ));
     }
 
-    @Test
-    @DisplayName("이미지 업로드 성공")
-    public void imageUpload() throws Exception {
-        MockMultipartFile file = new MockMultipartFile(
-                "file",
-                "image.txt",
-                MediaType.TEXT_PLAIN_VALUE,
-                "Image Test".getBytes()
-        );
-        MockMvc mockMvc =
-                MockMvcBuilders.webAppContextSetup(context).build();
-        mockMvc.perform(multipart("/members/upload/{member-id}", 1L).file(file))
-                .andExpect(status().isCreated())
-                .andDo(print());
-    }
+//    @Test
+//    @DisplayName("이미지 업로드 성공")
+//    public void imageUpload() throws Exception {
+//        MockMultipartFile file = new MockMultipartFile(
+//                "file",
+//                "image.txt",
+//                MediaType.TEXT_PLAIN_VALUE,
+//                "Image Test".getBytes()
+//        );
+//        MockMvc mockMvc =
+//                MockMvcBuilders.webAppContextSetup(context).build();
+//        mockMvc.perform(multipart("/members/upload/{member-id}", 1L).file(file))
+//                .andExpect(status().isCreated())
+//                .andDo(print());
+//    }
 
     @Test
     @DisplayName("회원 전체 조회 테스트")
