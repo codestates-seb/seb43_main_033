@@ -6,6 +6,7 @@ import lombok.Setter;
 import main.main.salarystatement.dto.PreDto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -16,8 +17,8 @@ public class LaborContractDto {
         private long companyMemberId;
         private long companyId;
         private BigDecimal basicSalary;
-        private LocalDateTime startOfContract;
-        private LocalDateTime endOfContract;
+        private LocalDate startOfContract;
+        private LocalDate endOfContract;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;

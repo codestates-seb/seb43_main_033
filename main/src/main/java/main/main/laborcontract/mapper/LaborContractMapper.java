@@ -7,12 +7,16 @@ import main.main.laborcontract.entity.LaborContract;
 import main.main.member.entity.Member;
 import org.mapstruct.Mapper;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface LaborContractMapper {
     default LaborContract postToLaborContract(LaborContractDto.Post requestBody) {
+        LocalDate start = requestBody.getStartOfContract();
+        LocalDate end = requestBody.getEndOfContract();
         CompanyMember companyMember = new CompanyMember();
         companyMember.setCompanyMemberId(requestBody.getCompanyMemberId());
         Company company = new Company();
@@ -21,8 +25,8 @@ public interface LaborContractMapper {
         laborContract.setCompanyMember(companyMember);
         laborContract.setCompany(company);
         laborContract.setBasicSalary(requestBody.getBasicSalary());
-        laborContract.setStartOfContract(requestBody.getStartOfContract());
-        laborContract.setEndOfContract(requestBody.getEndOfContract());
+        laborContract.setStartOfContract(LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(), 0, 0, 0));
+        laborContract.setEndOfContract(LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 23, 59, 59));
         laborContract.setStartTime(requestBody.getStartTime());
         laborContract.setFinishTime(requestBody.getFinishTime());
         laborContract.setInformation(requestBody.getInformation());
