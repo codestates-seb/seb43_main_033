@@ -61,7 +61,11 @@ public class MemberBankService {
 
         MemberBank findedMemberBank = findVerifiedMemberBank(memberBank.getMemberBankId());
         Member member = findedMemberBank.getMember();
-        Company company = companyService.findCompany(member.getCompany().getCompanyId());
+        Company company = null;
+        if (member.getCompany() != null) {
+            company = companyService.findCompany(member.getCompany().getCompanyId());
+        }
+
         checkPermission(authenticationMemberId, company);
 
         if (!findedMemberBank.getAccountNumber().equals(memberBank.getAccountNumber())) {
@@ -160,7 +164,11 @@ public class MemberBankService {
     public void deleteMemberBank(long memberBankId, long authenticationMemberId) {
         MemberBank findedMemberBank = findVerifiedMemberBank(memberBankId);
         Member member = findedMemberBank.getMember();
-        Company company = companyService.findCompany(member.getCompany().getCompanyId());
+        Company company = null;
+        if (member.getCompany() != null) {
+            company = companyService.findCompany(member.getCompany().getCompanyId());
+        }
+
         checkPermission(authenticationMemberId, company);
         List<MemberBank> memberBanks = member.getMemberBanks();
 
@@ -194,9 +202,16 @@ public class MemberBankService {
         }
 
         Member member = memberService.findMember(authenticationMemberId);
-        CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
-        if (!isAuthorizedMember(member, authenticationMemberId) && !isManager(companyAndMember)) {
-            throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+
+        if (company != null) {
+            CompanyMember companyAndMember = companyMemberRepository.findByMemberAndCompany(member, company);
+            if (!isAuthorizedMember(member, authenticationMemberId) && !isManager(companyAndMember)) {
+                throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+            }
+        } else {
+            if (!isAuthorizedMember(member, authenticationMemberId)) {
+                throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
+            }
         }
     }
 
