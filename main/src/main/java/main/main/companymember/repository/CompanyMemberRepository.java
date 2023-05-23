@@ -14,4 +14,6 @@ public interface CompanyMemberRepository extends JpaRepository<CompanyMember, Lo
     Page<CompanyMember> findAllByCompanyCompanyIdAndStatus(Long companyId, Status status, PageRequest status1);
 
     Page<CompanyMember> findAllByCompanyCompanyId(Long companyId, PageRequest status);
+
+    boolean existsByCompanyAndMember(Company company, Member member);
 }

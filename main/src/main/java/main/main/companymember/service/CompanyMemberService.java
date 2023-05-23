@@ -36,6 +36,11 @@ public class CompanyMemberService {
 
         Company company = companyService.findCompany(companyMember.getCompany().getCompanyId());
         Member member = memberService.findMember(companyMember.getMember().getMemberId());
+
+        if (companyMemberRepository.existsByCompanyAndMember(company, member)) {
+            throw new BusinessLogicException(ExceptionCode.COMPANYMEMBER_EXISTS);
+        }
+
         checkPermission(authenticationMemberId, company);
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         companyMember.setRoles(roles);
