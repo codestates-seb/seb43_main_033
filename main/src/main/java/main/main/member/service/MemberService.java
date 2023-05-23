@@ -101,43 +101,4 @@ public class MemberService {
         }
     }
 
-    public Boolean uploading(MultipartFile file, long memberId, long authenticationMemberId, String url) {
-
-        checkVerifiedId(authenticationMemberId);
-        Member findedMember = findVerifiedMember(memberId);
-        uploadingPermission(findedMember, authenticationMemberId);
-
-        Boolean result = Boolean.TRUE;
-
-        String dir = Long.toString(memberId);
-        String extension = Optional.ofNullable(file)
-                .map(MultipartFile::getOriginalFilename)
-                .map(name -> name.substring(name.lastIndexOf(".")).toLowerCase())
-                .orElse("default_extension");
-
-        String newFileName = dir + extension;
-
-        try {
-            //사업자등록증 폴더안에 memberId로 된 폴더에 이미지를 저장
-            File folder = new File("img" + File.separator + "사업자등록증" + File.separator + dir);
-            File[] files = folder.listFiles();
-            if (!folder.exists()) {
-                folder.mkdirs();
-            } else if (files != null) {
-                for (File file1 : files) {
-                    file1.delete();
-                }
-            }
-            File destination = new File( folder.getAbsolutePath() , newFileName);
-
-            file.transferTo(destination);
-
-            result = Boolean.FALSE;
-        }catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            return result;
-        }
-    }
-
 }

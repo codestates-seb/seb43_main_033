@@ -88,36 +88,5 @@ public class MemberController {
                 , HttpStatus.OK);
     }
 
-    @PostMapping(path = "/upload/{member-id}")
-    public ResponseEntity postImageUpload(@PathVariable("member-id") Long memberId,
-                                          @RequestPart(required = false) MultipartFile file){
-        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        String dir = Long.toString(memberId);
-
-        memberService.uploading(file, memberId, authenticationMemberId, dir);
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @GetMapping("/image/{member-id}")
-    public ResponseEntity<byte[]> getProfileImage(@PathVariable("member-id") long memberId) throws IOException {
-        String dir = Long.toString(memberId);
-        String fileExtension = ".png";
-        InputStream inputStream = null;
-        try {
-            inputStream = new FileInputStream( "img" + "/" + "사업자등록증" + "/" + dir + "/" + dir + ".jpeg");
-        } catch (Exception e) {
-            inputStream = new FileInputStream( "img" + "/" + "사업자등록증" + "/" + dir + "/" + dir + ".png");
-        } finally {
-            byte[] imageByteArray = IOUtils.toByteArray(inputStream);
-            inputStream.close();
-
-            HttpHeaders httpHeaders = new HttpHeaders();
-            if (".png".equals(fileExtension)) {
-                httpHeaders.setContentType(MediaType.IMAGE_PNG);
-            } else if (".jpeg".equals(fileExtension)) {
-                httpHeaders.setContentType(MediaType.IMAGE_JPEG);
-            } return new ResponseEntity<>(imageByteArray, httpHeaders, HttpStatus.OK);
-        }
-    }
 
 }
