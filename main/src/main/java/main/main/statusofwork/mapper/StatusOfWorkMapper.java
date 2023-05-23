@@ -1,6 +1,8 @@
 package main.main.statusofwork.mapper;
 
 import main.main.company.entity.Company;
+import main.main.companymember.dto.CompanyMemberDto;
+import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
 import main.main.member.entity.Member;
 import main.main.statusofwork.dto.StatusOfWorkDto;
@@ -20,7 +22,9 @@ public interface StatusOfWorkMapper {
         statusOfWork.setCompany(new Company());
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
-        statusOfWork.setNote(requestBody.getNote());
+        if (requestBody.getNote() != null) {
+            statusOfWork.setNote(requestBody.getNote());
+        }
 
         return statusOfWork;
     }
@@ -46,12 +50,12 @@ public interface StatusOfWorkMapper {
     default StatusOfWorkDto.Response statusOfWorkToResponse(StatusOfWork statusOfWork) {
         return StatusOfWorkDto.Response.builder()
                 .id(statusOfWork.getId())
-                .memberId(statusOfWork.getMember().getMemberId())
-                .memberName(statusOfWork.getMember().getName())
-                .companyId(statusOfWork.getCompany().getCompanyId())
-                .companyName(statusOfWork.getCompany().getCompanyName())
+                .memberId(statusOfWork.getCompanyMember().getMember().getMemberId())
+                .memberName(statusOfWork.getCompanyMember().getMember().getName())
+                .companyId(statusOfWork.getCompanyMember().getCompany().getCompanyId())
+                .companyName(statusOfWork.getCompanyMember().getCompany().getCompanyName())
                 .startTime(statusOfWork.getStartTime())
-                .finishTime(statusOfWork.getFinishTime())
+                .finishTime(statusOfWork.getFinishTime() != null ? statusOfWork.getFinishTime() : null)
                 .note(statusOfWork.getNote().getStatus()).build();
     }
 
@@ -102,5 +106,24 @@ public interface StatusOfWorkMapper {
                 .vacationStart(requestVacation.getVacationStart())
                 .vacationEnd(requestVacation.getVacationEnd())
                 .build();
+    }
+
+    default List<StatusOfWorkDto.Today> todayToResponse(List<CompanyMember> companyMembers) {
+        return companyMembers.stream().map(statusOfWork -> toToday(statusOfWork)).collect(Collectors.toList());
+    }
+
+    default StatusOfWorkDto.Today toToday(CompanyMember companyMember) {
+        return StatusOfWorkDto.Today.builder()
+                .member(CompanyMemberDto.Response.builder()
+                        .companyMemberId(companyMember.getCompanyMemberId())
+                        .companyId(companyMember.getCompany().getCompanyId())
+                        .memberId(companyMember.getMember().getMemberId())
+                        .name(companyMember.getMember().getName())
+                        .grade(companyMember.getGrade())
+                        .team(companyMember.getTeam())
+                        .status(companyMember.getStatus())
+                        .roles(companyMember.getRoles()).build()
+                )
+                .status(statusOfWorksToResponses(companyMember.getStatusOfWorks())).build();
     }
 }
