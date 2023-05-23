@@ -39,7 +39,7 @@ public class CompanyService {
         CompanyMember companyMember = new CompanyMember();
         companyMember.setCompany(createdCompany);
         companyMember.setMember(member);
-        companyMember.setRoles(authorityUtils.createRoles(member.getEmail()));
+        companyMember.setRoles(Collections.singletonList("ADMIN"));
         companyMember.setVacation(new Vacation());
 
         companyMemberRepository.save(companyMember);
@@ -204,7 +204,7 @@ public class CompanyService {
     }
 
     private boolean isManager(CompanyMember companyMember) {
-        return companyMember != null && companyMember.getRoles().contains("MANAGER");
+        return companyMember != null && companyMember.getRoles().contains("MANAGER") || companyMember.getRoles().contains("ADMIN");
     }
 
 }

@@ -19,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,9 +43,11 @@ public class CompanyMemberService {
         }
 
         checkPermission(authenticationMemberId, company);
-        List<String> roles = authorityUtils.createRoles(member.getEmail());
-        companyMember.setRoles(roles);
 
+        List<String> roles = new ArrayList<>();
+        roles.add("MEMBER");
+
+        companyMember.setRoles(roles);
         companyMember.setVacation(new Vacation());
         companyMember.setCompany(company);
         companyMember.setMember(member);
