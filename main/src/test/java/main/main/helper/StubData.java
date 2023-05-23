@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -51,7 +52,7 @@ public class StubData {
     public static class MockLaborContract {
         private static Map<HttpMethod, Object> stubRequestBody;
         static {
-            LocalDateTime time = LocalDateTime.now();
+            LocalDate time = LocalDate.now();
 
             LaborContractDto.Post post = new LaborContractDto.Post();
             post.setCompanyMemberId(1L);
