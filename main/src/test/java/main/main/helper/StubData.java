@@ -173,6 +173,30 @@ public class StubData {
             );
         }
 
+        public static List<StatusOfWorkDto.Response> getResponsesBody() {
+            LocalDateTime time = LocalDateTime.now();
+
+            return List.of(StatusOfWorkDto.Response.builder()
+                            .id(2L)
+                            .memberId(1L)
+                            .memberName("직원 이름")
+                            .companyId(1L)
+                            .companyName("회사 이름")
+                            .startTime(time)
+                            .finishTime(time)
+                            .note("지각").build(),
+                    StatusOfWorkDto.Response.builder()
+                            .id(1L)
+                            .memberId(1L)
+                            .memberName("직원 이름")
+                            .companyId(1L)
+                            .companyName("회사 이름")
+                            .startTime(time)
+                            .finishTime(time)
+                            .note("지각").build()
+            );
+        }
+
         public static StatusOfWorkDto.Response getResponseBody() {
             LocalDateTime time = LocalDateTime.now();
 
@@ -218,6 +242,14 @@ public class StubData {
                                     .startTime(time)
                                     .finishTime(time)
                                     .note("지각").build())).build();
+        }
+
+        public static List<StatusOfWorkDto.Today> getTodayList() {
+            return List.of(
+                    StatusOfWorkDto.Today.builder()
+                            .member(StubData.MockCompanyMember.getCompanyMemberResponse())
+                            .status(getResponsesBody()).build()
+            );
         }
     }
     public static class MockSalaryStatement {

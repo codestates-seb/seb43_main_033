@@ -2,22 +2,28 @@ package main.main.statusofwork.controller;
 
 import lombok.RequiredArgsConstructor;
 import main.main.auth.interceptor.JwtParseInterceptor;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.service.CompanyMemberService;
+import main.main.dto.ListPageResponseDto;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.dto.VacationDto;
 import main.main.statusofwork.entity.RequestVacation;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.mapper.StatusOfWorkMapper;
 import main.main.statusofwork.service.StatusOfWorkService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 public class StatusOfWorkController {
     private final StatusOfWorkService statusOfWorkService;
+    private final CompanyMemberService companyMemberService;
     private final StatusOfWorkMapper statusOfWorkMapper;
 
     @PostMapping("/manager/{company-id}/members/{companymember-id}/status")
@@ -71,6 +77,15 @@ public class StatusOfWorkController {
         List<RequestVacation> requestList = statusOfWorkService.getRequestList(companyId);
 
         return new ResponseEntity<>(statusOfWorkMapper.requestResponses(requestList), HttpStatus.OK);
+    }
+
+    @GetMapping("/manager/{company-id}/mystaff")
+    public ResponseEntity getTodayStatusOfWork(@PathVariable("company-id") long companyId, @Positive @RequestParam int page) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        Page<CompanyMember> pageCompanyMember = companyMemberService.findCompanyMembersByCompanyId(page - 1, companyId);
+        List<CompanyMember> companyMembers = statusOfWorkService.findTodayStatusOfWorks(pageCompanyMember.getContent(), companyId, authenticationMemberId);
+
+        return new ResponseEntity<>(new ListPageResponseDto<>(statusOfWorkMapper.todayToResponse(companyMembers), pageCompanyMember), HttpStatus.OK);
     }
 
 

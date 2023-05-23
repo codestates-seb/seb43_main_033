@@ -20,11 +20,14 @@ import main.main.statusofwork.repository.VacationRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -107,6 +110,21 @@ public class StatusOfWorkService {
         LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
         Member member = memberService.findMember(memberId);
         return statusOfWorkRepository.findByMemberAndStartTimeBetween(member, startOfMonth, endOfMonth);
+    }
+
+    public List<CompanyMember> findTodayStatusOfWorks(List<CompanyMember> companyMembers, long companyId, long authenticationMemberId) {
+        LocalDateTime now = LocalDateTime.now();
+        checkPermission(authenticationMemberId, companyService.findCompany(companyId));
+
+        return companyMembers.stream()
+                .map(companyMember -> {
+                    List<StatusOfWork> statusOfWorks = statusOfWorkRepository.findAllByCompanyMemberMemberAndStartTimeIsBeforeAndFinishTimeIsAfter(companyMember, now, now).stream()
+                            .sorted(Comparator.comparing(StatusOfWork::getId).reversed())
+                            .collect(Collectors.toList());
+                    companyMember.setStatusOfWorks(statusOfWorks);
+
+                    return companyMember;
+                }).collect(Collectors.toList());
     }
 
     public void deleteStatusOfWork(long statusOfWorkId, long authenticationMemberId) {

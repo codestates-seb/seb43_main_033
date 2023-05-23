@@ -1,6 +1,9 @@
 package main.main.statusofwork.controller;
 
 import main.main.auth.jwt.JwtTokenizer;
+import main.main.companymember.dto.Status;
+import main.main.companymember.entity.CompanyMember;
+import main.main.companymember.service.CompanyMemberService;
 import main.main.helper.StatusOfWorkHelper;
 import main.main.helper.StubData;
 import main.main.statusofwork.dto.StatusOfWorkDto;
@@ -21,6 +24,8 @@ import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDoc
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -31,6 +36,7 @@ import org.springframework.util.MultiValueMap;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 
 import static main.main.utils.ApiDocumentUtils.getRequestPreProcessor;
@@ -60,6 +66,8 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
     private StatusOfWorkService statusOfWorkService;
     @MockBean
     private StatusOfWorkMapper statusOfWorkMapper;
+    @MockBean
+    private CompanyMemberService companyMemberService;
     private String accessToken;
     @BeforeAll
     public void init() {
@@ -210,6 +218,67 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("Get TodayList Test")
+    public void getTodayStatusTest() throws Exception {
+        String page = "1";
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("page", page);
+
+        CompanyMember companyMember = new CompanyMember();
+        companyMember.setCompanyMemberId(1L);
+        companyMember.setTeam("부서");
+        companyMember.setGrade("직급");
+        companyMember.setStatus(Status.PENDING);
+
+        List<CompanyMember> companyMembers = List.of(companyMember);
+        Page<CompanyMember> companyMemberPage = new PageImpl<>(List.of(companyMember));
+
+        given(companyMemberService.findCompanyMembersByCompanyId(Mockito.anyInt(), Mockito.anyLong())).willReturn(companyMemberPage);
+        given(statusOfWorkService.findTodayStatusOfWorks(Mockito.anyList(), Mockito.anyLong(), Mockito.anyLong())).willReturn(companyMembers);
+        given(statusOfWorkMapper.todayToResponse(Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getTodayList());
+
+        mockMvc.perform(get("/manager/{company-id}/mystaff", 1L, accessToken)
+                .header("Authorization", "Bearer ".concat(accessToken))
+                .params(params))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-TodayStatus",
+                getRequestPreProcessor(),
+                getResponsePreProcessor(),
+                requestParameters(
+                        List.of(
+                                parameterWithName("page").description("현재 페이지")
+                        )
+                ),
+                responseFields(
+                        List.of(
+                                fieldWithPath("data[].member.companyMemberId").type(JsonFieldType.NUMBER).description("회사 회원 식별 번호"),
+                                fieldWithPath("data[].member.companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                fieldWithPath("data[].member.memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                fieldWithPath("data[].member.name").type(JsonFieldType.STRING).description("회사 회원 이름"),
+                                fieldWithPath("data[].member.grade").type(JsonFieldType.STRING).description("회사 회원 직급"),
+                                fieldWithPath("data[].member.team").type(JsonFieldType.STRING).description("회사 회원 소속 부서"),
+                                fieldWithPath("data[].member.roles").type(JsonFieldType.ARRAY).description("회사 회원 권한").optional(),
+                                fieldWithPath("data[].member.status").type(JsonFieldType.STRING).description("회사 회원 상태"),
+                                fieldWithPath("data[].status[].id").type(JsonFieldType.NUMBER).description("특이 사항 식별 번호"),
+                                fieldWithPath("data[].status[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                fieldWithPath("data[].status[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
+                                fieldWithPath("data[].status[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
+                                fieldWithPath("data[].status[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                fieldWithPath("data[].status[].startTime").type(JsonFieldType.STRING).description("특이사항 시작 시간"),
+                                fieldWithPath("data[].status[].finishTime").type(JsonFieldType.STRING).description("특이사항 마감 시간"),
+                                fieldWithPath("data[].status[].note").type(JsonFieldType.STRING).description("특이사항 내용: 지각 / 조퇴 / 결근 / 연장근로 / 휴일근로 / 야간근로 / 유급휴가 / 무급휴가"),
+                                fieldWithPath("pageInfo.page").type(JsonFieldType.NUMBER).description("현재 페이지"),
+                                fieldWithPath("pageInfo.totalElements").type(JsonFieldType.NUMBER).description("전체 직원 수"),
+                                fieldWithPath("pageInfo.totalPages").type(JsonFieldType.NUMBER).description("전체 페이지 수")
+                        )
+                )
+        ));
+    }
+
 
     @Test
     @DisplayName("StatusOfWork Delete Test")

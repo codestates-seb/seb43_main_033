@@ -3,6 +3,7 @@ package main.main.statusofwork.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import main.main.companymember.dto.CompanyMemberDto;
 import main.main.statusofwork.entity.StatusOfWork;
 
 import java.time.LocalDateTime;
@@ -59,5 +60,12 @@ public class StatusOfWorkDto {
     public static class CompanyInfo {
         private Long companyId;
         private String companyName;
+    }
+
+    @Getter
+    @Builder
+    public static class Today {
+        private CompanyMemberDto.Response member;
+        private List<Response> status;
     }
 }

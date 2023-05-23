@@ -5,6 +5,7 @@ import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.dto.Status;
 import main.main.member.entity.Member;
+import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.entity.Vacation;
 
 import javax.persistence.*;
@@ -34,6 +35,9 @@ public class CompanyMember {
     @JoinColumn(name = "MEMBER_ID")
     @JsonIgnoreProperties("companyMembers")
     private Member member;
+
+    @OneToMany(mappedBy = "companyMember")
+    private List<StatusOfWork> statusOfWorks = new ArrayList<>();
 
     @OneToOne(mappedBy = "companyMember", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private Vacation vacation;
