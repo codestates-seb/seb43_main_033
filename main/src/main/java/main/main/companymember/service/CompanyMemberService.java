@@ -137,6 +137,10 @@ public class CompanyMemberService {
         return companyMemberRepository.findAllByCompanyCompanyId(companyId, PageRequest.of(page, 10, Sort.by("companyMemberId").ascending()));
     }
 
+    public List<CompanyMember> findCompanyMembersByMemberId(long memberId) {
+        return companyMemberRepository.findAllByMemberMemberId(memberId);
+    }
+
     private void checkPermission(long authenticationMemberId, Company company) { // 본인이거나 매니저일경우 패스
         if (authenticationMemberId == -1) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);

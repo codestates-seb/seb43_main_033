@@ -185,7 +185,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         params.add("month", month);
 
         given(statusOfWorkService.findStatusOfWorks(Mockito.anyInt(), Mockito.anyInt(), Mockito.anyLong())).willReturn(StubData.MockStatusOfWork.getStatusOfWorkList());
-        given(statusOfWorkMapper.statusOfWorkToMyWork(Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getMultiResponseBody());
+        given(statusOfWorkMapper.statusOfWorkToMyWork(Mockito.anyList(), Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getMultiResponseBody());
 
         mockMvc.perform(get("/worker/mywork", 1L, accessToken)
                 .header("Authorization", "Bearer ".concat(accessToken))

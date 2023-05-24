@@ -59,9 +59,9 @@ public interface StatusOfWorkMapper {
                 .note(statusOfWork.getNote().getStatus()).build();
     }
 
-    default StatusOfWorkDto.MyWork statusOfWorkToMyWork(List<StatusOfWork> statusOfWorks) {
+    default StatusOfWorkDto.MyWork statusOfWorkToMyWork(List<CompanyMember> companyMembers, List<StatusOfWork> statusOfWorks) {
         return StatusOfWorkDto.MyWork.builder()
-                .company(toCompanyInfoList(statusOfWorks.get(0).getMember().getCompanyMembers()))
+                .company(toCompanyInfoList(companyMembers))
                 .status(statusOfWorksToResponses(statusOfWorks)).build();
     }
 
