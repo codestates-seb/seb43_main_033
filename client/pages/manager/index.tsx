@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Navi from "../../components/ManagerNavi";
 import TopInformation from "../../components/ManagerHome/TopInformation";
 import MiddleInformation from "../../components/ManagerHome/MiddleInformation";

@@ -103,7 +103,7 @@ export default function SignupFrom() {
         onChange={(e) => handleChange(e, setAddress)}
         className="outline-none border rounded-sm px-3 py-1 focus:border-green-500 mb-2"
       ></input>
-      <button
+      <button      
         className="mt-10 bg-green-400 rounded-md py-2 text-white hover:bg-green-300"
         onClick={handleSubmit}
       >

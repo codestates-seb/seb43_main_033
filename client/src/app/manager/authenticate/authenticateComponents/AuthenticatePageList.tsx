@@ -1,16 +1,18 @@
-import AuthenticatePageListLi from "./AuthenticatePageListLi";
+import AuthenticatePageListLi from "../../../../../components/authenticateComponents/AuthenticatePageListLi";
 
 interface AuthenticatePageListProps {
-  p_nm: string;
-  b_no: string;
-  b_stt: string;
-  b_stt_cd: string;
-  end_dt: string;
-  invoice_apply_dt: string;
-  tax_type: string;
-  tax_type_cd: string;
-  tax_type_change_dt: string;
-  utcc_yn: string;
+  prop: {
+    p_nm: string;
+    b_no: string;
+    b_stt: string;
+    b_stt_cd: string;
+    end_dt: string;
+    invoice_apply_dt: string;
+    tax_type: string;
+    tax_type_cd: string;
+    tax_type_change_dt: string;
+    utcc_yn: string;    
+  };
   handleOnDelete: (b_no: string) => void;
 }
 
