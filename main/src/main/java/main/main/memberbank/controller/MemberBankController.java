@@ -11,6 +11,7 @@ import main.main.memberbank.service.MemberBankService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -56,6 +57,12 @@ public class MemberBankController {
         return new ResponseEntity<>(memberBankMapper.memberBankToMemberBankResponse(memberBank), HttpStatus.OK);
     }
 
+    @GetMapping("/member/{member-id}")
+    public ResponseEntity<List<MemberBankDto.ResponseForList>> getMemberBanksByMemberId(@Positive @PathVariable("member-id") long memberId) {
+        List<MemberBank> memberBanks = memberBankService.findMemberBanksByMemberId(memberId);
+        List<MemberBankDto.ResponseForList> memberBankResponses = memberBankMapper.memberBanksToMemberBanksResponse(memberBanks);
+        return new ResponseEntity<>(memberBankResponses, HttpStatus.OK);
+    }
 
     @GetMapping
     public ResponseEntity getMemberBanks(@Positive @RequestParam int page, @RequestParam int size) {

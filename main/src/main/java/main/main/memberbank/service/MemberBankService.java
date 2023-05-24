@@ -46,6 +46,10 @@ public class MemberBankService {
     }
 
 
+    public List<MemberBank> findMemberBanksByMemberId(long memberId) {
+        return memberBankRepository.findByMemberMemberId(memberId);
+    }
+
     public Page<MemberBank> findMemberBanks(int page, int size) {
         return memberBankRepository.findAll(PageRequest.of(page, size, Sort.by("memberBankId").ascending()));
     }
