@@ -6,7 +6,7 @@ files:
     overwrite: yes
 permissions:
   - object: /home/ubuntu/seb43_main_033/main
-#    pattern: "**"
+    pattern: "**"
     owner: ubuntu
     group: ubuntu
     mode: 755
@@ -14,4 +14,4 @@ hooks:
   AfterInstall:
   - location: deploy.sh
     timeout: 60
-    runas: root
+    runas: ubuntu
