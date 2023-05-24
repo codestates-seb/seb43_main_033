@@ -35,10 +35,14 @@ public interface LaborContractMapper {
     }
 
     default LaborContract patchToLaborContract(LaborContractDto.Patch requestBody) {
+        LocalDate start = requestBody.getStartOfContract();
+        LocalDate end = requestBody.getEndOfContract();
         Company company = new Company();
         LaborContract laborContract = new LaborContract();
         laborContract.setCompany(company);
         laborContract.setBasicSalary(requestBody.getBasicSalary());
+        laborContract.setStartOfContract(LocalDateTime.of(start.getYear(), start.getMonth(), start.getDayOfMonth(), 0, 0, 0));
+        laborContract.setEndOfContract(LocalDateTime.of(end.getYear(), end.getMonth(), end.getDayOfMonth(), 23, 59, 59));
         laborContract.setStartTime(requestBody.getStartTime());
         laborContract.setFinishTime(requestBody.getFinishTime());
         laborContract.setInformation(requestBody.getInformation());

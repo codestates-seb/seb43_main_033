@@ -66,6 +66,8 @@ public class StubData {
 
             LaborContractDto.Patch patch = new LaborContractDto.Patch();
             patch.setBasicSalary(BigDecimal.valueOf(3200000));
+            patch.setStartOfContract(LocalDate.now());
+            patch.setEndOfContract(LocalDate.now());
             patch.setStartTime(LocalTime.MIDNIGHT);
             patch.setFinishTime(LocalTime.MIDNIGHT);
             patch.setInformation("수정된 근로계약서 정보");

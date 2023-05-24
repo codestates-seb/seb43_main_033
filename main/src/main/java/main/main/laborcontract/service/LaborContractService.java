@@ -71,6 +71,10 @@ public class LaborContractService {
 
         Optional.ofNullable(laborContract.getBasicSalary())
                 .ifPresent(basicSalary -> findedLaborContract.setBasicSalary(basicSalary));
+        Optional.ofNullable(laborContract.getStartOfContract())
+                .ifPresent(startOffContract -> findedLaborContract.setStartOfContract(startOffContract));
+        Optional.ofNullable(laborContract.getEndOfContract())
+                .ifPresent(endOfContract -> findedLaborContract.setEndOfContract(endOfContract));
         Optional.ofNullable(laborContract.getStartTime())
                 .ifPresent(startTime -> findedLaborContract.setStartTime(startTime));
         Optional.ofNullable(laborContract.getFinishTime())
