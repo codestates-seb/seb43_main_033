@@ -15,6 +15,7 @@ public class CompanyDto {
 
         private String companyName;
         private String companySize;
+        private String businessNumber;
         private String address;
         private String information;
     }

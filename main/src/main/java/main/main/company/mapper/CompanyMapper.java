@@ -26,6 +26,7 @@ public interface CompanyMapper {
         company.setCompanyName(requestBody.getCompanyName());
         company.setCompanySize(requestBody.getCompanySize());
         company.setAddress(requestBody.getAddress());
+        company.setBusinessNumber(requestBody.getBusinessNumber());
         company.setInformation(requestBody.getInformation());
         company.setMemberId(member.getMemberId());
 
