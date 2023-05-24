@@ -1,11 +1,7 @@
-#!/bin/bash
+PROJECT_ROOT="/home/ubuntu/seb43_main_033/main"
+JAR_NAME="$PROJECT_ROOT/main-0.0.1-SNAPSHOT.jar"
 
-REPOSITORY=/home/ubuntu/seb43_main_033/main
-cd $REPOSITORY
-
-JAR_NAME=$(ls $REPOSITORY/build/libs/ | grep '.jar' | tail -n 1)
-JAR_PATH=$REPOSITORY/build/libs/$JAR_NAME
-DEPLOY_LOG="$REPOSITORY/deploy.log"
+DEPLOY_LOG="$PROJECT_ROOT/deploy.log"
 
 TIME_NOW=$(date +%c)
 
