@@ -6,7 +6,7 @@ interface MiddleInformationLiProps {
 export default function MiddleInformationLi({
   label,
   value,
-}: MiddleInforamtionLiProps) {
+}: MiddleInformationLiProps) {
   return (
     <div className="flex">
       <label className="w-36 mb-1">{label}</label>

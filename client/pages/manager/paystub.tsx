@@ -1,55 +1,126 @@
 //import { useState } from 'react';
-// "use client";
-import { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import Greenheader from "../../components/PaystubPage/GreenTop";
-import StaffSelect from "../../components/StaffSelect";
-import StaffSelectModal from "../../components/StaffSelectModal";
 import PaystubPreview from "../../components/PaystubPage/PaystubPreview";
 import WorkingStatus from "../../components/PaystubPage/WorkingStatus";
 import Navi from "../../components/ManagerNavi";
-import AccountAdd from "../../components/PaystubPage/AccountAdd";
 import AccountList from "../../components/PaystubPage/AccountList";
+import axios from "axios";
+import { SelectCompany } from "../../components/PaystubPage/SelectCompany";
+import SelectCompanymembers from "../../components/PaystubPage/SelectCompanymembers";
 
 const Paystub = () => {
-  const [showModal, setShowModal] = useState(false);
-  // const [selectedStaff, setSelectedStaff] = useState('');
+  const [mycompanies, setMyCompanies] = useState<CompanyMembers[]>([]);
+  const [companies, setCompanies] = useState<CompanyData[]>([]);
+  const [companyId, setCompanyId] = useState(0);
+  const [selectCompany, setSelectCompany] = useState<CompanyData | null>({});
+  const [selectedCompanyMemberId, setSelectedCompanyMemberId] = useState(0);
+  const [selectedMemberId, setSelectedMemberId] = useState(0);
+  const [selectedCompanyMember, setSelectedCompanyMember] = useState("");
 
-  //  const [isChecked, setIsChecked] = useState<boolean>(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const memberId = localStorage.getItem("memberid");
+    {
+      memberId &&
+        axios
+          .get(`${process.env.NEXT_PUBLIC_URL}/members/${memberId}`, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            setMyCompanies(res.data.companyMembers);
+          })
+          .catch((err) => console.log(err));
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=1&size=200`, {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        setCompanies(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+  useEffect(() => {
+    const selectCompanyData = companies.filter(
+      (el) => el.companyId === companyId
+    );
+    selectCompanyData[0] && setSelectCompany(selectCompanyData[0]);
+  }, [companyId]);
   return (
     <>
       <Navi />
-      <div className="w-full">
+      <div className="w-full p-10">
+        <Greenheader>회사선택</Greenheader>
+        <SelectCompany
+          companies={companies}
+          mycompanies={mycompanies}
+          setCompanyId={setCompanyId}
+        />
         <Greenheader>직원선택</Greenheader>
-        <div className="bg-white p-3 m-5 flex justify-between">
-          <StaffSelect>홍길동</StaffSelect>
-          <button
-            className="text-sm font-bold hover:bg-gray-300 px-2"
-            onClick={() => setShowModal(true)}
-          >
-            직원선택하기
-          </button>
-        </div>
-        {showModal && (
-          <StaffSelectModal onClose={() => setShowModal(false)}>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-          </StaffSelectModal>
-        )}
+        <SelectCompanymembers
+          selectCompany={selectCompany}
+          setSelectedCompanyMember={setSelectedCompanyMember}
+          setSelectedCompanyMemberId={setSelectedCompanyMemberId}
+          setSelectedMemberId={setSelectedMemberId}
+          selectedCompanyMemberId={selectedCompanyMemberId}          
+          />
         <Greenheader>계좌번호</Greenheader>
-        <AccountList />
+        <AccountList
+          selectedMemberId={selectedMemberId}
+          selectedCompanyMemberId={selectedCompanyMemberId}
+        />
         <Greenheader>근태</Greenheader>
-        <WorkingStatus></WorkingStatus>
+        <WorkingStatus
+          selectedCompanyMemberId={selectedCompanyMemberId}
+          companyId={companyId}
+        ></WorkingStatus>
         <Greenheader>지급내역</Greenheader>
-        <PaystubPreview isMyPaystub={false}></PaystubPreview>
+        {selectedCompanyMemberId && companyId ? (
+          <PaystubPreview
+            companyId={companyId}
+            selectedCompanyMemberId={selectedCompanyMemberId}
+          ></PaystubPreview>
+        ) : (
+          ""
+        )}
       </div>
     </>
   );
 };
 
 export default Paystub;
+
+export interface CompanyMember {
+  companyMemberId: number;
+  companyId: number;
+  memberId: number | null;
+  name: string | null;
+  grade: string;
+  team: string;
+  status: string | null;
+  roles: string[] | null;
+}
+
+export interface CompanyData {
+  companyId?: number;
+  memberId?: number | null;
+  companyName?: string;
+  companySize?: string;
+  businessNumber?: string;
+  address?: string;
+  information?: string;
+  companyMembers?: CompanyMember[];
+}
+
+export interface CompanyMembers {
+  companyMemberId: number;
+  companyId: number;
+}

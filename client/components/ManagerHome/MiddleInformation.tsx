@@ -1,8 +1,11 @@
-import MiddleInformationLi from "./MiddleInfo/MiddleInformationLi";
+"use client";
 
+import MiddleInformationLi from "./MiddleInfo/MiddleInformationLi";
+import { useState } from "react";
 interface MiddleInformationProps {}
 
-export default function MiddleInformation(props: MiddleInformationProps) {
+export default function MiddleInformation() {
+  const [data, setdata] = useState({});
   return (
     <article className="flex flex-row flex-wrap min-h-32 bg-white p-3 mb-5 rounded drop-shadow">
       <section className="flex-1 flex-col p-4">

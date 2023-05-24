@@ -17,6 +17,8 @@ export default function WorkingStatusAdd({
   setEditId,
   startTime,
   finishTime,
+  selectedCompanyMemberId,
+  companyId,
 }: {
   editId?: number | null;
   setEditId?: Dispatch<SetStateAction<number | null>>;
@@ -24,6 +26,8 @@ export default function WorkingStatusAdd({
   setAdd?: Dispatch<SetStateAction<boolean>>;
   startTime?: string;
   finishTime?: string;
+  selectedCompanyMemberId?: number;
+  companyId?: number;
 }) {
   const [startDate, setStartDate] = useState(new Date());
   const [finishDate, setFinishDate] = useState(new Date());
@@ -48,7 +52,6 @@ export default function WorkingStatusAdd({
   ];
   const handleStatus = (e: ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value);
-    console.log(status);
   };
 
   const handleTime = (date: any) => {
@@ -63,40 +66,46 @@ export default function WorkingStatusAdd({
   };
   const handleSubmit = () => {
     let workStatusdata = {
-      companyId: 4,
-      memberId: 2,
       startTime: statusDate,
       finishTime: statusFinishDate,
       note: status,
     };
-    console.log(workStatusdata);
+    const token = localStorage.getItem("token");
     axios
-      .post(`${process.env.NEXT_PUBLIC_URL}/statusofworks`, workStatusdata, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
+      .post(
+        `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/members/${selectedCompanyMemberId}/status`,
+        workStatusdata,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: token,
+          },
+        }
+      )
       .then((res) => {
-        console.log(res);
         setAdd && setAdd(false);
       })
       .catch((err) => console.log(err));
   };
   const handleEditSubmit = () => {
+    const token = localStorage.getItem("token");
     let workStatusdata = {
       startTime: statusDate,
       finishTime: statusFinishDate,
       note: status,
     };
-    console.log(workStatusdata);
     axios
       .patch(
-        `https://c49c-61-254-8-200.ngrok-free.app/statusofworks/${editId}`,
-        workStatusdata
+        `${process.env.NEXT_PUBLIC_URL}/status/${editId}`,
+        workStatusdata,
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
       )
       .then((res) => {
-        console.log(res);
-        setAdd(false);
+        setAdd && setAdd(false);
       })
       .catch((err) => console.log(err));
   };
@@ -111,8 +120,8 @@ export default function WorkingStatusAdd({
             <button
               className="ml-5 fond-bold mb-3"
               onClick={() => {
-                setAdd(false);
-                editId ? setEditId(null) : null;
+                setAdd && setAdd(false);
+                setEditId ? setEditId(null) : null;
               }}
             >
               X
@@ -165,4 +174,3 @@ export default function WorkingStatusAdd({
     </div>
   );
 }
-
