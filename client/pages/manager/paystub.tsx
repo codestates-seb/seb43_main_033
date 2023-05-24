@@ -70,8 +70,8 @@ const Paystub = () => {
           setSelectedCompanyMember={setSelectedCompanyMember}
           setSelectedCompanyMemberId={setSelectedCompanyMemberId}
           setSelectedMemberId={setSelectedMemberId}
-          selectedCompanyMemberId={selectedCompanyMemberId}
-        />
+          selectedCompanyMemberId={selectedCompanyMemberId}          
+          />
         <Greenheader>계좌번호</Greenheader>
         <AccountList
           selectedMemberId={selectedMemberId}

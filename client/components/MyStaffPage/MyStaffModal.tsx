@@ -171,7 +171,6 @@ console.log(contractList);
   };
 
   const [contractEdit, setcontractEdit] = useState<boolean>(false);
-
   /*const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
@@ -361,19 +360,11 @@ console.log(contractList);
                 </div>
               </div>
               <div>
-                <div className="modal-close mt-10 pt-40 flex justify-end">
-                  <button
-                    className="mr-3 mt-10"
-                    onClick={() => staffEditClick(companymemberId)}
-                  >
+                <div className="modal-close mt-5 pt-40 flex justify-end">
+                  <button className="mr-3" onClick={() => staffEditClick()}>
                     submit
                   </button>
-                  <button
-                    className="mt-10"
-                    onClick={() => staffDeleteClick(companymemberId)}
-                  >
-                    Delete
-                  </button>
+                  <button onClick={() => staffDeleteClick()}>Delete</button>
                 </div>
               </div>
             </div>

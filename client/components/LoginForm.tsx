@@ -35,7 +35,7 @@ export default function LoginForm() {
           localStorage.setItem("memberid", memberid);
         };
         const refresh = response.headers.refresh;
-        const saveRefresh = (refresh) => {
+        const saveRefresh = (refresh: string) => {
           localStorage.setItem("refresh", refresh);
         };
 

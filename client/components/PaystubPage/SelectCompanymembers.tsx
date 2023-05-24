@@ -11,11 +11,11 @@ export default function SelectCompanymembers({
   setSelectedMemberId,
   selectedCompanyMemberId,
 }: {
-  selectCompany: CompanyData | undefined;
-  setSelectedCompanyMember: Dispatch<SetStateAction<string>>;
-  setSelectedCompanyMemberId: Dispatch<SetStateAction<number>>;
-  setSelectedMemberId: Dispatch<SetStateAction<number>>;
-  selectedCompanyMemberId: number;
+  selectCompany:any;
+  setSelectedCompanyMember: any;
+  setSelectedCompanyMemberId: any;
+  setSelectedMemberId: any;
+  selectedCompanyMemberId: any;
 }) {
   const [showModal, setShowModal] = useState(false);
   const [nameArr, setNameArr] = useState<any>([]);
