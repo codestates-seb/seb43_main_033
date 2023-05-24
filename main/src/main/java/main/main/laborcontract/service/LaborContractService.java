@@ -82,7 +82,9 @@ public class LaborContractService {
         Optional.ofNullable(laborContract.getInformation())
                 .ifPresent(information -> findedLaborContract.setInformation(information));
         if (file != null) {
-            awsS3Service.deleteFile(findedLaborContract.getPureUri());
+            if (findedLaborContract.getLaborContractUri() != null) {
+                awsS3Service.deleteFile(findedLaborContract.getPureUri());
+            }
             String[] uriList = awsS3Service.uploadFile(file);
             findedLaborContract.setLaborContractUri(uriList[0]);
             findedLaborContract.setPureUri(uriList[1]);
