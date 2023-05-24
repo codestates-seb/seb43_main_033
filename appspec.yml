@@ -1,18 +1,21 @@
 version: 0.0
 os: linux
-
 files:
-  - source:  /
-    destination: /home/ubuntu/app
-    overwrite: yes
+  
+source:  /
+  destination: /home/ubuntu/seb43_main_033
+  overwrite: yes
 
 permissions:
-  - object: /
-    pattern: "**"
-    owner: ubuntu
-    group: ubuntu
+  
+object: /
+  pattern: "**"
+  owner: ubuntu
+  group: ubuntu
 
 hooks:
-    - location: scripts/restart.sh
-      timeout: 60
-      runas: ubuntu
+  ApplicationStart:
+    
+location: scripts/deploy.sh
+    timeout: 60
+    runas: ubuntu
