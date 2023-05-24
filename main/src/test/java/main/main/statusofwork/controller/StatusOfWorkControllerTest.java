@@ -206,6 +206,8 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                                         fieldWithPath("company[]").type(JsonFieldType.ARRAY).description("소속 회사 리스트"),
                                         fieldWithPath("company[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
                                         fieldWithPath("company[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("company[].startTime").type(JsonFieldType.STRING).description("근무 시작 시간"),
+                                        fieldWithPath("company[].finishTime").type(JsonFieldType.STRING).description("근무 종료 시간"),
                                         fieldWithPath("company[].remainVacation").type(JsonFieldType.NUMBER).description("잔여 휴가 일수"),
                                         fieldWithPath("status[].id").type(JsonFieldType.NUMBER).description("특이사항 식별 번호"),
                                         fieldWithPath("status[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),

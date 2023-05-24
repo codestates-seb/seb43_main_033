@@ -220,10 +220,14 @@ public class StubData {
                     .company(List.of(
                             StatusOfWorkDto.CompanyInfo.builder()
                                     .companyId(1L)
-                                    .companyName("회사 이름").build(),
+                                    .companyName("회사 이름")
+                                    .startTime(LocalTime.now())
+                                    .finishTime(LocalTime.now()).build(),
                             StatusOfWorkDto.CompanyInfo.builder()
                                     .companyId(2L)
-                                    .companyName("회사 이름").build()
+                                    .companyName("회사 이름")
+                                    .startTime(LocalTime.now())
+                                    .finishTime(LocalTime.now()).build()
                     ))
                     .status(List.of(
                             StatusOfWorkDto.Response.builder()

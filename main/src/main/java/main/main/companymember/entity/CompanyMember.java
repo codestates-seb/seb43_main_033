@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import main.main.company.entity.Company;
 import main.main.companymember.dto.Status;
+import main.main.laborcontract.entity.LaborContract;
 import main.main.member.entity.Member;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.entity.Vacation;
@@ -35,6 +36,9 @@ public class CompanyMember {
     @JoinColumn(name = "MEMBER_ID")
     @JsonIgnoreProperties("companyMembers")
     private Member member;
+
+    @OneToMany(mappedBy = "companyMember")
+    private List<LaborContract> laborContracts = new ArrayList<>();
 
     @OneToMany(mappedBy = "companyMember")
     private List<StatusOfWork> statusOfWorks = new ArrayList<>();
