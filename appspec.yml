@@ -4,6 +4,7 @@ files:
   - source: /
     destination: /home/ubuntu/seb43_main_033/main
     overwrite: yes
+file_exists_behavior: OVERWRITE
 permissions:
   - object: /home/ubuntu/seb43_main_033/main
     pattern: "**"
