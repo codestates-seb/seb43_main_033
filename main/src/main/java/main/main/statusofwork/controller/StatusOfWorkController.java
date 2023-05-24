@@ -93,8 +93,9 @@ public class StatusOfWorkController {
     public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
         List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, 1, authenticationMemberId);
+        List<CompanyMember> companyMembers = companyMemberService.findCompanyMembersByMemberId(authenticationMemberId);
 
-        return new ResponseEntity<>(statusOfWorkMapper.statusOfWorkToMyWork(statusOfWorks), HttpStatus.OK);
+        return new ResponseEntity<>(statusOfWorkMapper.statusOfWorkToMyWork(companyMembers, statusOfWorks), HttpStatus.OK);
     }
 
     @DeleteMapping("/status/{statusofwork-id}")

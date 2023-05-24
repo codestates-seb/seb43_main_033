@@ -80,7 +80,7 @@ public class StubData {
         }
 
         public static LaborContractDto.Response getResponseBody() {
-            LocalDateTime time = LocalDateTime.now();
+            LocalDate time = LocalDate.now();
             return LaborContractDto.Response.builder()
                     .laborContactId(1L)
                     .memberName("직원 이름")
@@ -98,7 +98,7 @@ public class StubData {
         }
 
         public static List<LaborContractDto.Response> getMultiResponseBody() {
-            LocalDateTime time = LocalDateTime.now();
+            LocalDate time = LocalDate.now();
             return List.of(
                     LaborContractDto.Response.builder()
                             .laborContactId(2L)

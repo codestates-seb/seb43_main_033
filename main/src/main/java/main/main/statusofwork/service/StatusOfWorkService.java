@@ -147,7 +147,8 @@ public class StatusOfWorkService {
         }
         Member manager = memberService.findMember(authenticationMemberId);
         CompanyMember companyMember = companyMemberRepository.findByMemberAndCompany(manager, statusOfWork.getCompany());
-        if (!companyMember.getRoles().contains("MANAGER") || statusOfWork.getMember().getMemberId() != authenticationMemberId) {
+        if (!companyMember.getRoles().contains("MANAGER")
+                || statusOfWork.getMember().getMemberId() != authenticationMemberId) {
             throw new BusinessLogicException(ExceptionCode.UNAUTHORIZED);
         }
     }
