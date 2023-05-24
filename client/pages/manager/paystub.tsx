@@ -31,13 +31,13 @@ const Paystub = () => {
         </div>
         {showModal && (
           <StaffSelectModal onClose={() => setShowModal(false)}>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
-            <StaffSelect>ddd</StaffSelect>
+            <StaffSelect>유호균</StaffSelect>
+            <StaffSelect>심재우</StaffSelect>
+            <StaffSelect>정 솔</StaffSelect>
+            <StaffSelect>송준상</StaffSelect>
+            <StaffSelect>유소영</StaffSelect>
+            <StaffSelect>석원준</StaffSelect>
+            <StaffSelect>김영택</StaffSelect>
             <StaffSelect>ddd</StaffSelect>
           </StaffSelectModal>
         )}

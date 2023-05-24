@@ -20,7 +20,7 @@ export default function LoginForm() {
   };
   const loginAxios = () => {
     axios
-      .post(`http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/login`, {
+      .post(`${process.env.NEXT_PUBLIC_URL}/login`, {
         email,
         password,
       })
