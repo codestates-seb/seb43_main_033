@@ -28,6 +28,8 @@ public class LaborContractDto {
     @Setter
     public static class Patch {
         private BigDecimal basicSalary;
+        private LocalDate startOfContract;
+        private LocalDate endOfContract;
         private LocalTime startTime;
         private LocalTime finishTime;
         private String information;
