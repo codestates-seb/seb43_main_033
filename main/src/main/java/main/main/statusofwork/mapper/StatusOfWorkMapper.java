@@ -75,6 +75,8 @@ public interface StatusOfWorkMapper {
         return StatusOfWorkDto.CompanyInfo.builder()
                 .companyId(companyMember.getCompany().getCompanyId())
                 .companyName(companyMember.getCompany().getCompanyName())
+                .startTime(companyMember.getLaborContracts().get(0).getStartTime())
+                .finishTime(companyMember.getLaborContracts().get(0).getFinishTime())
                 .remainVacation(companyMember.getVacation().getCount()).build();
     }
 

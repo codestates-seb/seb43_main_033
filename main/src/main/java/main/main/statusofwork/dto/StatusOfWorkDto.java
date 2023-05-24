@@ -7,6 +7,7 @@ import main.main.companymember.dto.CompanyMemberDto;
 import main.main.statusofwork.entity.StatusOfWork;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 public class StatusOfWorkDto {
@@ -60,6 +61,8 @@ public class StatusOfWorkDto {
     public static class CompanyInfo {
         private Long companyId;
         private String companyName;
+        private LocalTime startTime;
+        private LocalTime finishTime;
         private int remainVacation;
     }
 
