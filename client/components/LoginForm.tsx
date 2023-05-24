@@ -8,6 +8,7 @@ export default function LoginForm() {
   const [isLogin, setIsLogin] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [companyId, setCompanyId] = useState(0);
   const router = useRouter();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
@@ -33,10 +34,16 @@ export default function LoginForm() {
         const saveMemberId = (memberid: string) => {
           localStorage.setItem("memberid", memberid);
         };
+        const refresh = response.headers.refresh;
+        const saveRefresh = (refresh) => {
+          localStorage.setItem("refresh", refresh);
+        };
+
         if (response.status === 200 || response.status === 201) {
           setIsLogin(true);
           saveToken(token);
           saveMemberId(memberid);
+          saveRefresh(refresh);
           router.push("/");
         }
       })
