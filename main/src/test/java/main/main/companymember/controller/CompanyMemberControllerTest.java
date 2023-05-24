@@ -232,33 +232,5 @@ public class CompanyMemberControllerTest implements CompanyMemberHelper {
                         )));
     }
 
-//    @Test
-//    @DisplayName("updateMember Role Test")
-//    public void updateMemberRoleTest() throws Exception {
-//
-//        long companyMemberId = 1L;
-//        CompanyMemberDto.Roles roles = new CompanyMemberDto.Roles();
-//        roles.setRoles(Arrays.asList("MANAGER"));
-//
-//        CompanyMember updatedCompanyMember = new CompanyMember();
-//
-//        given(companyMemberService.updateCompanyMemberRole(
-//                Mockito.eq(companyMemberId), Mockito.any(CompanyMemberDto.Roles.class)))
-//                .willReturn(updatedCompanyMember);
-//
-//        mockMvc.perform(RestDocumentationRequestBuilders.patch(
-//                                "/companymembers/role/{companymember-id}", companyMemberId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(toJsonContent(roles)))
-//                .andExpect(MockMvcResultMatchers.status().isOk())
-//                .andDo(document("update-memberRole",
-//                        pathParameters(
-//                                parameterWithName("companymember-id").description("회사 사원 식별 번호")
-//                        ),
-//                        requestFields(
-//                                fieldWithPath("roles").description("업데이트 전 역할")
-//                        )
-//                ));
-//    }
 
 }
