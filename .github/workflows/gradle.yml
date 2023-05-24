@@ -31,9 +31,10 @@ jobs:
         java-version: '11'
 
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: clean build -x test
+        gradle-version: 7.5.1
+        arguments: build
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
