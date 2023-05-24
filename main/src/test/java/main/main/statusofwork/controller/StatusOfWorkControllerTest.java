@@ -206,6 +206,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                                         fieldWithPath("company[]").type(JsonFieldType.ARRAY).description("소속 회사 리스트"),
                                         fieldWithPath("company[].companyId").type(JsonFieldType.NUMBER).description("회사 식별 번호"),
                                         fieldWithPath("company[].companyName").type(JsonFieldType.STRING).description("회사 이름"),
+                                        fieldWithPath("company[].remainVacation").type(JsonFieldType.NUMBER).description("잔여 휴가 일수"),
                                         fieldWithPath("status[].id").type(JsonFieldType.NUMBER).description("특이사항 식별 번호"),
                                         fieldWithPath("status[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
                                         fieldWithPath("status[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
@@ -263,6 +264,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                                 fieldWithPath("data[].member.team").type(JsonFieldType.STRING).description("회사 회원 소속 부서"),
                                 fieldWithPath("data[].member.roles").type(JsonFieldType.ARRAY).description("회사 회원 권한").optional(),
                                 fieldWithPath("data[].member.status").type(JsonFieldType.STRING).description("회사 회원 상태"),
+                                fieldWithPath("data[].member.remainVacation").type(JsonFieldType.NUMBER).description("잔여 휴가 일수"),
                                 fieldWithPath("data[].status[].id").type(JsonFieldType.NUMBER).description("특이 사항 식별 번호"),
                                 fieldWithPath("data[].status[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
                                 fieldWithPath("data[].status[].memberName").type(JsonFieldType.STRING).description("회원 이름"),
@@ -334,6 +336,37 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                         )
                 );
 
+    }
+
+    @Test
+    @DisplayName("Change Remain Vacation Test")
+    public void changeRemainVacationTest() throws Exception {
+        String day = "10";
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("day", day);
+
+        doNothing().when(statusOfWorkService).changeRemainVacation(Mockito.anyInt(), Mockito.anyLong(), Mockito.anyLong(), Mockito.anyLong());
+
+        mockMvc.perform(post("/manager/{company-id}/members/{companymember-id}", 1L, 1L, accessToken)
+                .header("Authorization", "Bearer ".concat(accessToken))
+                .params(params))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document(
+                        "change-remain-vacation",
+                        getRequestPreProcessor(),
+                        getResponsePreProcessor(),
+                        pathParameters(
+                                parameterWithName("company-id").description("회사 식별 번호"),
+                                parameterWithName("companymember-id").description("사원 식별 번호")
+                        ),
+                        requestParameters(
+                                List.of(
+                                        parameterWithName("day").description("증감 날짜 일수 (양수, 음수)")
+                                )
+                        )
+                ));
     }
 
     @Test

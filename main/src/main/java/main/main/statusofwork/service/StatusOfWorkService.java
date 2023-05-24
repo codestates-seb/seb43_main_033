@@ -92,17 +92,13 @@ public class StatusOfWorkService {
         statusOfWorkRepository.save(findedStatusOfWork);
     }
 
-    public List<StatusOfWork> findStatusOfWorks(int year, int month, long memberId, long authenticationMemberId) {
+    public List<StatusOfWork> findStatusOfWorksForMypage(int year, int month, long authenticationMemberId) {
         LocalDateTime startOfMonth = LocalDateTime.of(year, month, 1, 0, 0);
         LocalDateTime endOfMonth = startOfMonth.plusMonths(1).minusSeconds(1);
         Member member = memberService.findMember(authenticationMemberId);
-        List<StatusOfWork> list = statusOfWorkRepository.findByMemberAndStartTimeBetween(member, startOfMonth, endOfMonth);
 
-        if (list.size() == 0) {
-            throw new BusinessLogicException(ExceptionCode.STATUS_NOT_FOUND);
-        }
-        checkPermission(authenticationMemberId, list.get(0));
-        return list;
+        return statusOfWorkRepository.findByMemberAndStartTimeBetween(member, startOfMonth, endOfMonth);
+
     }
 
     public List<StatusOfWork> findStatusOfWorks(int year, int month, long memberId) {
@@ -132,6 +128,15 @@ public class StatusOfWorkService {
         checkPermission(authenticationMemberId, statusOfWork);
 
         statusOfWorkRepository.delete(statusOfWork);
+    }
+
+    public void changeRemainVacation(int day, long companyId, long companyMemberId, long authenticationMemberId) {
+        checkPermission(authenticationMemberId, companyService.findCompany(companyId));
+
+        CompanyMember companyMember = companyMemberService.findCompanyMember(companyMemberId);
+        companyMember.getVacation().setCount(companyMember.getVacation().getCount() + day);
+
+        companyMemberRepository.save(companyMember);
     }
 
     private StatusOfWork findVerifiedStatusOfWork(long statusOfWorkId) {
