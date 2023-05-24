@@ -30,6 +30,7 @@ public class PdfMaker {
         document.open();
 
         // Add the employee details
+        String num = salaryStatement.getCompanyMember().getCompanyMemberId().toString();
         String name = salaryStatement.getName();
         String team = salaryStatement.getTeam();
         String grade = salaryStatement.getGrade();
@@ -82,7 +83,7 @@ public class PdfMaker {
         cell4.setPadding(10);
         table.addCell(cell4);
 
-        PdfPCell cell5 = new PdfPCell(new Phrase("12345", objFont));
+        PdfPCell cell5 = new PdfPCell(new Phrase(num, objFont));
         cell5.setHorizontalAlignment(Element.ALIGN_CENTER);
         cell5.setPadding(10);
         table.addCell(cell5);
