@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react";
-import { bankData } from "./AccountList";
+import { BankData, bankData } from "./AccountList";
 
 export function AccountSearch({
   bankId,
@@ -10,7 +10,7 @@ export function AccountSearch({
 }) {
   const [bankSearch, setBankSearch] = useState("");
   const [bankSearchBar, setBankSearchBar] = useState(false);
-  const [filteredBank, setFilteredBank] = useState([]);
+  const [filteredBank, setFilteredBank] = useState<BankData[]>([]);
 
   const handleSerach = (e: any) => {
     setBankSearch(e.target.value);
@@ -19,7 +19,7 @@ export function AccountSearch({
     );
     setFilteredBank(filterData);
   };
-  const handleClickBank = (id) => {
+  const handleClickBank = (id: number) => {
     setBankSearch("");
     setBankId && setBankId(id);
   };

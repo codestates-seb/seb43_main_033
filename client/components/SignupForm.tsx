@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/router";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface MemberData {
@@ -8,7 +9,7 @@ interface MemberData {
   phoneNumber: string;
   email: string;
   password: string;
-  residientNumber: string;
+  residentNumber: string;
   grade: string;
   address: string;
 }
@@ -18,9 +19,10 @@ export default function SignupFrom() {
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [residientNumber, setResidientNumber] = useState<string>("");
+  const [residentNumber, setResidentNumber] = useState<string>("");
   const [grade, setGrade] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const router = useRouter();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     func: Dispatch<SetStateAction<string>>
@@ -33,14 +35,14 @@ export default function SignupFrom() {
       phoneNumber,
       email,
       password,
-      residientNumber,
+      residentNumber,
       grade,
       address,
     };
     console.log(memberdata);
     axios
       .post<MemberData>(`${process.env.NEXT_PUBLIC_URL}/members`, memberdata)
-      .then((res) => console.log(res))
+      .then((res) => router.push("/login"))
       .catch((err) => console.log(err));
   };
   return (
@@ -78,11 +80,11 @@ export default function SignupFrom() {
         className="outline-none border rounded-sm px-3 py-1 focus:border-green-500 mb-2"
       ></input>
       <label className="font-semibold text-gray-700" htmlFor="residientNumber">
-        residientnumber
+        residentNumber
       </label>
       <input
         id="residientNumber"
-        onChange={(e) => handleChange(e, setResidientNumber)}
+        onChange={(e) => handleChange(e, setResidentNumber)}
         className="outline-none border rounded-sm px-3 py-1 focus:border-green-500 mb-2"
       ></input>
       <label className="font-semibold text-gray-700" htmlFor="grade">

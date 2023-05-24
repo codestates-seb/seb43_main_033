@@ -4,32 +4,51 @@ import { useEffect, useState } from "react";
 import AccountAdd from "./AccountAdd";
 import axios from "axios";
 
-export default function AccountList() {
-  // const accountDataArr: Account[] = accountData.bank;
+export default function AccountList({
+  selectedCompanyMemberId,
+  selectedMemberId,
+}: {
+  selectedCompanyMemberId?: number;
+  selectedMemberId?: number;
+}) {
   const [accountAdd, setAccountAdd] = useState(false);
   const [accountEditId, setAccountEditId] = useState<number | null>(null);
   const [accountDeleteId, setAccountDeleteId] = useState<number | null>(null);
   const [accoutEdit, setAccountEdit] = useState<string | null>(null);
-  const [accountData, setAccountData] = useState([]);
+  const [accountData, setAccountData] = useState<Account[]>([]);
+  const [selectBankName, setSelectBankName] = useState("");
   useEffect(() => {
     const token = localStorage.getItem("token");
-    axios
-      .get(
-        `http://ec2-3-39-22-248.ap-northeast-2.compute.amazonaws.com:8080/members/7`,
-        {
+    const memberId = selectedMemberId;
+    memberId &&
+      axios
+        .get(`${process.env.NEXT_PUBLIC_URL}/memberbanks/member/${memberId}`, {
           headers: {
             Authorization: token,
           },
-        }
-      )
-      .then((res) => {
-        setAccountData(res.data.bank);
+        })
+        .then((res) => {
+          setAccountData(res.data);
+        })
+        .catch((err) => console.log(err));
+  }, [selectedMemberId]);
+
+  const handleDelete = (memberBankId: number) => {
+    setAccountDeleteId(memberBankId);
+    const token = localStorage.getItem("token");
+    axios
+      .delete(`${process.env.NEXT_PUBLIC_URL}/memberbanks/${memberBankId}`, {
+        headers: {
+          Authorization: token,
+        },
       })
+      .then((res) => console.log(res))
       .catch((err) => console.log(err));
-  }, []);
+  };
+
   return (
     <div className="ml-10">
-      {accountData.map((el, idx) => {
+      {accountData.map((el: Account, idx: number) => {
         return (
           <div
             key={idx}
@@ -41,26 +60,33 @@ export default function AccountList() {
             <div className="w-[170px]">{el.bankName}</div>
             <div className="w-[170px]">{el.accountNumber}</div>
             <button
-              className="text-[12px] text-gray-400"
+              className="text-[12px] text-gray-400 ml-5"
               onClick={() => {
                 setAccountEditId(el.memberBankId);
                 setAccountEdit(el.accountNumber);
+                setSelectBankName(el.bankName);
               }}
             >
               edit
             </button>
             <button
               className="ml-5 text-[12px] text-gray-400"
-              onClick={() => setAccountDeleteId(el.memberBankId)}
+              onClick={() => handleDelete(el.memberBankId)}
             >
               delete
             </button>
+            {/* <div className="ml-5 text-[12px] text-gray-500 font-semibold">
+              {el.mainAccount ? "main" : ""}
+            </div> */}
             {accountEditId === el.memberBankId ? (
               <AccountAdd
                 setAccountAdd={setAccountAdd}
                 setAccountEditId={setAccountEditId}
                 accountEditId={accountEditId}
                 accoutEdit={accoutEdit}
+                selectedCompanyMemberId={selectedCompanyMemberId}
+                selectBankName={selectBankName}
+                selectedMemberId={selectedMemberId}
               />
             ) : null}
           </div>
@@ -74,12 +100,18 @@ export default function AccountList() {
           {accountAdd ? "Cancel" : "Add"}
         </button>
       </div>
-      {accountAdd ? <AccountAdd setAccountAdd={setAccountAdd} /> : null}
+      {accountAdd ? (
+        <AccountAdd
+          setAccountAdd={setAccountAdd}
+          selectedCompanyMemberId={selectedCompanyMemberId}
+          selectedMemberId={selectedMemberId}
+        />
+      ) : null}
     </div>
   );
 }
 
-interface Account {
+export interface Account {
   memberBankId: number;
   bankId: number;
   bankName: string;
@@ -88,41 +120,7 @@ interface Account {
   mainAccount: boolean;
 }
 
-interface AccountData {
-  bank: Account[];
-}
-
-export const accountData: AccountData = {
-  //계좌리스트더미데이터
-  bank: [
-    {
-      memberBankId: 1,
-      bankId: 3,
-      bankName: "KB국민은행",
-      accountNumber: "1123-112-124421",
-      bankCode: "004",
-      mainAccount: false,
-    },
-    {
-      memberBankId: 2,
-      bankId: 3,
-      bankName: "난쟁은행",
-      accountNumber: "1234-112-124421",
-      bankCode: "005",
-      mainAccount: false,
-    },
-    {
-      memberBankId: 3,
-      bankId: 3,
-      bankName: "백설왕국은행",
-      accountNumber: "156-112-124421",
-      bankCode: "001",
-      mainAccount: true,
-    },
-  ],
-};
-
-interface BankData {
+export interface BankData {
   bankId: number;
   bankCode: string;
   bankName: string;
