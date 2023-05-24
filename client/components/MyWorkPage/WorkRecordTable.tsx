@@ -4,7 +4,7 @@ import { ChangeEvent } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Event as CalendarEvent } from "react-big-calendar";
-//import { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 interface WorkRecordTableProps {
   date: Date;
@@ -19,22 +19,30 @@ interface WorkRecordTableProps {
 
 type WorkRecord = {
   id: number;
-  memberId: number;
-  memberName: string;
   companyId: number;
   companyName: string;
+  memberId: number;
+  memberName: string;
   startTime: string;
   finishTime: string;
   note: string;
 };
 
-//type EditingState = boolean | null;
+type ApiResponse = {
+  company: {
+    companyId: number;
+    companyName: string;
+  }[];
+  status: WorkRecord[];
+};
+
 
 const WorkRecordTable = ({
   date,
   addEvent,
   deleteEvent,
 }: WorkRecordTableProps) => {
+  const [companyId, setCompanyId] = useState<number>(4);
   const [startWork, setStartWork] = useState<string>("00:00");
   const [endWork, setEndWork] = useState<string>("00:00");
   const today: string = new Date().toISOString().slice(0, 10);
@@ -47,23 +55,20 @@ const WorkRecordTable = ({
     useState<boolean>(false);
   const [statusOfWorkId, setStatusOfWorkId] = useState<number | null>(null);
 
-  /*useEffect(() => {
-  updateEvents(date, startWork, endWork, note);
-}, [date, startWork, endWork, note]);*/
-
-  //const router = useRouter();
+  const router = useRouter();
 
   useEffect(() => {
     fetchWorkRecord();
   }, [date]);
 
   const fetchWorkRecord = () => {
-    const year = moment(date).format("YYYY");
-    const month = moment(date).format("M");
-    //http://localhost:8080/statusofworks/${memberId}?year=${year}&month=${month}`
+    const year = moment(date).year();
+    const month = moment(date).month() + 1;
+  
+    
     axios
       .get(
-        `http://localhost:8080/statusofworks/1?year=${year}&month=${month}`,
+        `${process.env.NEXT_PUBLIC_URL}/worker/mywork?year=${year}&month=${month}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -72,12 +77,14 @@ const WorkRecordTable = ({
         }
       )
       .then((response) => {
-        const data = response.data;
-
-        const workRecord: WorkRecord | undefined = data.find(
+        const data: ApiResponse = response.data; 
+        const companyId =data.company[0]?.companyId;
+        setCompanyId(companyId);
+        const workRecord: WorkRecord | undefined = data.status.find(
           (record: WorkRecord) => moment(record.startTime).isSame(date, "day")
         );
 
+       
         if (workRecord) {
           setStartWork(moment(workRecord.startTime).format("HH:mm"));
           setEndWork(moment(workRecord.finishTime).format("HH:mm"));
@@ -87,6 +94,7 @@ const WorkRecordTable = ({
           if (workRecord.id) {
             setStatusOfWorkId(workRecord.id);
           }
+         
         } else {
           setStartWork("00:00");
           setEndWork("00:00");
@@ -129,12 +137,16 @@ const WorkRecordTable = ({
   const handleNoteChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setNote(e.target.value);
   };
-
+  
   const handleSubmit = () => {
+    console.log(today);
+    console.log(startWork);
+    console.log(companyId);
     axios
       .post(
-        "http://localhost:8080/statusofworks",
+        `${process.env.NEXT_PUBLIC_URL}/worker/mywork`,
         {
+          companyId : companyId,
           startTime: `${today}T${startWork}:00.000`,
           finishTime: `${today}T${endWork}:00.000`,
           note: note,
@@ -147,10 +159,9 @@ const WorkRecordTable = ({
         }
       )
       .then(() => {
-        // router.push('/mywork');
         setIsEditing(true);
-        fetchWorkRecord();
         addEvent(date, startWork, endWork, note);
+        router.push('/');
       })
       .catch((err) => {
         console.log(err);
@@ -160,7 +171,7 @@ const WorkRecordTable = ({
   const handleEdit = (statusOfWorkId: number) => {
     axios
       .patch(
-        `http://localhost:8080/statusofworks/${statusOfWorkId}`,
+        `${process.env.NEXT_PUBLIC_URL}/status/${statusOfWorkId}`,
         {
           startTime: `${today}T${startWork}:00.000`,
           finishTime: `${today}T${endWork}:00.000`,
@@ -174,10 +185,10 @@ const WorkRecordTable = ({
         }
       )
       .then(() => {
-        //router.push('/mywork');
         setIsEditing(true);
         fetchWorkRecord();
         addEvent(date, startWork, endWork, note);
+        router.push('/mywork');
       })
       .catch((err) => {
         console.log(err);
@@ -186,7 +197,7 @@ const WorkRecordTable = ({
 
   const handleDelete = (statusOfWorkId: number, event?: CalendarEvent) => {
     axios
-      .delete(`http://localhost:8080/statusofworks/${statusOfWorkId}`, {
+      .delete(`${process.env.NEXT_PUBLIC_URL}/status/${statusOfWorkId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: localStorage.getItem("token"),

@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { useRouter } from "next/router";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
 interface MemberData {
@@ -21,6 +22,7 @@ export default function SignupFrom() {
   const [residentNumber, setResidentNumber] = useState<string>("");
   const [grade, setGrade] = useState<string>("");
   const [address, setAddress] = useState<string>("");
+  const router = useRouter();
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     func: Dispatch<SetStateAction<string>>
@@ -40,7 +42,7 @@ export default function SignupFrom() {
     console.log(memberdata);
     axios
       .post<MemberData>(`${process.env.NEXT_PUBLIC_URL}/members`, memberdata)
-      .then((res) => console.log(res))
+      .then((res) => router.push("/login"))
       .catch((err) => console.log(err));
   };
   return (

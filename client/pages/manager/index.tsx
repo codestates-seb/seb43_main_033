@@ -9,8 +9,8 @@ export default function ManagerHome() {
       <Navi />
       <section className="flex flex-col px-8 py-4 w-screen bg-stone-50">
         <TopInformation />
-        <MiddleInformation />
-        <BottomInformation />
+        {/* <MiddleInformation />
+        <BottomInformation /> */}
       </section>
     </>
   );

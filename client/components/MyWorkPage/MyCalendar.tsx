@@ -18,6 +18,16 @@ const MyCalendar = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<Event[]>([]);
 
+  const handleSelectEvent = (event: CalendarEvent) => {
+    setSelectedDate(new Date(moment(event.start).format("YYYY-MM-DD")));
+    setDialogIsOpen(true);
+  };
+
+  const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
+    setSelectedDate(new Date(moment(slotInfo.start).format("YYYY-MM-DD")));
+    setDialogIsOpen(true);
+  };
+
   const updateEvents = (updatedEvents: Event[]) => {
     setEvents(updatedEvents);
   };
@@ -52,15 +62,6 @@ const MyCalendar = () => {
     updateEvents(updatedEvents);
   };
 
-  const handleSelectEvent = (event: CalendarEvent) => {
-    setSelectedDate(new Date(moment(event.start).format("YYYY-MM-DD")));
-    setDialogIsOpen(true);
-  };
-
-  const handleSelectSlot = (slotInfo: { start: Date; end: Date }) => {
-    setSelectedDate(new Date(moment(slotInfo.start).format("YYYY-MM-DD")));
-    setDialogIsOpen(true);
-  };
 
   const eventStyleGetter = () => {
     const backgroundColor = "#34d399";
@@ -72,7 +73,7 @@ const MyCalendar = () => {
       border: "0px",
     };
     return {
-      style: style,
+      style
     };
   };
 
