@@ -40,7 +40,7 @@ export default function AuthenticatePageList({
   ];
 
   return (
-    <li className="flex flex-wrap min-h-32">
+    <li className={`flex flex-wrap min-h-32 mb-8`}>
       <label className="flex flex-wrap">
         <svg
           className="h-32 w-32"

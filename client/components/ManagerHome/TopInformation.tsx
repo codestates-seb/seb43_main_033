@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import TopInformationLi from "./TopInfo/TopInformationLi";
 import axios from "axios";
+import { da } from "date-fns/locale";
 
 interface Data {
   companyId: number | string;
@@ -23,14 +24,47 @@ export default function TopInformation() {
   const [isModal, setIsModal] = useState<boolean>(false);
   const [data, setData] = useState<Data>({
     companyId: "",
-    companyName: "법인명 예시",
-    companySize: "기업분류 예시",
-    businessNumber: "사업자 등록번호 예시",
-    address: "회사주소 예시",
-    information: "회사정보 예시",
+    companyName: "",
+    companySize: "",
+    businessNumber: "",
+    address: "",
+    information: "",
   });
   const patchInfo = () => {
     setIsModal(!isModal);
+  };
+  const isCompanyInfo = async () => {
+    const memberid = localStorage.getItem("memberid");
+    const data = await axios
+      .get(`${process.env.NEXT_PUBLIC_URL}/members/${memberid}`)
+      .then((res) => {
+        console.log(res.data);
+        const id = res.data.companyMembers[0].companyId;
+        if (id !== undefined) {
+          axios
+            .get(`${process.env.NEXT_PUBLIC_URL}/companies/${id}`)
+            .then((res) => {
+              const {
+                companyId,
+                companyName,
+                companySize,
+                businessNumber,
+                address,
+                information,
+              } = res.data;
+              setData({
+                companyId,
+                companyName,
+                companySize,
+                businessNumber,
+                address,
+                information,
+              });
+              console.log(res.data);
+            })
+            .catch((err) => console.log(err));
+        }
+      });
   };
   const informationList: InformationItem[] = [
     {
@@ -55,25 +89,8 @@ export default function TopInformation() {
     },
   ];
   useEffect(() => {
-    axios
-      .get(`${process.env.NEXT_PUBLIC_API_URL}/companies/1`)
-      .then((res) => console.log(res.data))
-      .catch((err) => console.log(err));
+    isCompanyInfo();
   }, []);
-
-  useEffect(() => {
-    axios
-      .post(`${process.env.NEXT_PUBLIC_API_URL}/companies`, {
-        companyId: "",
-        companyName: "법인명 예시",
-        companySize: "기업분류 예시",
-        businessNumber: "사업자 등록번호 예시",
-        address: "회사주소 예시",
-        information: "회사정보 예시",
-      })
-      .then((res) => setData(res.data))
-      .catch((err) => console.log(err));
-  }, [data]);
   return (
     <>
       {isModal && <Modal setData={setData} data={data} patchInfo={patchInfo} />}

@@ -10,10 +10,11 @@ interface Status {
 interface Props {
   status: Status;
   isModal: () => void;
+  AddList: () => void;
 }
 
 export default function AuthenticateModal(props: Props) {
-  const { status, isModal } = props;
+  const { status, isModal, AddList } = props;
   const informationList = [
     {
       label: "사업자 대표명:",
@@ -51,7 +52,12 @@ export default function AuthenticateModal(props: Props) {
           })}
         </ul>
         <div className="flex justify-center items-center">
-          <button className="mx-4 my-1 px-2 rounded-sm  bg-emerald-400 hover:bg-emerald-700 hover:text-white">
+          <button
+            onClick={() => {
+              AddList(), isModal();
+            }}
+            className="mx-4 my-1 px-2 rounded-sm  bg-emerald-400 hover:bg-emerald-700 hover:text-white"
+          >
             등록
           </button>
           <button
