@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, Dispatch, SetStateAction } from "react";
+import axios from "axios";
 
 type props = {
   setData: Dispatch<
@@ -46,13 +47,31 @@ function Modal(props: any): React.ReactElement {
   useEffect(() => setInputs({ ...data }), [data]);
   useEffect(() => console.log(inputs), [inputs]);
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.name);
     const { name, value } = e.target;
     setInputs({ ...inputs, [name]: value });
   };
 
   const handleOnSubmit = () => {
     setData({ ...data, ...inputs });
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_URL}/companies/${data.companyId}`,
+        {
+          headers: {
+            authorization: `${localStorage.getItem("token")}`,
+          },
+        },
+        {
+          companyId: data.companyId,
+          companyName: inputs.companyName,
+          companySize: inputs.companySize,
+          businessNumber: inputs.businessNumber,
+          address: inputs.address,
+          information: inputs.information,
+        }
+      )
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
     setInputs({
       image: "",
       companyName: "",

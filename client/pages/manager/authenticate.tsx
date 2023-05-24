@@ -5,6 +5,7 @@ import Navi from "../../components/ManagerNavi";
 import AuthenticateModal from "../../components/authenticateComponents/AuthenticateModal";
 import AuthenticatePageList from "../../components/authenticateComponents/AuthenticatePageList";
 import axios from "axios";
+import { stat } from "fs";
 
 interface Inputs {
   b_no: string;
@@ -22,6 +23,13 @@ interface Status {
   tax_type_cd: string;
   tax_type_change_dt: string;
   utcc_yn: string;
+}
+
+interface List {
+  p_nm: string;
+  b_no: string;
+  b_stt: string;
+  tax_type: string;
 }
 
 export default function Authenticate() {
@@ -42,19 +50,13 @@ export default function Authenticate() {
     start_dt: "",
     p_nm: "",
   });
-  const [list, setList] = useState<Status[]>([
-    {
-      p_nm: "예시",
-      b_no: "예시",
-      b_stt: "예시",
-      b_stt_cd: "",
-      end_dt: "",
-      invoice_apply_dt: "",
-      tax_type: "예시",
-      tax_type_cd: "",
-      tax_type_change_dt: "",
-      utcc_yn: "",
-    },
+  const [list, setList] = useState<List[]>([
+    // {
+    //   p_nm: "예시",
+    //   b_no: "예시",
+    //   b_stt: "예시",
+    //   tax_type: "예시",
+    // },
   ]);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | undefined>(
     undefined
@@ -81,7 +83,7 @@ export default function Authenticate() {
         }
       )
       .then((res) => {
-        // console.log(res.data.data[0].request_param.p_nm); 입력된 사업자 대표명
+        const name = res.data.data[0].request_param.p_nm;
         setInputs({
           b_no: "",
           start_dt: "",
@@ -90,8 +92,9 @@ export default function Authenticate() {
         if (res.data.data[0].valid === "02") {
           setIsAuthenticated(false);
         } else if (res.data.data[0].valid === "01") {
-          setStatus({            
+          setStatus({
             ...res.data.data[0].status,
+            p_nm: name,
           });
           setIsAuthenticated(true);
         }
@@ -107,13 +110,32 @@ export default function Authenticate() {
     const onClicked = list.find((x) => x.b_no === businessNo);
     setList([...list.filter((x) => x !== onClicked)]);
   };
+  const AddList = () => {
+    const li = {
+      p_nm: status.p_nm,
+      b_no: status.b_no,
+      b_stt: status.b_stt,
+      tax_type: status.tax_type,
+    };
+    const isReplicated = list.find((x) => x.b_no === li.b_no);
+    console.log(isReplicated);
+    if (isReplicated === undefined) {
+      setList([...list, li]);
+    } else {
+      alert("중복된 사업자 등록명입니다.");
+    }
+  };
   useEffect(() => console.log(status), [status]);
 
   return (
     <>
       <Navi />
       {isAuthenticated === true && (
-        <AuthenticateModal status={status} isModal={isModal} />
+        <AuthenticateModal
+          status={status}
+          isModal={isModal}
+          AddList={AddList}
+        />
       )}
       <section className="flex-1 flex flex-col px-8 py-4 bg-stone-50">
         <article className="flex flex-col flex-wrap min-h-32 bg-white p-6 mb-5 rounded drop-shadow">
@@ -204,7 +226,7 @@ export default function Authenticate() {
                 list.length === 0 && "hidden"
               }`}
             >
-              {list.map((x: Status) => {
+              {list.map((x: any) => {
                 return (
                   <AuthenticatePageList
                     prop={x}
