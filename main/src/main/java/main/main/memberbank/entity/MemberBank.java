@@ -34,12 +34,6 @@ public class MemberBank {
     @JoinColumn(name = "BANK_ID")
     private Bank bank;
 
-//    @OneToMany(mappedBy = "memberBank")
-//    private List<SalaryStatement> salaryStatements = new ArrayList<>();
-//    public void addSalaryStatement(SalaryStatement salaryStatement) {
-//        this.salaryStatements.add(salaryStatement);
-//    }
-
 
     public void setMember(Member member) {
         this.member = member;
