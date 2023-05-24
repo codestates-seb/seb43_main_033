@@ -1,6 +1,6 @@
 import SignupFrom from "../../components/SignupForm";
 
-export default function singup() {
+export default function signup() {
   return (
     <main className="flex justify-center">
       <div className="flex justify-center m-0 py-20 w-screen items-center  bg-gray-50">
