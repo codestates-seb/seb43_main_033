@@ -63,6 +63,16 @@ public class StatusOfWorkController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PostMapping("manager/{company-id}/members/{companymember-id}")
+    public ResponseEntity changeRemainVacation(@RequestParam int day,
+                                               @PathVariable("company-id") long companyId,
+                                               @PathVariable("companymember-id") long companyMemberId) {
+        long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
+        statusOfWorkService.changeRemainVacation(day, companyId, companyMemberId, authenticationMemberId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PatchMapping("/status/{statusofwork-id}")
     public ResponseEntity patchStatusOfWork(@PathVariable("statusofwork-id") long statusOfworkId,
                                             @RequestBody StatusOfWorkDto.Patch requestBody) {
@@ -92,7 +102,7 @@ public class StatusOfWorkController {
     @GetMapping("/worker/mywork")
     public ResponseEntity getStatusOfWork(@RequestParam int year, @RequestParam int month) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, 1, authenticationMemberId);
+        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorksForMypage(year, month, authenticationMemberId);
         List<CompanyMember> companyMembers = companyMemberService.findCompanyMembersByMemberId(authenticationMemberId);
 
         return new ResponseEntity<>(statusOfWorkMapper.statusOfWorkToMyWork(companyMembers, statusOfWorks), HttpStatus.OK);

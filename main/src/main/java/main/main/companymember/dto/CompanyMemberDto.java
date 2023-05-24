@@ -48,6 +48,7 @@ public class CompanyMemberDto {
         private String team;
         private Status status;
         private List<String> roles;
+        private int remainVacation;
 
 
     }

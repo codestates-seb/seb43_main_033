@@ -60,6 +60,7 @@ public class StatusOfWorkDto {
     public static class CompanyInfo {
         private Long companyId;
         private String companyName;
+        private int remainVacation;
     }
 
     @Getter

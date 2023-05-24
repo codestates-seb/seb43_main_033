@@ -74,7 +74,8 @@ public interface StatusOfWorkMapper {
     default StatusOfWorkDto.CompanyInfo toCompanyInfo(CompanyMember companyMember) {
         return StatusOfWorkDto.CompanyInfo.builder()
                 .companyId(companyMember.getCompany().getCompanyId())
-                .companyName(companyMember.getCompany().getCompanyName()).build();
+                .companyName(companyMember.getCompany().getCompanyName())
+                .remainVacation(companyMember.getVacation().getCount()).build();
     }
 
 
@@ -122,7 +123,8 @@ public interface StatusOfWorkMapper {
                         .grade(companyMember.getGrade())
                         .team(companyMember.getTeam())
                         .status(companyMember.getStatus())
-                        .roles(companyMember.getRoles()).build()
+                        .roles(companyMember.getRoles())
+                        .remainVacation(companyMember.getVacation().getCount()).build()
                 )
                 .status(statusOfWorksToResponses(companyMember.getStatusOfWorks())).build();
     }
