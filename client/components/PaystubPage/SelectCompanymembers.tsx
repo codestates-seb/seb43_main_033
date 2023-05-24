@@ -33,7 +33,7 @@ export default function SelectCompanymembers({
   const handleSubmit = () => {
     setShowModal(false);
   };
-  const handleSelectApprove = (e) => {
+  const handleSelectApprove = (e : any) => {
     setApprove(e.target.value);
   };
   const handleApprove = (companymembersid: any) => {

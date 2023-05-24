@@ -53,23 +53,22 @@ function Modal(props: any): React.ReactElement {
 
   const handleOnSubmit = () => {
     setData({ ...data, ...inputs });
-    axios
-      .patch(
-        `${process.env.NEXT_PUBLIC_URL}/companies/${data.companyId}`,
-        {
-          headers: {
-            authorization: `${localStorage.getItem("token")}`,
-          },
+    axios.patch(
+      `${process.env.NEXT_PUBLIC_URL}/companies/${data.companyId}`,
+      {
+        companyId: data.companyId,
+        companyName: inputs.companyName,
+        companySize: inputs.companySize,
+        businessNumber: inputs.businessNumber,
+        address: inputs.address,
+        information: inputs.information,
+      },
+      {
+        headers: {
+          authorization: localStorage.getItem("token"),
         },
-        {
-          companyId: data.companyId,
-          companyName: inputs.companyName,
-          companySize: inputs.companySize,
-          businessNumber: inputs.businessNumber,
-          address: inputs.address,
-          information: inputs.information,
-        }
-      )
+      }
+    )
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     setInputs({

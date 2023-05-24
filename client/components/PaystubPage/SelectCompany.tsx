@@ -12,7 +12,7 @@ export function SelectCompany({
 }) {
   const [filteredCompanies, setFilteredCompanies] = useState<any>([]);
   useEffect(() => {
-    const companydata = companies.filter((company) => {
+    const companydata = companies.filter((company : any) => {
       return mycompanies.some(
         (mycompany) => company.companyId === mycompany.companyId
       );
