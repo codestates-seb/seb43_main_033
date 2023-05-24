@@ -44,7 +44,4 @@ public class Company {
     public void addSalaryStatement(SalaryStatement salaryStatement) { this.salaryStatements.add(salaryStatement); }
 
 
-//    @OneToMany(mappedBy = "company")
-//    private List<Member> members = new ArrayList<>();
-//    public void addMember(Member member) { this.members.add(member); }
 }

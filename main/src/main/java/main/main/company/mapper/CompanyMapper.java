@@ -94,16 +94,4 @@ public interface CompanyMapper {
                 .collect(Collectors.toList());
     }
 
-
-
-
-//    default CompanyDto.ResponseForSalary companyToCompanyResponseForSalary(Company company, BigDecimal totalSalaryOfCompany) {
-//        return CompanyDto.ResponseForSalary.builder()
-//                .companyId(company.getCompanyId())
-//                .companyName(company.getCompanyName())
-//                .totalSalaryOfCompany(totalSalaryOfCompany)
-//                .build();
-//    }
-
-
 }

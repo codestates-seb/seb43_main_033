@@ -69,15 +69,5 @@ public class CompanyDto {
 
     }
 
-//    @Getter
-//    @Setter
-//    @Builder
-//    public static class ResponseForSalary {
-//
-//        private Long companyId;
-//        private String companyName;
-//        private BigDecimal theSalaryOfTheCompanyThisMonth;
-//        private BigDecimal theSalaryOfTheCompanyLastMonth;
-//    }
 
 }
