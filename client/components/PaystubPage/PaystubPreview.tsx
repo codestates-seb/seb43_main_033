@@ -22,28 +22,31 @@ export default function PaystubPreview({
   const year = currentDate.getFullYear();
   const router = useRouter();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    axios
-      .get(
-        `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/members/${selectedCompanyMemberId}/paystub?year=${year}&month=${month}`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      )
-      .then((response) => {
-        setData(response.data.statement);
-        setName(response.data.member.name);
-        setPaystubExist(response.data.exist);
-        setManagerPaystubId(response.data.salaryStatementId);
-      })
-      .catch((err) => {
-        console.log(err);
-        setData(null);
-      });
-  }, [selectedCompanyMemberId]);
+  {
+    selectedCompanyMemberId &&
+      useEffect(() => {
+        const token = localStorage.getItem("token");
+        axios
+          .get(
+            `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/members/${selectedCompanyMemberId}/paystub?year=${year}&month=${month}`,
+            {
+              headers: {
+                Authorization: token,
+              },
+            }
+          )
+          .then((response) => {
+            setData(response.data.statement);
+            setName(response.data.member.name);
+            setPaystubExist(response.data.exist);
+            setManagerPaystubId(response.data.salaryStatementId);
+          })
+          .catch((err) => {
+            console.log(err);
+            setData(null);
+          });
+      }, [selectedCompanyMemberId]);
+  }
 
   const handleMyPaystub = () => {
     const token = localStorage.getItem("token");
@@ -80,7 +83,6 @@ export default function PaystubPreview({
       .catch((err) => console.log(err));
   };
   const handleSelect = (e: any) => {
-    console.log(e.target.value);
     setPaystubId(e.target.value);
   };
   useEffect(() => {
@@ -94,7 +96,6 @@ export default function PaystubPreview({
               },
             })
             .then((res) => {
-              console.log(res.data);
               setData(res.data);
               setName(res.data.name);
             })
