@@ -19,9 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -111,7 +109,18 @@ public class CompanyMemberService {
         CompanyMember companyMember = companyMemberRepository.findById(companyMemberId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMPANYMEMBER_NOT_FOUND));
 
-        companyMember.setRoles(requestBody.getRoles());
+        List<String> roles = new ArrayList<>(requestBody.getRoles());
+
+        if (roles.contains("ADMIN")) {
+            roles.addAll(Arrays.asList("MANAGER", "MEMBER"));
+        } else if (roles.contains("MANAGER")) {
+            roles.add("MEMBER");
+        } else if (roles.contains("MEMBER")) {
+            roles.add("MEMBER");
+        }
+
+        companyMember.setRoles(roles);
+
         return companyMemberRepository.save(companyMember);
     }
 
