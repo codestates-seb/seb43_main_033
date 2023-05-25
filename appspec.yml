@@ -1,21 +1,22 @@
 version: 0.0
 os: linux
 files:
-  
-source:  /
-  destination: /home/ubuntu/seb43_main_033
-  overwrite: yes
-
+  - source: /
+    destination: /home/ubuntu/seb43_main_033/main
+    overwrite: yes
+file_exists_behavior: OVERWRITE
 permissions:
-  
-object: /
-  pattern: "**"
-  owner: ubuntu
-  group: ubuntu
-
+  - object: /home/ubuntu/seb43_main_033/main
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
 hooks:
+  AfterInstall:
+    - location: scripts/stop.sh
+      timeout: 60
+      runas: ubuntu
   ApplicationStart:
-    
-location: scripts/deploy.sh
-    timeout: 60
-    runas: ubuntu
+    - location: scripts/start.sh
+      timeout: 60
+      runas: ubuntu
