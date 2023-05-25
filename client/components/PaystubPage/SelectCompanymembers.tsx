@@ -1,8 +1,5 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import StaffSelect from "../StaffSelect";
-import StaffSelectModal from "../StaffSelectModal";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { CompanyData, CompanyMembers } from "../../pages/manager/paystub";
 
 export default function SelectCompanymembers({
   selectCompany,

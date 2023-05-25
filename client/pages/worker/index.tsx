@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Navi from "../../components/WorkerNavi";
 import TopInformation from "../../components/WorkerHome/TopInformation";
 
