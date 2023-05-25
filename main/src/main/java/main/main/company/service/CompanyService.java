@@ -39,7 +39,7 @@ public class CompanyService {
         CompanyMember companyMember = new CompanyMember();
         companyMember.setCompany(createdCompany);
         companyMember.setMember(member);
-        companyMember.setRoles(Collections.singletonList("ADMIN"));
+        companyMember.setRoles(Arrays.asList("ADMIN", "MANAGER", "MEMBER"));
         companyMember.setVacation(new Vacation());
 
         companyMemberRepository.save(companyMember);
