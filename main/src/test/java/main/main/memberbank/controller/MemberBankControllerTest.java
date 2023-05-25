@@ -190,6 +190,36 @@ public class MemberBankControllerTest implements MemberBankHelper {
                 ));
     }
 
+    @Test
+    @DisplayName("MemberBank get By MemberId Test")
+    public void getMemberBanksByMemberId() throws Exception {
+
+
+        given(memberBankService.findMemberBanksByMemberId(Mockito.anyLong())).willReturn(StubData.MockMemberBank.memberBanks());
+        given(memberBankMapper.memberBanksToMemberBanksResponse(Mockito.anyList())).willReturn(StubData.MockMemberBank.getmemberBanksToMemberBanksResponse());
+
+        ResultActions actions =
+                mockMvc.perform(getRequestBuilder(MEMBERBANK_MEMBER_URI, 1L));
+
+        actions
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andDo(document("get-memberbanksbymember",
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("[].memberBankId").type(JsonFieldType.NUMBER).description("멤버 은행 식별 번호"),
+                                        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("회원 식별 번호"),
+                                        fieldWithPath("[].bankId").type(JsonFieldType.NUMBER).description("은행 식별 번호"),
+                                        fieldWithPath("[].bankName").type(JsonFieldType.STRING).description("은행 이름"),
+                                        fieldWithPath("[].bankCode").type(JsonFieldType.STRING).description("회원 계좌 은행 코드").optional(),
+                                        fieldWithPath("[].accountNumber").type(JsonFieldType.STRING).description("계좌 번호"),
+                                        fieldWithPath("[].mainAccount").type(JsonFieldType.BOOLEAN).description("주 계좌 사용 여부")
+
+                                )
+                        )));
+
+
+    }
 
     @Test
     @DisplayName("MemberBank Delete Test")
