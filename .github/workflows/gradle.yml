@@ -32,6 +32,12 @@ jobs:
         distribution: 'temurin'
         java-version: '11'
         
+    - name: Set YML
+      run: |
+        mkdir -p main/src/main/resources
+        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
+        find src    
+        
     - name: init with Gradle
       uses: gradle/gradle-build-action@v2
     - run: gradle init
@@ -53,12 +59,6 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ${{ env.AWS_REGION }}
         
-    - name: Set YML
-      run: |
-        mkdir -p main/src/main/resources
-        echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-        find src
-
 
     - name: Upload to AWS S3
       run: |
