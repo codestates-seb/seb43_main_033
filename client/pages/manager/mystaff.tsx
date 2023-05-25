@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import Bigsquare from "../../components/Bigsquare";
 import ListBox from "../../components/ListBox";
 import MyStaffModal from "../../components/MyStaffPage/MyStaffModal";
@@ -8,6 +7,10 @@ import { format } from "date-fns";
 import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import StaffAxios from "../../components/MyStaffPage/StaffAxios";
+import axios from "axios";
+import { SelectCompany } from "../../components/PaystubPage/SelectCompany";
+import { useEffect, useState } from "react";
+import { CompanyData, CompanyMembers } from "./paystub";
 
 type Staff = {
   companyMemberId: number;
@@ -21,19 +24,61 @@ type Staff = {
 };
 
 export default function Mystaff() {
+  const [mycompanies, setMyCompanies] = useState<CompanyMembers[]>([]);
+  const [companies, setCompanies] = useState<CompanyData[]>([]);
+  const [companyId, setCompanyId] = useState(0);
+  const [selectCompany, setSelectCompany] = useState<CompanyData | null>({});
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const memberId = localStorage.getItem("memberid");
+    {
+      memberId &&
+        axios
+          .get(`${process.env.NEXT_PUBLIC_URL}/members/${memberId}`, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then((res) => {
+            setMyCompanies(res.data.companyMembers);
+          })
+          .catch((err) => console.log(err));
+    }
+  }, []);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    axios
+      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=1&size=200`, {
+        headers: { Authorization: token },
+      })
+      .then((res) => {
+        setCompanies(res.data.data);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  useEffect(() => {
+    const selectCompanyData = companies.filter(
+      (el) => el.companyId === companyId
+    );
+    selectCompanyData[0] && setSelectCompany(selectCompanyData[0]);
+  }, [companyId]);
+
   const today = format(new Date(), "yyyy.MM.dd");
 
-  const [selectedcompanyId, setSelectedcompanyId] = useState<number | null>(null);
+  const [selectedcompanyMemberId, setSelectedcompanyMemberId] = useState<
+    number | null
+  >(null);
   const [showModal, setShowModal] = useState<boolean>(false);
-  
+
   const [staffList] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=4`
+    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=${companyId}`
   );
 
-  console.log(staffList);
-
   const openModalClick = (id: number) => {
-    setSelectedcompanyId(id);
+    setSelectedcompanyMemberId(id);
     setShowModal(true);
   };
 
@@ -45,8 +90,11 @@ export default function Mystaff() {
     <>
       <Navi />
       <div className="flex flex-col w-full">
+        <div className="flex"></div>
         <div className="flex justify-end pb-3">
-          <h1 className="pr-10">우리 회사의 근무시간 : 09:00~18:00</h1>
+          <h1 className="pr-10 pl-10 ml-5">
+            우리 회사의 근무시간 : 09:00~18:00
+          </h1>
           <i className="material-icons"></i>
           <CheckBoxIcon />
           <h1 className="mr-8">오늘의 근무상황</h1>
@@ -54,28 +102,33 @@ export default function Mystaff() {
         <div className="h-screen w-full flex justify-center">
           <Bigsquare>
             <div className="bg-white p-3 m-5 flex justify-between">
-              <div>나의 직원들</div>
+              <div className="flex">
+                <div>나의 직원들</div>
+                <SelectCompany
+                  companies={companies}
+                  mycompanies={mycompanies}
+                  setCompanyId={setCompanyId}
+                />
+              </div>
               <div>{today}</div>
             </div>
 
             <ListBox>
-              <div className="lg:pl-5">사번</div>
-              <div className="lg:pl-10">이름</div>
-              <div className="lg:pl-10">부서</div>
-              <div className="lg:pl-7">직급</div>
-              <div className="lg:pl-5">근무상황</div>
-              <div className="lg:pl-7">기본근무시간</div>
-              <div className="sm:mr-20 lg:mr-40 lg:pr-10">관리권한</div>
+              <div>사번</div>
+              <div>이름</div>
+              <div className="pl-10">부서</div>
+              <div className="pl-5 pr-4">직급</div>
+              <div className="pr-10"></div>
             </ListBox>
-            {staffList &&staffList.data && (
+            {staffList && staffList.data && (
               <>
-                {staffList.data.map((item:Staff) => (
+                {staffList.data.map((item: Staff) => (
                   <ListBox key={item.companyMemberId}>
                     <div>{item.companyMemberId}</div>
                     <div>{item.name}</div>
                     <div>{item.team}</div>
                     <div>{item.grade}</div>
-                    <div className="pr-5">{item.roles}</div>
+                    
                     <button
                       className="text-sm font-bold hover:bg-gray-300"
                       onClick={() => openModalClick(item.companyMemberId)}
@@ -83,13 +136,14 @@ export default function Mystaff() {
                       <EditOutlinedIcon />
                     </button>
 
-                    {selectedcompanyId === item.companyMemberId && showModal &&(
-                      <MyStaffModal
-                      onClose={closeModal}
-                      companyId={item.companyId}
-                      companymemberId={item.companyMemberId}
-                      ></MyStaffModal>
-                    )}
+                    {selectedcompanyMemberId === item.companyMemberId &&
+                      showModal && (
+                        <MyStaffModal
+                          onClose={closeModal}
+                          companyId={item.companyId}
+                          companymemberId={item.companyMemberId}
+                        ></MyStaffModal>
+                      )}
                   </ListBox>
                 ))}
               </>

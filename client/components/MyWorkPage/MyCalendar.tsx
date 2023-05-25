@@ -1,22 +1,30 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import { Event as CalendarEvent } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import WorkRecordTable from "../MyWorkPage/WorkRecordTable";
+import { v4 as uuidv4 } from 'uuid';
+
 
 const localizer = momentLocalizer(moment);
 
 interface Event {
+  id: string; 
   start: Date;
   end: Date;
   title: string;
 }
 
+
 const MyCalendar = () => {
   const [dialogIsOpen, setDialogIsOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<Event[]>([]);
+
+
+
+
 
   const handleSelectEvent = (event: CalendarEvent) => {
     setSelectedDate(new Date(moment(event.start).format("YYYY-MM-DD")));
@@ -30,7 +38,42 @@ const MyCalendar = () => {
 
   const updateEvents = (updatedEvents: Event[]) => {
     setEvents(updatedEvents);
+    
   };
+  
+  const updateEvent = (updatedEvent: CalendarEvent) => {
+    const updatedEvents = events.map((event) => {
+      if (event.start === updatedEvent.start && event.end === updatedEvent.end) {
+        return {
+          ...event,
+          title: String(updatedEvent.title),
+        };
+      }
+      return event;
+    });
+    updateEvents(updatedEvents);
+  };
+
+  const editEvent = (eventId: string, updatedEvent: CalendarEvent) => {
+    const editedEvent: Event = {
+      ...updatedEvent,
+      id: eventId, 
+      start: moment(updatedEvent.start).subtract(1, 'hours').toDate(),
+      end: moment(updatedEvent.end).add(1, 'hours').toDate(),
+      title: `${updatedEvent.title} (수정됨)`,
+    };
+  
+    const updatedEvents = events.map((event) => {
+      if (event.id === eventId) { 
+        return editedEvent;
+      }
+      return event;
+    });
+  
+    updateEvents(updatedEvents);
+    updateEvent(editedEvent);
+  };
+  
 
   const addEvent = (
     date: Date,
@@ -48,11 +91,12 @@ const MyCalendar = () => {
     const formattedNote = `출근: ${startWork}, 퇴근: ${endWork}\n${note}`;
 
     const newEvent: Event = {
+      id: uuidv4(), 
       start: startTime.toDate(),
       end: endTime.toDate(),
       title: formattedNote,
     };
-
+    
     const updatedEvents = [...events, newEvent];
     updateEvents(updatedEvents);
   };
@@ -60,8 +104,9 @@ const MyCalendar = () => {
   const deleteEvent = (event: CalendarEvent) => {
     const updatedEvents = events.filter((e) => e !== event);
     updateEvents(updatedEvents);
+    
   };
-
+  
 
   const eventStyleGetter = () => {
     const backgroundColor = "#34d399";
@@ -108,6 +153,7 @@ const MyCalendar = () => {
                 date={selectedDate}
                 addEvent={addEvent}
                 deleteEvent={deleteEvent}
+                editEvent={editEvent} 
               />
             </div>
           </div>
