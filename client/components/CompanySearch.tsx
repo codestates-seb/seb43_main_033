@@ -21,7 +21,6 @@ export default function CompanySearch({ setShowModal }: { setShowModal: any }) {
             },
           }
         );
-        console.log(response.data.data);
         setCompanyData(response.data.data);
       } catch (error) {
         // 에러 처리
