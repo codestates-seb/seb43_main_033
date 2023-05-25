@@ -1,6 +1,7 @@
 "use client";
 
 import axios from "axios";
+import { error } from "console";
 import { useRouter } from "next/router";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 
@@ -24,7 +25,10 @@ export default function SignupFrom() {
   const [address, setAddress] = useState<string>("");
   const [emailInfo, setEmailInfo] = useState("");
   const [passwordInfo, setPasswordInfo] = useState("");
+  const [info, setInfo] = useState("");
   const router = useRouter();
+  const emailRegex =
+    /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
   const handleChange = (
     e: ChangeEvent<HTMLInputElement>,
     func: Dispatch<SetStateAction<string>>
@@ -41,16 +45,19 @@ export default function SignupFrom() {
       grade,
       address,
     };
-    console.log(memberdata);
-    axios
-      .post<MemberData>(`${process.env.NEXT_PUBLIC_URL}/members`, memberdata)
-      .then((res) => router.push("/login"))
-      .catch((err) => console.log(err));
+    if (emailRegex.test(email) && password.length >= 6) {
+      axios
+        .post<MemberData>(`${process.env.NEXT_PUBLIC_URL}/members`, memberdata)
+        .then((res) => router.push("/login"))
+        .catch((error) => {
+          if (error.response.status === 409) {
+            setInfo("이미 존재하는 email입니다.");
+          }
+        });
+    }
   };
 
   const emailHandler = (e: any) => {
-    const emailRegex =
-      /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
     setEmail(e.target.value);
     if (!emailRegex.test(e.target.value)) {
       setEmailInfo("이메일 형식이 틀렸습니다");
@@ -60,8 +67,8 @@ export default function SignupFrom() {
   };
   const passwordHandler = (e: any) => {
     setPassword(e.target.value);
-    if (e.target.value.length < 8) {
-      setPasswordInfo("8글자 이상 입력하세요");
+    if (e.target.value.length < 6) {
+      setPasswordInfo("6글자 이상 입력하세요");
     } else {
       setPasswordInfo("");
     }
@@ -127,6 +134,7 @@ export default function SignupFrom() {
         onChange={(e) => handleChange(e, setAddress)}
         className="outline-none border rounded-sm px-3 py-1 focus:border-green-500 mb-2"
       ></input>
+      <p className="text-red-500">{info}</p>
       <button
         className="mt-10 bg-green-400 rounded-md py-2 text-white hover:bg-green-300"
         onClick={handleSubmit}
