@@ -1,7 +1,5 @@
 import Navi from "../../components/ManagerNavi";
 import TopInformation from "../../components/ManagerHome/TopInformation";
-import MiddleInformation from "../../components/ManagerHome/MiddleInformation";
-import BottomInformation from "../../components/ManagerHome/BottomInformation";
 
 export default function ManagerHome() {
   return (
