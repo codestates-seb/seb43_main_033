@@ -36,7 +36,9 @@ public interface StatusOfWorkMapper {
         statusOfWork.setCompany(company);
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
-        statusOfWork.setNote(requestBody.getNote());
+        if (requestBody.getNote() != null) {
+            statusOfWork.setNote(requestBody.getNote());
+        }
 
         return statusOfWork;
     }
