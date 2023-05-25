@@ -15,6 +15,7 @@ public enum ExceptionCode {
     UNAUTHORIZED(401,  "권한이 없습니다."),
     LABORCONTRACT_FOR_SALARY_NOT_FOUND(404, "해당 기간에 유효한 근로 계약서를 찾을 수 없습니다."),
     LABORCONTRACT_NOT_FOUND(404, "근로 계약서를 찾을 수 없습니다."),
+    MAKE_LABORCONTRACT_FIRST(404, "입사한 회사의 계약서를 찾을 수 없습니다. 회사 관리자에게 문의해 근로계약서를 먼저 입력해 주세요."),
     SALARYSTATEMENT_NOT_FOUND(404, "급여 명세서를 찾을 수 없습니다."),
     STATUS_NOT_FOUND(404, "정보를 찾을 수 없습니다."),
     BANK_NOT_FOUND(404, "찾는 은행이 없습니다."),
