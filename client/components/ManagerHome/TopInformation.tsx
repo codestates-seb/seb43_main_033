@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import TopInformationLi from "./TopInfo/TopInformationLi";
 import axios from "axios";
-import { da } from "date-fns/locale";
 
 interface Data {
   companyId: number | string;
@@ -22,6 +21,7 @@ interface InformationItem {
 
 export default function TopInformation() {
   const [isModal, setIsModal] = useState<boolean>(false);
+  const [isCompany, setIsCompany] = useState<boolean>(false);
   const [data, setData] = useState<Data>({
     companyId: "",
     companyName: "",
@@ -38,9 +38,10 @@ export default function TopInformation() {
     const data = await axios
       .get(`${process.env.NEXT_PUBLIC_URL}/members/${memberid}`)
       .then((res) => {
-        console.log(res.data);
-        const id = res.data.companyMembers[0].companyId;
+        console.log(res.status);
+        const id = res.data.companyMembers[0]?.companyId;
         if (id !== undefined) {
+          setIsCompany(true);
           axios
             .get(`${process.env.NEXT_PUBLIC_URL}/companies/${id}`)
             .then((res) => {
@@ -63,6 +64,8 @@ export default function TopInformation() {
               console.log(res.data);
             })
             .catch((err) => console.log(err));
+        } else {
+          setIsCompany(false);
         }
       });
   };
@@ -99,19 +102,25 @@ export default function TopInformation() {
           <span className="flex h-20 w-40 justify-center items-center p-1 border-black border-solid border rounded-sm">
             이미지
           </span>
-          <button
-            className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow hover:bg-slate-600 hover:text-white"
-            onClick={patchInfo}
-          >
-            수정
-          </button>
+          {isCompany && (
+            <button
+              className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow hover:bg-slate-600 hover:text-white"
+              onClick={patchInfo}
+            >
+              수정
+            </button>
+          )}
         </div>
         <section className="flex flex-col p-4 bg-stone-100 rounded">
-          {informationList.map((x) => {
-            return (
-              <TopInformationLi label={x.label} description={x.description} />
-            );
-          })}
+          {isCompany ? (
+            informationList.map((x) => {
+              return (
+                <TopInformationLi label={x.label} description={x.description} />
+              );
+            })
+          ) : (
+            <div>사업자 등록증 탭에서 회사 정보를 등록해주세요.</div>
+          )}
         </section>
       </article>
     </>

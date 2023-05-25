@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Navi from "../../components/ManagerNavi";
-import AuthenticateModal from "../../components/authenticateComponents/AuthenticateModal";
-import AuthenticatePageList from "../../components/authenticateComponents/AuthenticatePageList";
+import Navi from "../../../components/ManagerNavi";
+import AuthenticateModal from "../../../components/authenticateComponents/AuthenticateModal";
+import AuthenticatePageList from "../../../components/authenticateComponents/AuthenticatePageList";
 import axios from "axios";
 import { stat } from "fs";
 

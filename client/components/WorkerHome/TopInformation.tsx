@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import axios, { Axios } from "axios";
+import TopInformationLi from "./TopInfo/TopInformationLi";
+import axios from "axios";
+
 
 interface Data {
-  image: string;
+  companyId: number | string;
   companyName: string;
   companySize: string;
   businessNumber: string;
@@ -13,20 +15,83 @@ interface Data {
   information: string;
 }
 
+interface InformationItem {
+  label: string;
+  description: string;
+}
+
 export default function TopInformation() {
-  const [isModal, setIsModal] = useState(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [isCompany, setIsCompany] = useState<boolean>(false);
   const [data, setData] = useState<Data>({
-    image: "",
-    companyName: "법인명 예시",
-    companySize: "기업분류 예시",
-    businessNumber: "사업자 등록번호 예시",
-    address: "회사주소 예시",
-    information: "회사정보 예시",
+    companyId: "",
+    companyName: "",
+    companySize: "",
+    businessNumber: "",
+    address: "",
+    information: "",
   });
   const patchInfo = () => {
     setIsModal(!isModal);
   };
-
+  const isCompanyInfo = async () => {
+    const memberid = localStorage.getItem('memberid');
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_URL}/members/${memberid}`);
+      console.log(response.status);
+      const id = response.data.companyMembers[0]?.companyId;
+      if (id !== undefined) {
+        setIsCompany(true);
+        const companyResponse = await axios.get(`${process.env.NEXT_PUBLIC_URL}/companies/${id}`);
+        const {
+          companyId,
+          companyName,
+          companySize,
+          businessNumber,
+          address,
+          information,
+        } = companyResponse.data;
+        setData({
+          companyId,
+          companyName,
+          companySize,
+          businessNumber,
+          address,
+          information,
+        });
+        console.log(companyResponse.data);
+      } else {
+        setIsCompany(false);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const informationList: InformationItem[] = [
+    {
+      label: "법인명:",
+      description: data.companyName,
+    },
+    {
+      label: "기업 분류:",
+      description: data.companySize,
+    },
+    {
+      label: "사업자 등록번호:",
+      description: data.businessNumber,
+    },
+    {
+      label: "주소명:",
+      description: data.address,
+    },
+    {
+      label: "회사 정보:",
+      description: data.information,
+    },
+  ];
+  useEffect(() => {
+    isCompanyInfo();
+  }, []);
   return (
     <>
       {isModal && <Modal setData={setData} data={data} patchInfo={patchInfo} />}
@@ -35,44 +100,25 @@ export default function TopInformation() {
           <span className="flex h-20 w-40 justify-center items-center p-1 border-black border-solid border rounded-sm">
             이미지
           </span>
-          <button
-            className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow"
-            onClick={patchInfo}
-          >
-            수정
-          </button>
+          {isCompany && (
+            <button
+              className="mx-4 bg-stone-50 px-6 py-3 rounded font-semibold text-2xl drop-shadow hover:bg-slate-600 hover:text-white"
+              onClick={patchInfo}
+            >
+              수정
+            </button>
+          )}
         </div>
         <section className="flex flex-col p-4 bg-stone-100 rounded">
-          <div>
-            <span className="flex">
-              <label className="w-28">법인명: </label>
-              <span>{data.companyName}</span>
-            </span>
-          </div>
-          <div>
-            <span className="flex">
-              <label className="w-28">기업 분류: </label>
-              <span>{data.companySize}</span>
-            </span>
-          </div>
-          <div>
-            <span className="flex">
-              <label className="w-28">사업자 등록번호: </label>
-              <span>{data.businessNumber}</span>
-            </span>
-          </div>
-          <div>
-            <span className="flex">
-              <label className="w-28">주소명: </label>
-              <span>{data.address}</span>
-            </span>
-          </div>
-          <div>
-            <span className="flex">
-              <label className="w-28">회사 정보: </label>
-              <span>{data.information}</span>
-            </span>
-          </div>
+          {isCompany ? (
+            informationList.map((x) => {
+              return (
+                <TopInformationLi label={x.label} description={x.description} />
+              );
+            })
+          ) : (
+            <div>회사 정보를 등록해주세요.</div>
+          )}
         </section>
       </article>
     </>

@@ -1,14 +1,13 @@
-//import { useState } from 'react';
 "use client";
 import { useEffect, useState } from "react";
-import Greenheader from "../../components/PaystubPage/GreenTop";
-import PaystubPreview from "../../components/PaystubPage/PaystubPreview";
-import WorkingStatus from "../../components/PaystubPage/WorkingStatus";
-import Navi from "../../components/ManagerNavi";
-import AccountList from "../../components/PaystubPage/AccountList";
+import Greenheader from "../../../components/PaystubPage/GreenTop";
+import PaystubPreview from "../../../components/PaystubPage/PaystubPreview";
+import WorkingStatus from "../../../components/PaystubPage/WorkingStatus";
+import Navi from "../../../components/ManagerNavi";
+import AccountList from "../../../components/PaystubPage/AccountList";
 import axios from "axios";
-import { SelectCompany } from "../../components/PaystubPage/SelectCompany";
-import SelectCompanymembers from "../../components/PaystubPage/SelectCompanymembers";
+import { SelectCompany } from "../../../components/PaystubPage/SelectCompany";
+import SelectCompanymembers from "../../../components/PaystubPage/SelectCompanymembers";
 
 const Paystub = () => {
   const [mycompanies, setMyCompanies] = useState<CompanyMembers[]>([]);
