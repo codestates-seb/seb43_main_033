@@ -13,12 +13,14 @@ import main.main.exception.BusinessLogicException;
 import main.main.exception.ExceptionCode;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
+import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.entity.Vacation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -142,7 +144,12 @@ public class CompanyMemberService {
         }
     }
 
-    public Page<CompanyMember> findCompanyMembersByCompanyId(int page, long companyId) {
+    public Page<CompanyMember> findCompanyMembersByCompanyId(int page, long companyId, boolean filter) {
+        if(filter) {
+            LocalDateTime now = LocalDateTime.now();
+
+            return companyMemberRepository.findAllByStatusOfWorksNoteNotAndStatusOfWorksStartTimeBeforeAndStatusOfWorksFinishTimeAfter(StatusOfWork.Note.정상근무, now, now, PageRequest.of(page, 10, Sort.by("companyMemberId").ascending()));
+        }
         return companyMemberRepository.findAllByCompanyCompanyId(companyId, PageRequest.of(page, 10, Sort.by("companyMemberId").ascending()));
     }
 

@@ -226,9 +226,11 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
     @DisplayName("Get TodayList Test")
     public void getTodayStatusTest() throws Exception {
         String page = "1";
+        String filter = "true";
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("page", page);
+        params.add("filter", filter);
 
         CompanyMember companyMember = new CompanyMember();
         companyMember.setCompanyMemberId(1L);
@@ -239,7 +241,7 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
         List<CompanyMember> companyMembers = List.of(companyMember);
         Page<CompanyMember> companyMemberPage = new PageImpl<>(List.of(companyMember));
 
-        given(companyMemberService.findCompanyMembersByCompanyId(Mockito.anyInt(), Mockito.anyLong())).willReturn(companyMemberPage);
+        given(companyMemberService.findCompanyMembersByCompanyId(Mockito.anyInt(), Mockito.anyLong(), Mockito.anyBoolean())).willReturn(companyMemberPage);
         given(statusOfWorkService.findTodayStatusOfWorks(Mockito.anyList(), Mockito.anyLong(), Mockito.anyLong())).willReturn(companyMembers);
         given(statusOfWorkMapper.todayToResponse(Mockito.anyList())).willReturn(StubData.MockStatusOfWork.getTodayList());
 
@@ -253,7 +255,8 @@ public class StatusOfWorkControllerTest implements StatusOfWorkHelper {
                 getResponsePreProcessor(),
                 requestParameters(
                         List.of(
-                                parameterWithName("page").description("현재 페이지")
+                                parameterWithName("page").description("현재 페이지"),
+                                parameterWithName("filter").description("필터 적용 여부 true / false")
                         )
                 ),
                 responseFields(
