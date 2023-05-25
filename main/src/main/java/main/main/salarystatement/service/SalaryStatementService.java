@@ -11,7 +11,7 @@ import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
 import main.main.salarystatement.entity.SalaryStatement;
 import main.main.salarystatement.repository.SalaryStatementRepository;
-import main.main.salarystatement.utils.Calculator;
+import main.main.salarystatement.utils.SalaryStatementMaker;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.utils.PdfMaker;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -38,11 +38,12 @@ public class SalaryStatementService {
     private final MemberService memberService;
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;
-    private final Calculator calculator;
+    private final SalaryStatementMaker salaryStatementMaker;
     private final PdfMaker pdfMaker;
 
     public SalaryStatement getPreContent(long companyId, long companyMemberId, int year, int month, long authenticationMemberId) {
-        SalaryStatement salaryStatement = calculator.makeContent(companyId, companyMemberId, year, month);
+        SalaryStatement salaryStatement = salaryStatementMaker.makeContent(companyId, companyMemberId, year, month);
+
 
         checkPermission(authenticationMemberId, salaryStatement.getCompany());
 
@@ -64,7 +65,7 @@ public class SalaryStatementService {
     }
 
     public void createSalaryStatement(long companyId, long companyMemberId, int year, int month, long authenticationMemberId) {
-        SalaryStatement salaryStatement = calculator.makeContent(companyId, companyMemberId, year, month);
+        SalaryStatement salaryStatement = salaryStatementMaker.makeContent(companyId, companyMemberId, year, month);
         List<StatusOfWork> statusOfWorks = salaryStatement.getStatusOfWorks();
 
         checkPermission(authenticationMemberId, salaryStatement.getCompany());
