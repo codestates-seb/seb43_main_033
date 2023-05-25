@@ -89,6 +89,7 @@ public class CompanyControllerTest implements CompanyHelper {
                                 List.of(
                                         fieldWithPath("companyName").type(JsonFieldType.STRING).description("회사명"),
                                         fieldWithPath("companySize").type(JsonFieldType.STRING).description("회사 규모"),
+                                        fieldWithPath("businessNumber").type(JsonFieldType.STRING).description("사업자 등록 번호"),
                                         fieldWithPath("address").type(JsonFieldType.STRING).description("회사 주소"),
                                         fieldWithPath("information").type(JsonFieldType.STRING).description("회사 정보")
                                 )

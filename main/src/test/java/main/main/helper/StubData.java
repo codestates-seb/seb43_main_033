@@ -376,6 +376,7 @@ public class StubData {
             CompanyDto.Post post = new CompanyDto.Post();
             post.setCompanyName("회사명");
             post.setCompanySize("회사 규모");
+            post.setBusinessNumber("사업자 등록 번호");
             post.setAddress("회사 주소");
             post.setInformation("회사 정보");
 
@@ -477,6 +478,11 @@ public class StubData {
         public static Object getRequestBody(HttpMethod method) {
             return stubRequestBody.get(method);
         }
+
+        public static List<MemberBank> memberBanks() {
+            return Arrays.asList(new MemberBank(), new MemberBank());
+        }
+
 
         public static Page<MemberBank> getMemberBanksByPage() {
             MemberBank memberBank1 = new MemberBank();
