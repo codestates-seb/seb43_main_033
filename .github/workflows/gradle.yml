@@ -38,7 +38,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 7.5.1
-        arguments: build
+        working-directory: ./main
+        arguments: clean build
+        
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v1
@@ -49,7 +51,7 @@ jobs:
         
     - name: Set YML
       run: |
-        mkdir -p src/main/resources
+        mkdir -p main/src/main/resources
         echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
         find src
 
