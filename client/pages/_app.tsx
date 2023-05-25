@@ -13,7 +13,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <div>
       <Header />
       <div className="flex">
-        <div className="flex mt-28 w-full">
+        <div className="flex mt-28 w-full ">
           <Component {...pageProps} />
         </div>
       </div>
