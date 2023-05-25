@@ -57,17 +57,17 @@ function Modal(props: any): React.ReactElement {
       .patch(
         `${process.env.NEXT_PUBLIC_URL}/companies/${data.companyId}`,
         {
-          headers: {
-            authorization: `${localStorage.getItem("token")}`,
-          },
-        },
-        {
           companyId: data.companyId,
           companyName: inputs.companyName,
           companySize: inputs.companySize,
           businessNumber: inputs.businessNumber,
           address: inputs.address,
           information: inputs.information,
+        },
+        {
+          headers: {
+            authorization: `${localStorage.getItem("token")}`,
+          },
         }
       )
       .then((res) => console.log(res))
@@ -121,6 +121,7 @@ function Modal(props: any): React.ReactElement {
               onChange={handleOnChange}
               value={inputs.businessNumber}
               name="businessNumber"
+              disabled
             />
           </div>
           <div className="flex items-center mb-3">
@@ -143,9 +144,9 @@ function Modal(props: any): React.ReactElement {
             />
           </div>
         </article>
-        <div className="flex justify-center items-center m-auto ">
+        <div className="flex justify-center items-center">
           <button
-            className="px-3 bg-emerald-400 rounded text-white drop-shadow-md"
+            className="px-8 py-3 bg-emerald-400 rounded text-white drop-shadow-md text-2xl hover:bg-emerald-600"
             onClick={handleOnSubmit}
           >
             등록

@@ -360,19 +360,11 @@ export default function MyStaffModal({
                 </div>
               </div>
               <div>
-                <div className="modal-close mt-10 pt-40 flex justify-end">
-                  <button
-                    className="mr-3 mt-10"
-                    onClick={() => staffEditClick(companymemberId)}
-                  >
+                <div className="modal-close mt-5 pt-40 flex justify-end">
+                  <button className="mr-3" onClick={() => staffEditClick(companymemberId)}>
                     submit
                   </button>
-                  <button
-                    className="mt-10"
-                    onClick={() => staffDeleteClick(companymemberId)}
-                  >
-                    Delete
-                  </button>
+                  <button onClick={() => staffDeleteClick(companymemberId)}>Delete</button>
                 </div>
               </div>
             </div>

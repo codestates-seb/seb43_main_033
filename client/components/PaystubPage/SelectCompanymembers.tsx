@@ -11,7 +11,7 @@ export default function SelectCompanymembers({
   setSelectedMemberId,
   selectedCompanyMemberId,
 }: {
-  selectCompany:any;
+  selectCompany: any;
   setSelectedCompanyMember: any;
   setSelectedCompanyMemberId: any;
   setSelectedMemberId: any;
@@ -22,6 +22,7 @@ export default function SelectCompanymembers({
   const [approve, setApprove] = useState("pending");
   const [information, setInformation] = useState("");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("");
   useEffect(() => {
     selectCompany && setNameArr(selectCompany.companyMembers);
   }, [selectCompany]);
@@ -53,6 +54,27 @@ export default function SelectCompanymembers({
       })
       .catch(() => {});
   };
+
+  const handleSelectRoles = (companymemberid: number) => {
+    const token = localStorage.getItem("token");
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberid}`,
+        {
+          roles: [role],
+        },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then(() => {
+        setInformation("권한변경이 완료되었습니다");
+      })
+      .catch(() => {});
+  };
+
   return (
     <div className=" ml-10">
       <div className="flex">
@@ -83,6 +105,7 @@ export default function SelectCompanymembers({
                 <div>
                   {nameArr && nameArr.length !== 0
                     ? nameArr.map((el: any, idx: number) => {
+                        const [roles] = [el.roles];
                         return (
                           <div key={idx}>
                             <input
@@ -129,6 +152,26 @@ export default function SelectCompanymembers({
                                   className="text-[10px]  bg-gray-200 rounded-sm"
                                 >
                                   승인
+                                </button>
+                              </div>
+                              <div className=" ml-2 text-gray-400 text-[10px] ">
+                                {roles}
+                              </div>
+                              <div>
+                                <select
+                                  className="text-[10px]"
+                                  onChange={(e) => setRole(e.target.value)}
+                                >
+                                  <option value={"MEMBER"}>Member</option>
+                                  <option value={"MANAGER"}>Manager</option>
+                                </select>
+                                <button
+                                  className="text-[10px]  bg-gray-200 rounded-sm"
+                                  onClick={() =>
+                                    handleSelectRoles(el.companyMemberId)
+                                  }
+                                >
+                                  권한변경
                                 </button>
                               </div>
                             </div>
