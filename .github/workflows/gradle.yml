@@ -36,7 +36,7 @@ jobs:
       run: |
         mkdir -p main/src/main/resources
         echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > main/src/main/resources/application.yml
-        find src    
+        find main    
         
     - name: init with Gradle
       uses: gradle/gradle-build-action@v2
