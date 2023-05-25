@@ -2,9 +2,10 @@ package main.main.statusofwork.mapper;
 
 import main.main.company.entity.Company;
 import main.main.companymember.dto.CompanyMemberDto;
-import main.main.companymember.dto.Status;
 import main.main.companymember.entity.CompanyMember;
-import main.main.member.entity.Member;
+import main.main.exception.BusinessLogicException;
+import main.main.exception.ExceptionCode;
+import main.main.laborcontract.entity.LaborContract;
 import main.main.statusofwork.dto.StatusOfWorkDto;
 import main.main.statusofwork.dto.VacationDto;
 import main.main.statusofwork.entity.RequestVacation;
@@ -23,7 +24,7 @@ public interface StatusOfWorkMapper {
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
         if (requestBody.getNote() != null) {
-            statusOfWork.setNote(requestBody.getNote());
+            statusOfWork.setNote(requestBody.getNote() == StatusOfWork.Note.없음 ? StatusOfWork.Note.정상근무 : requestBody.getNote());
         }
 
         return statusOfWork;
@@ -37,13 +38,22 @@ public interface StatusOfWorkMapper {
         statusOfWork.setStartTime(requestBody.getStartTime());
         statusOfWork.setFinishTime(requestBody.getFinishTime());
         if (requestBody.getNote() != null) {
-            statusOfWork.setNote(requestBody.getNote());
+            statusOfWork.setNote(requestBody.getNote() == StatusOfWork.Note.없음 ? StatusOfWork.Note.정상근무 : requestBody.getNote());
         }
 
         return statusOfWork;
     }
 
-    StatusOfWork patchToStatusOfWork(StatusOfWorkDto.Patch requestBody);
+    default StatusOfWork patchToStatusOfWork(StatusOfWorkDto.Patch requestBody) {
+        StatusOfWork statusOfWork = new StatusOfWork();
+        statusOfWork.setStartTime(requestBody.getStartTime());
+        statusOfWork.setFinishTime(requestBody.getFinishTime());
+        if (requestBody.getNote() != null) {
+            statusOfWork.setNote(requestBody.getNote() == StatusOfWork.Note.없음 ? StatusOfWork.Note.정상근무 : requestBody.getNote());
+        }
+
+        return statusOfWork;
+    }
 
     default List<StatusOfWorkDto.Response> statusOfWorksToResponses(List<StatusOfWork> statusOfWorks) {
         return statusOfWorks.stream().map(statusOfWork -> statusOfWorkToResponse(statusOfWork)).collect(Collectors.toList());
@@ -74,12 +84,18 @@ public interface StatusOfWorkMapper {
     }
 
     default StatusOfWorkDto.CompanyInfo toCompanyInfo(CompanyMember companyMember) {
+        List<LaborContract> laborContracts = companyMember.getLaborContracts();
+        if (laborContracts.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.MAKE_LABORCONTRACT_FIRST);
+        }
+
         return StatusOfWorkDto.CompanyInfo.builder()
                 .companyId(companyMember.getCompany().getCompanyId())
                 .companyName(companyMember.getCompany().getCompanyName())
-                .startTime(companyMember.getLaborContracts().get(0).getStartTime())
-                .finishTime(companyMember.getLaborContracts().get(0).getFinishTime())
-                .remainVacation(companyMember.getVacation().getCount()).build();
+                .startTime(laborContracts.get(0).getStartTime())
+                .finishTime(laborContracts.get(0).getFinishTime())
+                .remainVacation(companyMember.getVacation().getCount())
+                .build();
     }
 
 
