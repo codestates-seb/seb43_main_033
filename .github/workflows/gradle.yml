@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - BE-dev
-    paths:
-      - "main/**"
+#     paths:
+#       - "main/**"
       
 env:
   AWS_REGION: ap-northeast-2
