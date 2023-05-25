@@ -15,7 +15,9 @@ interface WorkRecordTableProps {
     note: string
   ) => void;
   deleteEvent: (event: CalendarEvent) => void;
+  editEvent: (eventId: string, updatedEvent: CalendarEvent) => void; 
 }
+
 
 type WorkRecord = {
   id: number;
@@ -41,8 +43,9 @@ const WorkRecordTable = ({
   date,
   addEvent,
   deleteEvent,
+  editEvent,
 }: WorkRecordTableProps) => {
-  const [companyId, setCompanyId] = useState<number>(4);
+  const [companyId, setCompanyId] = useState<number>(1);
   const [startWork, setStartWork] = useState<string>("00:00");
   const [endWork, setEndWork] = useState<string>("00:00");
   const today: string = new Date().toISOString().slice(0, 10);
@@ -59,6 +62,7 @@ const WorkRecordTable = ({
 
   useEffect(() => {
     fetchWorkRecord();
+    
   }, [date]);
 
   const fetchWorkRecord = () => {
@@ -84,15 +88,17 @@ const WorkRecordTable = ({
           (record: WorkRecord) => moment(record.startTime).isSame(date, "day")
         );
 
-       
+       console.log(workRecord);
         if (workRecord) {
           setStartWork(moment(workRecord.startTime).format("HH:mm"));
           setEndWork(moment(workRecord.finishTime).format("HH:mm"));
           setNote(workRecord.note);
           setIsStartButtonDisabled(!workRecord.startTime);
           setIsEndButtonDisabled(!workRecord.finishTime);
+          setIsEditing(true);
           if (workRecord.id) {
             setStatusOfWorkId(workRecord.id);
+            console.log(workRecord.id)
           }
          
         } else {
@@ -101,6 +107,7 @@ const WorkRecordTable = ({
           setNote("");
           setIsStartButtonDisabled(false);
           setIsEndButtonDisabled(false);
+          setIsEditing(false);
         }
       })
       .catch((err) => {
@@ -109,13 +116,19 @@ const WorkRecordTable = ({
   };
 
   const handleStartWork = () => {
+
+     if (startWork !== "00:00") {
+    alert("이미 출근 시간이 기록되었습니다.");
+    return;
+  }
     const currentTime = moment().format("HH:mm");
     setStartWork(currentTime);
     setIsStartButtonDisabled(true);
   };
 
   const handleEndWork = () => {
-    if (!isStartButtonDisabled) {
+   
+    if (startWork === "00:00") {
       alert("출근을 먼저 눌러야 퇴근을 누를 수 있습니다.");
       return;
     }
@@ -142,6 +155,8 @@ const WorkRecordTable = ({
     console.log(today);
     console.log(startWork);
     console.log(companyId);
+
+    
     axios
       .post(
         `${process.env.NEXT_PUBLIC_URL}/worker/mywork`,
@@ -161,14 +176,15 @@ const WorkRecordTable = ({
       .then(() => {
         setIsEditing(true);
         addEvent(date, startWork, endWork, note);
-        router.push('/');
+        fetchWorkRecord();
+        
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  const handleEdit = (statusOfWorkId: number) => {
+  console.log(isEditing)
+  const handleEdit = (statusOfWorkId: number ,eventId?: string, updatedEvent?: CalendarEvent) => {
     axios
       .patch(
         `${process.env.NEXT_PUBLIC_URL}/status/${statusOfWorkId}`,
@@ -185,10 +201,11 @@ const WorkRecordTable = ({
         }
       )
       .then(() => {
-        setIsEditing(true);
+        if (eventId&&updatedEvent) {
+          editEvent(eventId, updatedEvent);
+        }
         fetchWorkRecord();
-        addEvent(date, startWork, endWork, note);
-        router.push('/mywork');
+
       })
       .catch((err) => {
         console.log(err);
@@ -253,6 +270,7 @@ const WorkRecordTable = ({
                 <option value="야간근로">야간근로</option>
                 <option value="유급휴가">유급휴가</option>
                 <option value="무급휴가">무급휴가</option>
+                <option value="없음">없음</option>
               </select>
             </td>
           </tr>
