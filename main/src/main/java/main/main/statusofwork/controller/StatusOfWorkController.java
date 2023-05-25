@@ -90,9 +90,9 @@ public class StatusOfWorkController {
     }
 
     @GetMapping("/manager/{company-id}/mystaff")
-    public ResponseEntity getTodayStatusOfWork(@PathVariable("company-id") long companyId, @Positive @RequestParam int page) {
+    public ResponseEntity getTodayStatusOfWork(@PathVariable("company-id") long companyId, @Positive @RequestParam int page, @RequestParam boolean filter) {
         long authenticationMemberId = JwtParseInterceptor.getAutheticatedMemberId();
-        Page<CompanyMember> pageCompanyMember = companyMemberService.findCompanyMembersByCompanyId(page - 1, companyId);
+        Page<CompanyMember> pageCompanyMember = companyMemberService.findCompanyMembersByCompanyId(page - 1, companyId, filter);
         List<CompanyMember> companyMembers = statusOfWorkService.findTodayStatusOfWorks(pageCompanyMember.getContent(), companyId, authenticationMemberId);
 
         return new ResponseEntity<>(new ListPageResponseDto<>(statusOfWorkMapper.todayToResponse(companyMembers), pageCompanyMember), HttpStatus.OK);
