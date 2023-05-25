@@ -1,128 +1,61 @@
 package main.main.salarystatement.utils;
 
-import lombok.RequiredArgsConstructor;
-import main.main.company.entity.Company;
-import main.main.company.service.CompanyService;
-import main.main.companymember.entity.CompanyMember;
-import main.main.companymember.service.CompanyMemberService;
-import main.main.exception.BusinessLogicException;
-import main.main.exception.ExceptionCode;
-import main.main.laborcontract.entity.LaborContract;
-import main.main.laborcontract.service.LaborContractService;
-import main.main.member.entity.Member;
-import main.main.salarystatement.entity.SalaryStatement;
-import main.main.statusofwork.entity.StatusOfWork;
-import main.main.statusofwork.service.StatusOfWorkService;
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
 
-@RequiredArgsConstructor
-@Component
 public class Calculator {
-    private final CompanyService companyService;
-    private final CompanyMemberService companyMemberService;
-    private final StatusOfWorkService statusOfWorkService;
-    private final LaborContractService laborContractService;
+    // 고용 보험
+    public static BigDecimal calculateEmploymentInsurance(BigDecimal basicSalary) {
+        return basicSalary.multiply(BigDecimal.valueOf(0.008));
+    }
 
-    public SalaryStatement makeContent(long companyId, long companyMemberId, int year, int month) {
-        SalaryStatement salaryStatement = new SalaryStatement();
-        CompanyMember companyMember = companyMemberService.findCompanyMember(companyMemberId);
-        Member member = companyMember.getMember();
-        Company company = companyService.findCompany(companyId);
 
-        if (!company.getCompanyId().equals(companyId)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
-        }
+    // 건강 보험
+    public static BigDecimal calculateHealthInsurance(BigDecimal basicSalary) {
+        return basicSalary.multiply(BigDecimal.valueOf(0.0343));
+    }
 
-        List<StatusOfWork> statusOfWorks = statusOfWorkService.findStatusOfWorks(year, month, member.getMemberId());
-        LaborContract laborContract = laborContractService.findLaborContractForSalaryStatement(member, company, year, month);
-        BigDecimal basicSalary = laborContract.getBasicSalary();
-        BigDecimal hourlyWage = basicSalary.divide(BigDecimal.valueOf(209), RoundingMode.HALF_UP);
-        int time;
-        BigDecimal overtimePay = BigDecimal.ZERO;
-        int overtimePayBasis = 0;
-        BigDecimal nightWorkAllowance = BigDecimal.ZERO;
-        int nightWorkAllowanceBasis = 0;
-        BigDecimal holidayWorkAllowance = BigDecimal.ZERO;
-        int holidayWorkAllowanceBasis = 0;
-        BigDecimal unpaidLeave = BigDecimal.ZERO;
 
-        for (StatusOfWork statusOfWork : statusOfWorks) {
-            switch (statusOfWork.getNote()) {
-                case 연장근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    overtimePayBasis += time;
-                    overtimePay = overtimePay.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 야간근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    nightWorkAllowanceBasis += time;
-                    nightWorkAllowance = nightWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 휴일근로:
-                    time = (int) ChronoUnit.HOURS.between(statusOfWork.getStartTime(), statusOfWork.getFinishTime());
-                    holidayWorkAllowanceBasis += time;
-                    holidayWorkAllowance = holidayWorkAllowance.add(hourlyWage.multiply(BigDecimal.valueOf(time)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-                    break;
-                case 무급휴가:
-                    unpaidLeave = unpaidLeave.add(hourlyWage.multiply(BigDecimal.valueOf(8)).multiply(BigDecimal.valueOf(statusOfWork.getNote().getRate())));
-            }
-        }
+    // 국민 연금
+    public static BigDecimal calculateNationalCoalition(BigDecimal basicSalary) {
+        return basicSalary.multiply(BigDecimal.valueOf(0.045));
+    }
 
-        salaryStatement.setYear(year);
-        salaryStatement.setMonth(month);
-        salaryStatement.setMember(member);
-        salaryStatement.setCompany(company);
-        salaryStatement.setCompanyMember(companyMember);
-        salaryStatement.setLaborContract(laborContract);
-        salaryStatement.setStatusOfWorks(statusOfWorks);
-        salaryStatement.setName(member.getName());
-        salaryStatement.setTeam(companyMember.getTeam());
-        salaryStatement.setGrade(companyMember.getGrade());
-        salaryStatement.setHourlyWage(hourlyWage);
-        salaryStatement.setBasePay(basicSalary);
-        salaryStatement.setOvertimePay(overtimePay);
-        salaryStatement.setOvertimePayBasis(overtimePayBasis);
-        salaryStatement.setNightWorkAllowance(nightWorkAllowance);
-        salaryStatement.setNightWorkAllowanceBasis(nightWorkAllowanceBasis);
-        salaryStatement.setHolidayWorkAllowance(holidayWorkAllowance);
-        salaryStatement.setHolidayWorkAllowanceBasis(holidayWorkAllowanceBasis);
-        salaryStatement.setUnpaidLeave(unpaidLeave);
-        salaryStatement.setSalary();
+    public static BigDecimal calculateTax(BigDecimal basicSalary) {
+        BigDecimal taxBase = getTaxBase(basicSalary);
+        return getIncomeTax(taxBase);
+    }
 
-        BigDecimal taxBase = basicSalary.subtract(basicSalary.multiply(BigDecimal.valueOf(0.0873))).multiply(BigDecimal.valueOf(12));
+    // 소득세 계산
+    public static BigDecimal getIncomeTax(BigDecimal taxBase) {
         BigDecimal incomeTex;
         if (taxBase.compareTo(BigDecimal.valueOf(14000000)) < 1) {
-            incomeTex = taxBase.multiply(BigDecimal.valueOf(0.06)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.multiply(BigDecimal.valueOf(0.06)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(50000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(14000000)).multiply(BigDecimal.valueOf(0.15)).add(BigDecimal.valueOf(840000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(14000000)).multiply(BigDecimal.valueOf(0.15)).add(BigDecimal.valueOf(840000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(88000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.24)).add(BigDecimal.valueOf(6240000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.24)).add(BigDecimal.valueOf(6240000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(150000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(88000000)).multiply(BigDecimal.valueOf(0.35)).add(BigDecimal.valueOf(15360000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(88000000)).multiply(BigDecimal.valueOf(0.35)).add(BigDecimal.valueOf(15360000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(300000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(150000000)).multiply(BigDecimal.valueOf(0.38)).add(BigDecimal.valueOf(37060000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(150000000)).multiply(BigDecimal.valueOf(0.38)).add(BigDecimal.valueOf(37060000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(500000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(300000000)).multiply(BigDecimal.valueOf(0.4)).add(BigDecimal.valueOf(94060000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(300000000)).multiply(BigDecimal.valueOf(0.4)).add(BigDecimal.valueOf(94060000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else if (taxBase.compareTo(BigDecimal.valueOf(1000000000)) < 1) {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.42)).add(BigDecimal.valueOf(174060000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(50000000)).multiply(BigDecimal.valueOf(0.42)).add(BigDecimal.valueOf(174060000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         } else {
-            incomeTex = taxBase.subtract(BigDecimal.valueOf(1000000000)).multiply(BigDecimal.valueOf(0.45)).add(BigDecimal.valueOf(384060000)).divide(BigDecimal.valueOf(12));
+            incomeTex = taxBase.subtract(BigDecimal.valueOf(1000000000)).multiply(BigDecimal.valueOf(0.45)).add(BigDecimal.valueOf(384060000)).divide(BigDecimal.valueOf(12), RoundingMode.HALF_UP);
         }
+        return incomeTex;
+    }
 
-        salaryStatement.setIncomeTax(incomeTex);
-        salaryStatement.setNationalCoalition(basicSalary.multiply(BigDecimal.valueOf(0.045)));
-        salaryStatement.setHealthInsurance(basicSalary.multiply(BigDecimal.valueOf(0.0343)));
-        salaryStatement.setEmploymentInsurance(basicSalary.multiply(BigDecimal.valueOf(0.008)));
-        salaryStatement.setTotalSalary();
-        salaryStatement.setBankName(laborContract.getBankName());
-        salaryStatement.setAccountNumber(laborContract.getAccountNumber());
-        salaryStatement.setAccountHolder(laborContract.getAccountHolder());
+    // 기본공제
+    public static BigDecimal getTaxBase(BigDecimal basicSalary) {
+        BigDecimal taxBase = basicSalary.subtract(getBasicDeduction(basicSalary)).multiply(BigDecimal.valueOf(12));
+        return taxBase;
+    }
 
-        return salaryStatement;
+    public static BigDecimal getBasicDeduction(BigDecimal basicSalary) {
+        return basicSalary.multiply(BigDecimal.valueOf(0.0873));
     }
 }
