@@ -40,8 +40,9 @@ jobs:
       uses: gradle/gradle-build-action@v2
       with:
         gradle-version: 7.5.1
-        working-directory: "./main"
-        arguments: build
+    - run: |
+        cd main
+        ./gradlew clean build
         
 
     - name: Configure AWS credentials
