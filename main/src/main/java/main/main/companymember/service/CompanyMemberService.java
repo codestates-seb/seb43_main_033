@@ -117,8 +117,6 @@ public class CompanyMemberService {
             roles.addAll(Arrays.asList("MANAGER", "MEMBER"));
         } else if (roles.contains("MANAGER")) {
             roles.add("MEMBER");
-        } else if (roles.contains("MEMBER")) {
-            roles.add("MEMBER");
         }
 
         companyMember.setRoles(roles);
