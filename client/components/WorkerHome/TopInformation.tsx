@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import Modal from "./Modal";
-import axios, { Axios } from "axios";
 
 interface Data {
   image: string;

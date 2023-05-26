@@ -2,7 +2,6 @@ import Link from "next/link";
 import Logo from "./logo";
 import { useEffect, useState } from "react";
 import LogoutBtn from "./LogoutBtn";
-import { useRouter } from "next/router";
 
 export default function Header() {
   const [token, setToken] = useState<string | null>(null);
