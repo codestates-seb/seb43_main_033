@@ -94,7 +94,7 @@ public class SalaryStatementMaker {
         salaryStatement.setHolidayWorkAllowance(holidayWorkAllowance);
         salaryStatement.setHolidayWorkAllowanceBasis(holidayWorkAllowanceBasis);
         salaryStatement.setUnpaidLeave(unpaidLeave);
-        salaryStatement.setSalary();
+        salaryStatement.setSalary(basicSalary.add(overtimePay.add(nightWorkAllowance).add(holidayWorkAllowance).add(unpaidLeave)));
 
         BigDecimal incomeTax = calculateTax(basicSalary);
 
@@ -102,7 +102,7 @@ public class SalaryStatementMaker {
         salaryStatement.setNationalCoalition(calculateNationalCoalition(basicSalary));
         salaryStatement.setHealthInsurance(calculateHealthInsurance(basicSalary));
         salaryStatement.setEmploymentInsurance(calculateEmploymentInsurance(basicSalary));
-        salaryStatement.setTotalSalary();
+        salaryStatement.setTotalSalary(salaryStatement.getSalary().subtract(incomeTax).subtract(salaryStatement.getNationalCoalition()).subtract(salaryStatement.getHealthInsurance()).subtract(salaryStatement.getEmploymentInsurance()));
         salaryStatement.setBankName(laborContract.getBankName());
         salaryStatement.setAccountNumber(laborContract.getAccountNumber());
         salaryStatement.setAccountHolder(laborContract.getAccountHolder());
