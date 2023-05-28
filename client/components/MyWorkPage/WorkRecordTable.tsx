@@ -4,20 +4,13 @@ import { ChangeEvent } from "react";
 import axios from "axios";
 import moment from "moment";
 import { Event as CalendarEvent } from "react-big-calendar";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 interface WorkRecordTableProps {
   date: Date;
-  addEvent: (
-    date: Date,
-    startWork: string,
-    endWork: string,
-    note: string
-  ) => void;
-  deleteEvent: (event: CalendarEvent) => void;
-  editEvent: (eventId: string, updatedEvent: CalendarEvent) => void; 
+  
+  closeDialog: () => void;
 }
-
 
 type WorkRecord = {
   id: number;
@@ -38,12 +31,10 @@ type ApiResponse = {
   status: WorkRecord[];
 };
 
-
 const WorkRecordTable = ({
   date,
-  addEvent,
-  deleteEvent,
-  editEvent,
+
+  closeDialog,
 }: WorkRecordTableProps) => {
   const [companyId, setCompanyId] = useState<number>(1);
   const [startWork, setStartWork] = useState<string>("00:00");
@@ -51,6 +42,7 @@ const WorkRecordTable = ({
   const today: string = new Date().toISOString().slice(0, 10);
   const [workTime, setWorkTime] = useState<string>("0h 0m");
   const [note, setNote] = useState<string>("");
+  const [noteData, setNoteData] = useState<string>("");
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isStartButtonDisabled, setIsStartButtonDisabled] =
     useState<boolean>(false);
@@ -62,14 +54,12 @@ const WorkRecordTable = ({
 
   useEffect(() => {
     fetchWorkRecord();
-    
   }, [date]);
 
   const fetchWorkRecord = () => {
     const year = moment(date).year();
     const month = moment(date).month() + 1;
-  
-    
+
     axios
       .get(
         `${process.env.NEXT_PUBLIC_URL}/worker/mywork?year=${year}&month=${month}`,
@@ -81,14 +71,17 @@ const WorkRecordTable = ({
         }
       )
       .then((response) => {
-        const data: ApiResponse = response.data; 
-        const companyId =data.company[0]?.companyId;
+        const data: ApiResponse = response.data;
+        const companyId = data.company[0]?.companyId;
         setCompanyId(companyId);
         const workRecord: WorkRecord | undefined = data.status.find(
           (record: WorkRecord) => moment(record.startTime).isSame(date, "day")
         );
 
-       console.log(workRecord);
+        if (workRecord) {
+          setNoteData(workRecord.note);
+        }
+
         if (workRecord) {
           setStartWork(moment(workRecord.startTime).format("HH:mm"));
           setEndWork(moment(workRecord.finishTime).format("HH:mm"));
@@ -98,9 +91,7 @@ const WorkRecordTable = ({
           setIsEditing(true);
           if (workRecord.id) {
             setStatusOfWorkId(workRecord.id);
-            console.log(workRecord.id)
           }
-         
         } else {
           setStartWork("00:00");
           setEndWork("00:00");
@@ -116,18 +107,16 @@ const WorkRecordTable = ({
   };
 
   const handleStartWork = () => {
-
-     if (startWork !== "00:00") {
-    alert("이미 출근 시간이 기록되었습니다.");
-    return;
-  }
+    if (startWork !== "00:00") {
+      alert("이미 출근 시간이 기록되었습니다.");
+      return;
+    }
     const currentTime = moment().format("HH:mm");
     setStartWork(currentTime);
     setIsStartButtonDisabled(true);
   };
 
   const handleEndWork = () => {
-   
     if (startWork === "00:00") {
       alert("출근을 먼저 눌러야 퇴근을 누를 수 있습니다.");
       return;
@@ -150,18 +139,14 @@ const WorkRecordTable = ({
   const handleNoteChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setNote(e.target.value);
   };
-  
-  const handleSubmit = () => {
-    console.log(today);
-    console.log(startWork);
-    console.log(companyId);
 
-    
+  const handleSubmit = () => {
+
     axios
       .post(
         `${process.env.NEXT_PUBLIC_URL}/worker/mywork`,
         {
-          companyId : companyId,
+          companyId: companyId,
           startTime: `${today}T${startWork}:00.000`,
           finishTime: `${today}T${endWork}:00.000`,
           note: note,
@@ -175,16 +160,17 @@ const WorkRecordTable = ({
       )
       .then(() => {
         setIsEditing(true);
-        addEvent(date, startWork, endWork, note);
+        router.reload();
         fetchWorkRecord();
-        
+        closeDialog();
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  console.log(isEditing)
-  const handleEdit = (statusOfWorkId: number ,eventId?: string, updatedEvent?: CalendarEvent) => {
+  const handleEdit = (
+    statusOfWorkId: number,
+  ) => {
     axios
       .patch(
         `${process.env.NEXT_PUBLIC_URL}/status/${statusOfWorkId}`,
@@ -201,11 +187,9 @@ const WorkRecordTable = ({
         }
       )
       .then(() => {
-        if (eventId&&updatedEvent) {
-          editEvent(eventId, updatedEvent);
-        }
+       
         fetchWorkRecord();
-
+        router.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -223,9 +207,9 @@ const WorkRecordTable = ({
       .then(() => {
         setIsEditing(false);
         fetchWorkRecord();
-        if (event) {
-          deleteEvent(event);
-        }
+      
+        closeDialog();
+        router.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -250,6 +234,10 @@ const WorkRecordTable = ({
             <td className="pl-3 pb-3">{startWork}</td>
             <td className="pl-6 pb-3">{endWork}</td>
             <td className="pl-6 pb-3">{workTime}</td>
+           
+          </tr>
+          <tr>
+          <div>{noteData}</div>
           </tr>
           <tr>
             <td>
