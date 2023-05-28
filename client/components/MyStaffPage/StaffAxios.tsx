@@ -4,7 +4,7 @@ import axios from "axios";
 
 export default function StaffAxios(url:string,page:number) {
     const [staffLists, setStaffLists] = useState<any>(null);
-    const [list, setList] = useState(0); // 총 아이템들
+    const [list, setList] = useState(0); 
     
 
   useEffect(() => {

@@ -11,7 +11,7 @@ export default function Pagination({
   count,
   setPage,
 }: PaginationProps) {
-  const totalPages = Math.ceil(count / 10); // 한 페이지에 표시되는 아이템 수로 나눈 총 페이지 수 계산
+  const totalPages = Math.ceil(count / 10); 
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
