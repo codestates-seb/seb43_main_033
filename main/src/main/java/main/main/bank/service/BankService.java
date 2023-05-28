@@ -23,12 +23,14 @@ import java.util.Optional;
 public class BankService {
     private final BankRepository bankRepository;
     @PostConstruct
-    public List<Bank> createAllBanks() {
+    public List<Bank> initializeAllBanks() {
         List<Bank> banks = new ArrayList<>();
-        for (Bank.BankGroup bankGroup : Bank.BankGroup.values()) {
-            Bank bank = new Bank();
-            bank.setBankGroup(bankGroup);
-            banks.add(bankRepository.save(bank));
+        if (bankRepository.count() == 0) {
+            for (Bank.BankGroup bankGroup : Bank.BankGroup.values()) {
+                Bank bank = new Bank();
+                bank.setBankGroup(bankGroup);
+                banks.add(bankRepository.save(bank));
+            }
         }
         return banks;
     }

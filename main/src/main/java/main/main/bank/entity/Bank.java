@@ -87,7 +87,6 @@ public class Bank {
             this.bankName = bankName;
         }
 
-//        @JsonValue
         public String getBankCode() {
             return bankCode;
         }
@@ -96,7 +95,7 @@ public class Bank {
             return bankName;
         }
 
-        @OneToMany(mappedBy = "bank")
+        @OneToMany(mappedBy = "bank", fetch = FetchType.LAZY)
         private List<BankGroup> bankList = new ArrayList<>();
     }
 }
