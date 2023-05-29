@@ -16,6 +16,21 @@ export default function LoginForm() {
   const emailRegex =
     /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 
+  // const googleHandler = () => {
+  //   window.location.assign(
+  //     `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_CLIENTID}&redirect_uri=http://localhost:3000/oauthlogin&response_type=token&scope=https://www.googleapis.com/auth/cloud-platform&state=google`
+  //   );
+  // };
+
+  // useEffect(() => {
+  //   googleOauth(authorizationCode).then((res) => {
+  //     console.log(res);
+  //     navigate(-1);
+  //   });
+  // }, [authorizationCode, navigate, dispatch]);
+
+  // /oauth2/authorization/google
+
   const handleClick = () => {
     loginAxios();
   };
@@ -52,6 +67,8 @@ export default function LoginForm() {
           if (err.response.status === 401) {
             setInfo("아이디와 비밀번호를 다시 한번 확인해주세요");
           }
+          setEmailInfo("");
+          setPasswordInfo("");
         });
     }
   };
@@ -100,6 +117,7 @@ export default function LoginForm() {
       >
         submit
       </button>
+      {/* <button onClick={googleHandler}>Google</button> */}
     </div>
   );
 }
