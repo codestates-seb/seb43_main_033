@@ -7,9 +7,8 @@ import { format } from "date-fns";
 import TabButton from "./TabButton";
 import StaffInput from "./StaffInput";
 import ContractInput from "./ContractInput";
-import StaffAxios from "./StaffAxios";
+import StaffDetailAxios from "./StaffDetailAxios";
 import ContractAxios from "./ContractAxios";
-
 
 type ModalProps = {
   onClose: () => void;
@@ -27,7 +26,6 @@ type Staff = {
   status: string;
   roles: null;
 };
-
 
 type ContractRegistrationData = {
   basicSalary: number;
@@ -57,15 +55,13 @@ type Contract = {
 export default function MyStaffModal({
   onClose,
   companyId,
-  companymemberId,
+  companymemberId
 }: ModalProps) {
-  const [staffList] = StaffAxios(
+  const [staffList] = StaffDetailAxios(
     `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
   );
 
   const [staffData, setStaffData] = useState<Staff | null>(null);
-
-  
 
   useEffect(() => {
     if (staffList) {
@@ -84,7 +80,6 @@ export default function MyStaffModal({
         [name]: value,
       };
     });
-    console.log(staffData);
   };
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
@@ -107,7 +102,6 @@ export default function MyStaffModal({
       .then(() => {
         onClose();
         router.reload();
-       
       })
       .catch((err) => {
         console.log(err);
@@ -115,7 +109,7 @@ export default function MyStaffModal({
   };
 
   const staffDeleteClick = (companymemberId: number) => {
-    console.log(companymemberId);
+
     axios
       .delete(
         `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`,
@@ -158,7 +152,7 @@ export default function MyStaffModal({
   const [contractList] = ContractAxios(
     `${process.env.NEXT_PUBLIC_URL}/manager/laborcontracts/${companymemberId}`
   );
-  console.log(contractList);
+
   useEffect(() => {
     if (selectedContract !== null) {
       setRequestData(selectedContract);
@@ -172,7 +166,6 @@ export default function MyStaffModal({
   };
 
   const [contractEdit, setcontractEdit] = useState<boolean>(false);
-
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -199,40 +192,39 @@ export default function MyStaffModal({
   const contractFormClick = () => {
     setcontractEdit(true);
   };
- 
+
   const contractEditClick = (companyId: number, laborcontractId: number) => {
-    console.log(requestData);
-   
-      const formData = new FormData();
-      if(file){
+
+
+    const formData = new FormData();
+    if (file) {
       formData.append("file", file);
     }
-      formData.append(
-        "requestPart",
-        new Blob([JSON.stringify(requestData)], {
-          type: "application/json",
-        })
-      );
-      
-      axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/laborcontracts/${laborcontractId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then(() => {
-          onClose();
-          setcontractEdit(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    
+    formData.append(
+      "requestPart",
+      new Blob([JSON.stringify(requestData)], {
+        type: "application/json",
+      })
+    );
+
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/laborcontracts/${laborcontractId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then(() => {
+        onClose();
+        setcontractEdit(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const contractDeleteClick = (laborcontractId: number) => {
@@ -265,8 +257,6 @@ export default function MyStaffModal({
           type: "application/json",
         })
       );
-      console.log(requestData);
-      console.log(formData);
 
       axios
         .post(
@@ -301,9 +291,13 @@ export default function MyStaffModal({
       onChange: staffInputChange,
       name: "team",
     },
-   
+    {
+      label: "권한",
+      value: staffData?.roles || "",
+      onChange: staffInputChange,
+      name: "roles",
+    },
   ];
-  
 
   return (
     <div className="fixed pt-40 z-10 inset-0 overflow-y-auto">
@@ -357,14 +351,20 @@ export default function MyStaffModal({
                       <StaffInput {...information} />
                     </div>
                   ))}
+                 
                 </div>
               </div>
               <div>
-                <div className="modal-close mt-5 pt-40 flex justify-end">
-                  <button className="mr-3" onClick={() => staffEditClick(companymemberId)}>
+                <div className="modal-close mt-40 pt-40 flex justify-end">
+                  <button
+                    className="mr-3"
+                    onClick={() => staffEditClick(companymemberId)}
+                  >
                     submit
                   </button>
-                  <button onClick={() => staffDeleteClick(companymemberId)}>Delete</button>
+                  <button onClick={() => staffDeleteClick(companymemberId)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -489,7 +489,7 @@ export default function MyStaffModal({
                             contractEditClick(companyId, laborcontractId)
                           }
                         >
-                          Editsubmit
+                          update
                         </button>
                       </div>
                     </div>

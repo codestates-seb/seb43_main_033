@@ -1,12 +1,9 @@
-import { useRouter } from "next/router";
-
 export default function LogoutBtn() {
-  const router = useRouter();
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh");
-    router.push("/");
-    router.reload();
+    localStorage.removeItem("memberid");
+    window.location.href = "/";
   };
   return (
     <>
