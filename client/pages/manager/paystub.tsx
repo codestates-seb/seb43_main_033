@@ -8,7 +8,6 @@ import AccountList from "../../components/PaystubPage/AccountList";
 import axios from "axios";
 import { SelectCompany } from "../../components/PaystubPage/SelectCompany";
 import SelectCompanymembers from "../../components/PaystubPage/SelectCompanymembers";
-import CompanySearch from "../../components/CompanySearch";
 import Link from "next/link";
 
 const Paystub = () => {
