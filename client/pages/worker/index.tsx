@@ -19,9 +19,7 @@ export default function ManagerHome() {
       localStorage.setItem("token", token);
       localStorage.setItem("memberid", memberid);
 
-      router.push("/worker");
-      // window.location.href = "/";
-      // window.location.reload();
+      window.location.href = "/";
     }
   }, []);
 
