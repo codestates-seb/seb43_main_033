@@ -1,7 +1,13 @@
+import { useEffect, useState } from "react";
 import Logo from "./logo";
 import Link from "next/link";
 
 export default function Footer() {
+  const [token, setToken] = useState<string | null>(null);
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+  }, [token]);
+
   return (
     <div className=" bottom-0 border-t-2 w-full justify-center grid bg-emerald-700">
       <div className="flex h-80 box-border pt-12 pr-0 pb-0 pl-0 flex-auto w-full mx-20 gap-20">
@@ -11,9 +17,7 @@ export default function Footer() {
         <nav className=" flex">
           <div className="box-border pr-12 flex-auto ">
             <h5 className="mb-8">
-              
-                <Link href="/">우리의 급여</Link>
-              
+              <Link href="/">우리의 급여</Link>
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
@@ -26,9 +30,11 @@ export default function Footer() {
           </div>
           <div className="box-border pr-12 flex-auto">
             <h5 className="mb-8">
-              
+              {token ? (
                 <Link href="/manager">관리자 메뉴</Link>
-              
+              ) : (
+                <Link href="/login">관리자 메뉴</Link>
+              )}
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
@@ -44,9 +50,11 @@ export default function Footer() {
           </div>
           <div className="box-border pr-12 flex-auto">
             <h5 className="mb-8">
-              
+              {token ? (
                 <Link href="/worker">근로자 메뉴</Link>
-             
+              ) : (
+                <Link href="/login">근로자 메뉴</Link>
+              )}
             </h5>
             <ul className="inline-block align-top text-sm pt-2">
               <li>
