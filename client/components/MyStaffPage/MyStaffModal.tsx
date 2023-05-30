@@ -55,8 +55,12 @@ type Contract = {
 export default function MyStaffModal({
   onClose,
   companyId,
-  companymemberId,
+  companymemberId
 }: ModalProps) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> FE-dev
   const [staffList] = StaffDetailAxios(
     `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
   );

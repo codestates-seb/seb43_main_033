@@ -76,7 +76,7 @@ export default function Mystaff() {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const [staffList, list] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=${companyId}`,
+    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=${currentPage}&status=&companyId=${companyId}`,
     currentPage
   );
 
