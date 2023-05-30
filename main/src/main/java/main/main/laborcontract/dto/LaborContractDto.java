@@ -41,9 +41,6 @@ public class LaborContractDto {
         private long laborContactId;
         private String memberName;
         private String companyName;
-        private String bankName;
-        private String accountNumber;
-        private String accountHolder;
         private BigDecimal basicSalary;
         private LocalDate startOfContract;
         private LocalDate endOfContract;

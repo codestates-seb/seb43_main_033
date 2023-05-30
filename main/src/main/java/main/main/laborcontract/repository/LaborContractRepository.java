@@ -11,7 +11,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LaborContractRepository extends JpaRepository<LaborContract, Long> {
-    Optional<LaborContract> findLaborContractByMemberAndCompanyAndEndOfContractAfter(Member member, Company company, LocalDateTime thisMonth);
+    Optional<LaborContract> findLaborContractByMemberAndCompanyAndEndOfContractAfter(Member member,
+                                                                                     Company company,
+                                                                                     LocalDateTime thisMonth);
 
     List<LaborContract> findLaborContractByCompanyMember(CompanyMember companyMember);
 }

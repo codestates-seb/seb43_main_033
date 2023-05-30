@@ -31,12 +31,6 @@ public class LaborContract {
     @JoinColumn(name = "COMPANY_MEMEBER_ID")
     private CompanyMember companyMember;
 
-    private String bankName;
-
-    private String accountNumber;
-
-    private String accountHolder;
-
     private LocalDateTime startOfContract;
 
     private LocalDateTime endOfContract;
