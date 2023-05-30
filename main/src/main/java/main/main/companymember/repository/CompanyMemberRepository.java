@@ -25,4 +25,6 @@ public interface CompanyMemberRepository extends JpaRepository<CompanyMember, Lo
     List<CompanyMember> findAllByMemberMemberId(long memberId);
 
     boolean existsByCompanyAndMember(Company company, Member member);
+
+    List<CompanyMember> findByMember_MemberId(Long memberId);
 }
