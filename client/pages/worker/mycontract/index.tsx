@@ -77,17 +77,10 @@ export default function Mycontract() {
             )}
           </div>
 
-          <div
-            className="flex items-center"
-            style={{ minHeight: "calc(100vh - 6rem)", overflow: "auto" }}
-          >
+          <div className="flex items-center">
             {selectedContract && (
               <div className="w-full h-full flex justify-center items-center">
-                <img
-                  src={contractUri}
-                  alt="Contract Image"
-                  
-                />
+                <img className="w-2/5" src={contractUri} alt="Contract Image" />
               </div>
             )}
           </div>

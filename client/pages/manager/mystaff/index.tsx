@@ -4,13 +4,13 @@ import ListBox from "../../../components/ListBox";
 import MyStaffModal from "../../../components/MyStaffPage/MyStaffModal";
 import Navi from "../../../components/ManagerNavi";
 import { format } from "date-fns";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import StaffAxios from "../../../components/MyStaffPage/StaffAxios";
 import axios from "axios";
 import { SelectCompany } from "../../../components/PaystubPage/SelectCompany";
 import { useEffect, useState } from "react";
 import { CompanyData, CompanyMembers } from "../paystub";
+import Pagination from "../../../components/MyStaffPage/Pagination";
 
 type Staff = {
   companyMemberId: number;
@@ -28,6 +28,8 @@ export default function Mystaff() {
   const [companies, setCompanies] = useState<CompanyData[]>([]);
   const [companyId, setCompanyId] = useState(0);
   const [selectCompany, setSelectCompany] = useState<CompanyData | null>({});
+
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -73,8 +75,9 @@ export default function Mystaff() {
   >(null);
   const [showModal, setShowModal] = useState<boolean>(false);
 
-  const [staffList] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=${companyId}`
+  const [staffList, list] = StaffAxios(
+    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=${companyId}`,
+    currentPage
   );
 
   const openModalClick = (id: number) => {
@@ -86,29 +89,27 @@ export default function Mystaff() {
     setShowModal(false);
   };
 
+  const setPage = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <>
       <Navi />
       <div className="flex flex-col w-full">
         <div className="flex"></div>
-        <div className="flex justify-end pb-3">
-          <h1 className="pr-10 pl-10 ml-5">
-            우리 회사의 근무시간 : 09:00~18:00
-          </h1>
-          <i className="material-icons"></i>
-          <CheckBoxIcon />
-          <h1 className="mr-8">오늘의 근무상황</h1>
+        <div className="flex justify-end pt-5 pb-3 pr-10">
+          <SelectCompany
+            companies={companies}
+            mycompanies={mycompanies}
+            setCompanyId={setCompanyId}
+          />
         </div>
         <div className="h-screen w-full flex justify-center">
           <Bigsquare>
             <div className="bg-white p-3 m-5 flex justify-between">
               <div className="flex">
                 <div>나의 직원들</div>
-                <SelectCompany
-                  companies={companies}
-                  mycompanies={mycompanies}
-                  setCompanyId={setCompanyId}
-                />
               </div>
               <div>{today}</div>
             </div>
@@ -128,7 +129,7 @@ export default function Mystaff() {
                     <div>{item.name}</div>
                     <div>{item.team}</div>
                     <div>{item.grade}</div>
-                    
+
                     <button
                       className="text-sm font-bold hover:bg-gray-300"
                       onClick={() => openModalClick(item.companyMemberId)}
@@ -148,7 +149,17 @@ export default function Mystaff() {
                 ))}
               </>
             )}
+   
+          
           </Bigsquare>
+       
+        </div>
+        <div className="flex justify-center mt-2 mb-2">
+              <Pagination
+                currentPage={currentPage}
+                count={list}
+                setPage={setPage}
+              />
         </div>
       </div>
     </>
