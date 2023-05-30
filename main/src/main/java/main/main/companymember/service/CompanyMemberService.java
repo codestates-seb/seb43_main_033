@@ -121,6 +121,12 @@ public class CompanyMemberService {
 
         companyMember.setRoles(roles);
 
+        List<CompanyMember> duplicateMembers = companyMemberRepository.findByMember_MemberId(companyMember.getMember().getMemberId());
+        duplicateMembers.remove(companyMember);
+
+        if (!duplicateMembers.isEmpty()) {
+            throw new BusinessLogicException(ExceptionCode.COMPANYMEMBER_EXISTS);
+        }
         return companyMemberRepository.save(companyMember);
     }
 
