@@ -6,7 +6,7 @@ export default function ManagerHome() {
     <>
       <Navi />
       <section className="flex-1 flex flex-col px-8 py-4 bg-stone-50">
-        <TopInformation />        
+        <TopInformation />
       </section>
     </>
   );

@@ -1,7 +1,6 @@
 "use client";
 
 import axios from "axios";
-import { da } from "date-fns/locale";
 import { useEffect, useState } from "react";
 
 interface Inputs {
