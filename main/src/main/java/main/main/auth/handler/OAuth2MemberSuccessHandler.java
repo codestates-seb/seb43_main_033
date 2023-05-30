@@ -102,7 +102,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .scheme("http")
                 .host("ourmainpro-33.s3-website.ap-northeast-2.amazonaws.com")
 //                .port(3000)
-                .path("/worker")
+//                .path("/")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
