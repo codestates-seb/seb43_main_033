@@ -2,6 +2,7 @@ export default function LogoutBtn() {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refresh");
+    localStorage.removeItem("memberid");
     window.location.href = "/";
   };
   return (
