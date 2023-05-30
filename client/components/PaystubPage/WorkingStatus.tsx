@@ -4,6 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import WorkingStatusAdd from "./WorkingStatusAdd";
 import axios from "axios";
+import Link from "next/link";
 
 export default function WorkingStatus({
   selectedCompanyMemberId,
@@ -15,6 +16,7 @@ export default function WorkingStatus({
   const [add, setAdd] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [workdata, setWorkData] = useState<WorkingStatusData[]>([]);
+  const [info, setInfo] = useState(false);
   const handleDelete = (deletedId: number) => {
     const token = localStorage.getItem("token");
     axios
@@ -43,10 +45,11 @@ export default function WorkingStatus({
             )
             .then((res) => {
               setWorkData(res.data.status);
+              setInfo(false);
             })
             .catch((err) => {
               setWorkData([]);
-              console.log(err);
+              setInfo(true);
             })
         : null;
     }
@@ -54,6 +57,11 @@ export default function WorkingStatus({
 
   return (
     <div className="flex flex-col mb-20 ml-10">
+      {info && (
+        <Link href="/manager/mystaff">
+          <p className=" text-red-400">근로계약서를 먼저 등록해주세요</p>
+        </Link>
+      )}
       <div>
         {workdata &&
           workdata.map((el, idx) => {

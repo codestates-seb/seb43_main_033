@@ -1,4 +1,5 @@
 import axios from "axios";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
@@ -17,6 +18,8 @@ export default function PaystubPreview({
   const [paystubId, setPaystubId] = useState(0);
   const [managerPaysutbId, setManagerPaystubId] = useState(0);
   const [paystubExist, setPaystubExist] = useState(false);
+  const [info, setInfo] = useState(false);
+  const [myInfo, setMyInfo] = useState(false);
   const currentDate = new Date();
   const month = currentDate.getMonth() + 1;
   const year = currentDate.getFullYear();
@@ -40,10 +43,11 @@ export default function PaystubPreview({
             setName(response.data.member.name);
             setPaystubExist(response.data.exist);
             setManagerPaystubId(response.data.salaryStatementId);
+            setInfo(false);
           })
           .catch((err) => {
-            console.log(err);
             setData(null);
+            setInfo(true);
           });
       }, [selectedCompanyMemberId]);
   }
@@ -58,6 +62,9 @@ export default function PaystubPreview({
       })
       .then((res) => {
         setMypaystublist(res.data);
+        if (res.data.length === 0) {
+          setMyInfo(true);
+        }
       })
       .catch(() => {});
   };
@@ -170,6 +177,12 @@ export default function PaystubPreview({
 
   return (
     <div>
+      {info && (
+        <Link href="/manager/mystaff">
+          <p className=" ml-10 text-red-400">근로계약서를 먼저 등록해주세요</p>
+        </Link>
+      )}
+      {myInfo ? "급여명세서가 발급되지 않았습니다" : null}
       {mypaystublist.length ? (
         <div>
           <select onClick={(e) => handleSelect(e)}>
