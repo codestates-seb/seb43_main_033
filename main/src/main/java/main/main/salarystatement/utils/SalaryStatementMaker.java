@@ -10,6 +10,7 @@ import main.main.exception.ExceptionCode;
 import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.service.LaborContractService;
 import main.main.member.entity.Member;
+import main.main.memberbank.entity.MemberBank;
 import main.main.salarystatement.entity.SalaryStatement;
 import main.main.statusofwork.entity.StatusOfWork;
 import main.main.statusofwork.service.StatusOfWorkService;
@@ -35,6 +36,10 @@ public class SalaryStatementMaker {
         CompanyMember companyMember = companyMemberService.findCompanyMember(companyMemberId);
         Member member = companyMember.getMember();
         Company company = companyService.findCompany(companyId);
+        MemberBank memberBank = member.getMemberBanks().stream()
+                .filter(mainMemberBank -> mainMemberBank.isMainAccount())
+                .findFirst()
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBERBANK_ONLY_ONE));
 
         if (!company.getCompanyId().equals(companyId)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_STATUS);
@@ -103,9 +108,9 @@ public class SalaryStatementMaker {
         salaryStatement.setHealthInsurance(calculateHealthInsurance(basicSalary));
         salaryStatement.setEmploymentInsurance(calculateEmploymentInsurance(basicSalary));
         salaryStatement.setTotalSalary(salaryStatement.getSalary().subtract(incomeTax).subtract(salaryStatement.getNationalCoalition()).subtract(salaryStatement.getHealthInsurance()).subtract(salaryStatement.getEmploymentInsurance()));
-        salaryStatement.setBankName(laborContract.getBankName());
-        salaryStatement.setAccountNumber(laborContract.getAccountNumber());
-        salaryStatement.setAccountHolder(laborContract.getAccountHolder());
+        salaryStatement.setBankName(memberBank.getBank().getBankGroup().getBankName());
+        salaryStatement.setAccountNumber(memberBank.getAccountNumber());
+        salaryStatement.setAccountHolder(member.getName());
         return salaryStatement;
     }
 }

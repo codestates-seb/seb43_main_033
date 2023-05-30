@@ -12,7 +12,6 @@ import main.main.laborcontract.entity.LaborContract;
 import main.main.laborcontract.repository.LaborContractRepository;
 import main.main.member.entity.Member;
 import main.main.member.service.MemberService;
-import main.main.memberbank.entity.MemberBank;
 import main.main.utils.AwsS3Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,19 +39,12 @@ public class LaborContractService {
         }
 
         Member member = companyMember.getMember();
-        MemberBank memberBank = member.getMemberBanks().stream()
-                .filter(mainMemberBank -> mainMemberBank.isMainAccount())
-                .findFirst()
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBERBANK_ONLY_ONE));
 
         checkPermission(authenticationMemberId, company);
 
         laborContract.setMember(member);
         laborContract.setCompany(company);
         laborContract.setCompanyMember(companyMember);
-        laborContract.setBankName(memberBank.getBank().getBankGroup().getBankName());
-        laborContract.setAccountNumber(memberBank.getAccountNumber());
-        laborContract.setAccountHolder(memberBank.getMember().getName());
         if (file != null) {
             String[] uriList = awsS3Service.uploadFile(file);
             laborContract.setLaborContractUri(uriList[0]);
