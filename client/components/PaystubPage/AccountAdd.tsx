@@ -113,7 +113,7 @@ export default function AccountAdd({
                 <p className="text-red-400">{info}</p>
               </div>
               <div className="my-5 flex">
-                <div className="mr-5 bg-gray-200 p-2 w-fit">bankName</div>
+                <div className="mr-5 bg-gray-200 p-2 w-fit">은행이름</div>
                 <div>
                   {Object.keys(filteredBank).length
                     ? filteredBank["bankName"]
@@ -121,7 +121,7 @@ export default function AccountAdd({
                 </div>
               </div>
               <label htmlFor="accountNumber" className="mr-5 bg-gray-200 p-2 ">
-                AccountNumber
+                계좌번호
               </label>
               <input
                 id="accountNumber"
@@ -131,7 +131,7 @@ export default function AccountAdd({
               ></input>
               <div className="flex  items-center mt-5">
                 <div className=" w-fit mr-5 bg-gray-200 px-2 py-1 ">
-                  MainAccount
+                  주계좌여부
                 </div>
                 <input
                   name="mainaccount"

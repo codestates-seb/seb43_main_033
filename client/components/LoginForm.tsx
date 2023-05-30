@@ -16,34 +16,17 @@ export default function LoginForm() {
   const emailRegex =
     /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 
-  // const googleHandler = () => {
-  //   window.location.assign(
-  //     `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_CLIENTID}&redirect_uri=http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google&response_type=token&scope=https://www.googleapis.com/auth/cloud-platform&state=google`
-  //   );
-  // };
-
-  //https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&client_id=841579627059-o28hrcvh9cbvofd20vi6lcof4eunl2fd.apps.googleusercontent.com&scope=email%20profile&state=O2VQ4-Vpy-nJnb3Tux9YLUrceqMqqOe1Jea9q2BP-cQ%3D&redirect_uri=http%3A%2F%2Fec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com%3A8080%2Flogin%2Foauth2%2Fcode%2Fgoogle&service=lso&o2v=2&flowName=GeneralOAuthFlow
   const googleHandler = () => {
     window.location.assign(
-      // `http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google`
-      `http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`
+      `${process.env.NEXT_PUBLIC_URL}/oauth2/authorization/google`
     );
   };
-
-  // useEffect(() => {
-  //   googleOauth(authorizationCode).then((res) => {
-  //     console.log(res);
-  //     navigate(-1);
-  //   });
-  // }, [authorizationCode, navigate, dispatch]);
-
-  // /oauth2/authorization/google
 
   const handleClick = () => {
     loginAxios();
   };
   const loginAxios = () => {
-    if (emailRegex.test(email) && password.length >= 6) {
+    if (emailRegex.test(email)) {
       axios
         .post(`${process.env.NEXT_PUBLIC_URL}/login`, {
           email,
@@ -91,11 +74,6 @@ export default function LoginForm() {
   };
   const passwordHandler = (e: any) => {
     setPassword(e.target.value);
-    if (e.target.value.length < 6) {
-      setPasswordInfo("6글자 이상 입력하세요");
-    } else {
-      setPasswordInfo("");
-    }
   };
   return (
     <div>
