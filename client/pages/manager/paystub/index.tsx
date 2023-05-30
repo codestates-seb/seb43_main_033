@@ -8,6 +8,7 @@ import AccountList from "../../../components/PaystubPage/AccountList";
 import axios from "axios";
 import { SelectCompany } from "../../../components/PaystubPage/SelectCompany";
 import SelectCompanymembers from "../../../components/PaystubPage/SelectCompanymembers";
+import Link from "next/link";
 
 const Paystub = () => {
   const [mycompanies, setMyCompanies] = useState<CompanyMembers[]>([]);
@@ -17,6 +18,7 @@ const Paystub = () => {
   const [selectedCompanyMemberId, setSelectedCompanyMemberId] = useState(0);
   const [selectedMemberId, setSelectedMemberId] = useState(0);
   const [selectedCompanyMember, setSelectedCompanyMember] = useState("");
+  const [info, setInfo] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -31,6 +33,11 @@ const Paystub = () => {
           })
           .then((res) => {
             setMyCompanies(res.data.companyMembers);
+            if (!res.data.companyMembers.length) {
+              setInfo(true);
+            } else {
+              setInfo(false);
+            }
           })
           .catch((err) => console.log(err));
     }
@@ -63,14 +70,24 @@ const Paystub = () => {
           mycompanies={mycompanies}
           setCompanyId={setCompanyId}
         />
+        {info ? (
+          <div className="flex">
+            <p className="ml-10">회사를 먼저 등록해주세요</p>
+            <Link href="/manager/authenticate">
+              <button className="ml-10 bg-green-300 text-white rounded-md py-1 px-2">
+                회사등록하러가기
+              </button>
+            </Link>
+          </div>
+        ) : null}
         <Greenheader>직원선택</Greenheader>
         <SelectCompanymembers
           selectCompany={selectCompany}
           setSelectedCompanyMember={setSelectedCompanyMember}
           setSelectedCompanyMemberId={setSelectedCompanyMemberId}
           setSelectedMemberId={setSelectedMemberId}
-          selectedCompanyMemberId={selectedCompanyMemberId}          
-          />
+          selectedCompanyMemberId={selectedCompanyMemberId}
+        />
         <Greenheader>계좌번호</Greenheader>
         <AccountList
           selectedMemberId={selectedMemberId}
