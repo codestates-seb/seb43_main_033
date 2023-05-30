@@ -57,10 +57,6 @@ export default function MyStaffModal({
   companyId,
   companymemberId
 }: ModalProps) {
-<<<<<<< HEAD
-=======
-
->>>>>>> FE-dev
   const [staffList] = StaffDetailAxios(
     `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
   );
