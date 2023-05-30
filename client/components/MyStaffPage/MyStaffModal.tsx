@@ -7,7 +7,7 @@ import { format } from "date-fns";
 import TabButton from "./TabButton";
 import StaffInput from "./StaffInput";
 import ContractInput from "./ContractInput";
-import StaffAxios from "./StaffAxios";
+import StaffDetailAxios from "./StaffDetailAxios";
 import ContractAxios from "./ContractAxios";
 
 type ModalProps = {
@@ -57,12 +57,10 @@ export default function MyStaffModal({
   
   onClose,
   companyId,
-  companymemberId,
+  companymemberId
 }: ModalProps) {
-  
-  const [staffList] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`,
-    1
+  const [staffList] = StaffDetailAxios(
+    `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
   );
 
   const [staffData, setStaffData] = useState<Staff | null>(null);
