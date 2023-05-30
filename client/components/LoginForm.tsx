@@ -22,13 +22,11 @@ export default function LoginForm() {
       `${process.env.NEXT_PUBLIC_URL}/oauth2/authorization/google`
     );
   };
-
-
   const handleClick = () => {
     loginAxios();
   };
   const loginAxios = () => {
-    if (emailRegex.test(email) && password.length >= 6) {
+    if (emailRegex.test(email)) {
       axios
         .post(`${process.env.NEXT_PUBLIC_URL}/login`, {
           email,
@@ -76,11 +74,6 @@ export default function LoginForm() {
   };
   const passwordHandler = (e: any) => {
     setPassword(e.target.value);
-    if (e.target.value.length < 6) {
-      setPasswordInfo("6글자 이상 입력하세요");
-    } else {
-      setPasswordInfo("");
-    }
   };
   return (
     <div>
