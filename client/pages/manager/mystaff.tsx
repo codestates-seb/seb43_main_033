@@ -52,7 +52,7 @@ export default function Mystaff() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=1&size=200`, {
+      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=${currentPage}&size=200`, {
         headers: { Authorization: token },
       })
       .then((res) => {
@@ -76,7 +76,7 @@ export default function Mystaff() {
   const [showModal, setShowModal] = useState<boolean>(false);
 
   const [staffList, list] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=1&status=&companyId=${companyId}`,
+    `${process.env.NEXT_PUBLIC_URL}/companymembers?page=${currentPage}&status=&companyId=${companyId}`,
     currentPage
   );
 
