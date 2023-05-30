@@ -18,9 +18,17 @@ export default function LoginForm() {
 
   // const googleHandler = () => {
   //   window.location.assign(
-  //     `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_CLIENTID}&redirect_uri=http://localhost:3000/oauthlogin&response_type=token&scope=https://www.googleapis.com/auth/cloud-platform&state=google`
+  //     `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.NEXT_PUBLIC_CLIENTID}&redirect_uri=http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google&response_type=token&scope=https://www.googleapis.com/auth/cloud-platform&state=google`
   //   );
   // };
+
+  //https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?response_type=code&client_id=841579627059-o28hrcvh9cbvofd20vi6lcof4eunl2fd.apps.googleusercontent.com&scope=email%20profile&state=O2VQ4-Vpy-nJnb3Tux9YLUrceqMqqOe1Jea9q2BP-cQ%3D&redirect_uri=http%3A%2F%2Fec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com%3A8080%2Flogin%2Foauth2%2Fcode%2Fgoogle&service=lso&o2v=2&flowName=GeneralOAuthFlow
+  const googleHandler = () => {
+    window.location.assign(
+      // `http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google`
+      `http://ec2-13-125-242-36.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google`
+    );
+  };
 
   // useEffect(() => {
   //   googleOauth(authorizationCode).then((res) => {
@@ -117,7 +125,12 @@ export default function LoginForm() {
       >
         submit
       </button>
-      {/* <button onClick={googleHandler}>Google</button> */}
+      <button
+        onClick={googleHandler}
+        className="w-full border-2 p-1 rounded-md mt-2"
+      >
+        Google 로그인
+      </button>
     </div>
   );
 }
