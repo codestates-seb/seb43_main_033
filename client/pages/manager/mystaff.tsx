@@ -52,7 +52,7 @@ export default function Mystaff() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     axios
-      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=1&size=200`, {
+      .get(`${process.env.NEXT_PUBLIC_URL}/companies?page=${currentPage}&size=200`, {
         headers: { Authorization: token },
       })
       .then((res) => {
