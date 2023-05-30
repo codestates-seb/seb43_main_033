@@ -25,6 +25,7 @@ export default function AccountAdd({
   const [bankId, setBankId] = useState<number | null>(null);
   const [mainAccount, setMainAccout] = useState(false);
   const [filteredBank, setFilteredBank] = useState<any>({});
+  const [info, setInfo] = useState("");
   const router = useRouter();
   useEffect(() => {
     accoutEdit ? setAccount(accoutEdit) : setAccount("");
@@ -55,7 +56,12 @@ export default function AccountAdd({
         setAccountAdd && setAccountAdd(false);
         router.reload();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response.status === 500) {
+          setInfo("주계좌를 먼저 선택해주세요");
+        }
+        console.log(err);
+      });
   };
   const handleAccountPatch = () => {
     const token = localStorage.getItem("token");
@@ -104,6 +110,7 @@ export default function AccountAdd({
             <div>
               <div>
                 <AccountSearch bankId={bankId} setBankId={setBankId} />
+                <p className="text-red-400">{info}</p>
               </div>
               <div className="my-5 flex">
                 <div className="mr-5 bg-gray-200 p-2 w-fit">bankName</div>
