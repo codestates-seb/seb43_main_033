@@ -8,6 +8,7 @@ export default function StaffAxios(url:string,page:number) {
     
 
   useEffect(() => {
+    
     axios
       .get(url)
       .then((response) => {

@@ -52,13 +52,17 @@ type Contract = {
   uri: string;
 };
 
+
 export default function MyStaffModal({
+  
   onClose,
   companyId,
   companymemberId,
 }: ModalProps) {
+  
   const [staffList] = StaffAxios(
-    `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
+    `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`,
+    1
   );
 
   const [staffData, setStaffData] = useState<Staff | null>(null);
