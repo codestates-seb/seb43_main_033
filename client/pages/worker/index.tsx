@@ -8,7 +8,6 @@ import { useEffect } from "react";
 
 export default function ManagerHome() {
   const router = useRouter();
-
   useEffect(() => {
     const searchParamsToken = new URLSearchParams(window.location.search);
     const token = searchParamsToken.get("Authorization");
@@ -18,8 +17,8 @@ export default function ManagerHome() {
     if (token && memberid) {
       localStorage.setItem("token", token);
       localStorage.setItem("memberid", memberid);
-
-      window.location.href = "/";
+      router.push("/worker");
+      window.location.href = "/worker";
     }
   }, []);
 
