@@ -52,7 +52,9 @@ type Contract = {
   uri: string;
 };
 
+
 export default function MyStaffModal({
+  
   onClose,
   companyId,
   companymemberId

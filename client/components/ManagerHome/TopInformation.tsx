@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Modal from "./Modal";
 import TopInformationLi from "./TopInfo/TopInformationLi";
 import axios from "axios";
-import { da } from "date-fns/locale";
 
 interface Data {
   companyId: number | string;

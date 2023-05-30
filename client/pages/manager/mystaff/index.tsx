@@ -1,16 +1,16 @@
 "use client";
-import Bigsquare from "../../components/Bigsquare";
-import ListBox from "../../components/ListBox";
-import MyStaffModal from "../../components/MyStaffPage/MyStaffModal";
-import Navi from "../../components/ManagerNavi";
+import Bigsquare from "../../../components/Bigsquare";
+import ListBox from "../../../components/ListBox";
+import MyStaffModal from "../../../components/MyStaffPage/MyStaffModal";
+import Navi from "../../../components/ManagerNavi";
 import { format } from "date-fns";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import StaffAxios from "../../components/MyStaffPage/StaffAxios";
+import StaffAxios from "../../../components/MyStaffPage/StaffAxios";
 import axios from "axios";
-import { SelectCompany } from "../../components/PaystubPage/SelectCompany";
+import { SelectCompany } from "../../../components/PaystubPage/SelectCompany";
 import { useEffect, useState } from "react";
-import { CompanyData, CompanyMembers } from "./paystub";
-import Pagination from "../../components/MyStaffPage/Pagination";
+import { CompanyData, CompanyMembers } from "../paystub";
+import Pagination from "../../../components/MyStaffPage/Pagination";
 
 type Staff = {
   companyMemberId: number;

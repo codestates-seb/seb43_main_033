@@ -1,8 +1,8 @@
 import { useState } from "react";
-import Bigsquare from "../../components/Bigsquare";
-import CompanySearch from "../../components/CompanySearch";
-import PaystubPreview from "../../components/PaystubPage/PaystubPreview";
-import Navi from "../../components/WorkerNavi";
+import Bigsquare from "../../../components/Bigsquare";
+import CompanySearch from "../../../components/CompanySearch";
+import PaystubPreview from "../../../components/PaystubPage/PaystubPreview";
+import Navi from "../../../components/WorkerNavi";
 
 export default function Mypaystub(): JSX.Element {
   const [showModal, setShowModal] = useState(false);

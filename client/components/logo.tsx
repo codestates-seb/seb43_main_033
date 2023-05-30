@@ -1,16 +1,13 @@
 import Link from "next/link";
+import Image from 'next/image';
 
 export default function Logo() {
   return (
     <div className="flex">
       <button className="text-2xl">
         <Link href="/">
-          <span className="material-symbols-outlined ">
-            <span className="material-symbols-outlined absolute text-xs text-yellow-300">
-              paid
-            </span>
-            feed
-            <span className="text-blue-400">우리의급여</span>
+          <span className="material-symbols-outlined ">            
+            <Image src={'/logo3.jpg'} alt={''} width={200} height={50} className='pb-2'/>
           </span>
         </Link>
       </button>

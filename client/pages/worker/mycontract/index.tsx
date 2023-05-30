@@ -1,8 +1,8 @@
 "use client";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import Bigsquare from "../../components/Bigsquare";
-import Navi from "../../components/WorkerNavi";
+import Bigsquare from "../../../components/Bigsquare";
+import Navi from "../../../components/WorkerNavi";
 
 type Contract = {
   laborContactId: number;
