@@ -38,6 +38,7 @@
   "devDependencies": {
     "@types/react-big-calendar": "^1.6.3",
     "@types/react-datepicker": "^4.11.2",
-    "@types/react-modal": "^3.16.0"
+    "@types/react-js-pagination": "^3.0.4",
+    "@types/uuid": "^9.0.1"
   }
 }

@@ -16,12 +16,12 @@ export default function LoginForm() {
   const emailRegex =
     /([\w-.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
 
+
   const googleHandler = () => {
     window.location.assign(
       `${process.env.NEXT_PUBLIC_URL}/oauth2/authorization/google`
     );
   };
-
   const handleClick = () => {
     loginAxios();
   };

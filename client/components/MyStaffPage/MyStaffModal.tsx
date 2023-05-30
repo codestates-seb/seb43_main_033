@@ -26,11 +26,8 @@ type Staff = {
   status: string;
   roles: null;
 };
-//companyMemberId: number;
-//companyId: number;
 
 type ContractRegistrationData = {
-
   basicSalary: number;
   startOfContract: string;
   endOfContract: string;
@@ -63,7 +60,7 @@ export default function MyStaffModal({
   const [staffList] = StaffAxios(
     `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`
   );
-  
+
   const [staffData, setStaffData] = useState<Staff | null>(null);
 
   useEffect(() => {
@@ -83,7 +80,6 @@ export default function MyStaffModal({
         [name]: value,
       };
     });
-    console.log(staffData);
   };
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
@@ -105,7 +101,7 @@ export default function MyStaffModal({
       )
       .then(() => {
         onClose();
-        router.push("/");
+        router.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +109,7 @@ export default function MyStaffModal({
   };
 
   const staffDeleteClick = (companymemberId: number) => {
-    console.log(companymemberId);
+
     axios
       .delete(
         `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`,
@@ -124,7 +120,7 @@ export default function MyStaffModal({
         }
       )
       .then(() => {
-        //router.push("work/mystaff");
+        onClose();
       })
       .catch((err) => {
         console.log(err);
@@ -134,9 +130,7 @@ export default function MyStaffModal({
   //-------------------------------------------------
   const [file, setFile] = useState<File | null>(null);
 
- 
   const defaultRequestData: ContractRegistrationData = {
-   
     basicSalary: 0,
     startOfContract: "",
     endOfContract: "",
@@ -144,9 +138,10 @@ export default function MyStaffModal({
     finishTime: "",
     information: "",
   };
-  
-  const [requestData, setRequestData] = useState<ContractRegistrationData>(defaultRequestData);
-  
+
+  const [requestData, setRequestData] =
+    useState<ContractRegistrationData>(defaultRequestData);
+
   const [selectedContract, setSelectedContract] = useState<Contract | null>(
     null
   );
@@ -157,13 +152,13 @@ export default function MyStaffModal({
   const [contractList] = ContractAxios(
     `${process.env.NEXT_PUBLIC_URL}/manager/laborcontracts/${companymemberId}`
   );
-console.log(contractList);
- useEffect(() => {
+
+  useEffect(() => {
     if (selectedContract !== null) {
       setRequestData(selectedContract);
     }
   }, [selectedContract]);
- 
+
   const handleContractClick = (contract: Contract) => {
     setSelectedContract(contract);
     setLaborcontractId(contract.laborContactId);
@@ -171,20 +166,13 @@ console.log(contractList);
   };
 
   const [contractEdit, setcontractEdit] = useState<boolean>(false);
-  /*const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0];
-    if (selectedFile) {
-      const modifiedFile = new File([selectedFile], selectedFile.name, { type: "image/png" });
-      setFile(modifiedFile);
-    } else {
-      setFile(null);
-    }
-  };*/
-  
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (selectedFile) {
-      const modifiedFile = new File([selectedFile], selectedFile.name, { type: "image/png" });
+      const modifiedFile = new File([selectedFile], selectedFile.name, {
+        type: "image/png",
+      });
       setFile(modifiedFile);
       setContractUri(URL.createObjectURL(modifiedFile));
     } else {
@@ -192,50 +180,51 @@ console.log(contractList);
       setContractUri("");
     }
   };
-  
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const { name, value } = e.target;
-  setRequestData((prevData: ContractRegistrationData) => ({
-    ...prevData,
-    [name]: value,
-  }));
-};
+    const { name, value } = e.target;
+    setRequestData((prevData: ContractRegistrationData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
 
-
-
-
- 
   const contractFormClick = () => {
     setcontractEdit(true);
   };
 
   const contractEditClick = (companyId: number, laborcontractId: number) => {
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("requestPart", JSON.stringify(requestData));
 
-      axios
-        .patch(
-          `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/laborcontracts/${laborcontractId}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: localStorage.getItem("token"),
-            },
-          }
-        )
-        .then(() => {
-          console.log("suceess");
-          setcontractEdit(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+    const formData = new FormData();
+    if (file) {
+      formData.append("file", file);
     }
+    formData.append(
+      "requestPart",
+      new Blob([JSON.stringify(requestData)], {
+        type: "application/json",
+      })
+    );
+
+    axios
+      .patch(
+        `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/laborcontracts/${laborcontractId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: localStorage.getItem("token"),
+          },
+        }
+      )
+      .then(() => {
+        onClose();
+        setcontractEdit(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const contractDeleteClick = (laborcontractId: number) => {
@@ -251,7 +240,7 @@ console.log(contractList);
       )
       .then(() => {
         setcontractEdit(false);
-        router.push("work/mystaff");
+        router.reload();
       })
       .catch((err) => {
         console.log(err);
@@ -262,12 +251,13 @@ console.log(contractList);
     if (file) {
       const formData = new FormData();
       formData.append("file", file);
-      formData.append("requestPart",  new Blob([JSON.stringify(requestData)], {
-        type: "application/json"
-    }));
-       console.log(requestData);
-      console.log(formData);
-      
+      formData.append(
+        "requestPart",
+        new Blob([JSON.stringify(requestData)], {
+          type: "application/json",
+        })
+      );
+
       axios
         .post(
           `${process.env.NEXT_PUBLIC_URL}/manager/${companyId}/members/${companymemberId}/laborcontracts`,
@@ -277,18 +267,16 @@ console.log(contractList);
               "Content-Type": "multipart/form-data;charset=UTF-8",
               Authorization: `${localStorage.getItem("token")}`,
             },
-            
           }
         )
         .then(() => {
-          console.log("success");
+          onClose();
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-  
 
   const staffinformationList = [
     {
@@ -302,6 +290,12 @@ console.log(contractList);
       value: staffData?.team || "",
       onChange: staffInputChange,
       name: "team",
+    },
+    {
+      label: "권한",
+      value: staffData?.roles || "",
+      onChange: staffInputChange,
+      name: "roles",
     },
   ];
 
@@ -357,14 +351,20 @@ console.log(contractList);
                       <StaffInput {...information} />
                     </div>
                   ))}
+                 
                 </div>
               </div>
               <div>
-                <div className="modal-close mt-5 pt-40 flex justify-end">
-                  <button className="mr-3" onClick={() => staffEditClick()}>
+                <div className="modal-close mt-40 pt-40 flex justify-end">
+                  <button
+                    className="mr-3"
+                    onClick={() => staffEditClick(companymemberId)}
+                  >
                     submit
                   </button>
-                  <button onClick={() => staffDeleteClick()}>Delete</button>
+                  <button onClick={() => staffDeleteClick(companymemberId)}>
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -372,7 +372,7 @@ console.log(contractList);
 
           {selectedTab === "contract" && (
             <div>
-            {contractList && contractList.length > 0 ? (
+              {contractList && contractList.length > 0 ? (
                 <ul className="space-y-2 mb-10 ">
                   {contractList.map((contract: Contract) => (
                     <li
@@ -459,7 +459,7 @@ console.log(contractList);
                           <input
                             className="flex-1 h-5 mr-2 border-b pr-3 border-gray-300 focus:outline-none hover:outline-none"
                             type="date"
-                            name="startOfcontract"
+                            name="startOfContract"
                             value={requestData?.startOfContract ?? ""}
                             onChange={handleInputChange}
                           />
@@ -467,7 +467,7 @@ console.log(contractList);
                           <input
                             className="flex-1 h-5 ml-2 border-b border-gray-300 focus:outline-none hover:outline-none"
                             type="date"
-                            name="finishOfContract"
+                            name="endOfContract"
                             value={requestData?.endOfContract ?? ""}
                             onChange={handleInputChange}
                           />
@@ -489,7 +489,7 @@ console.log(contractList);
                             contractEditClick(companyId, laborcontractId)
                           }
                         >
-                          Editsubmit
+                          update
                         </button>
                       </div>
                     </div>
@@ -512,7 +512,7 @@ console.log(contractList);
                           alt="근로계약서"
                         />
                       )}
-                      
+
                       <input
                         id="fileInput"
                         type="file"
@@ -569,7 +569,8 @@ console.log(contractList);
                       <div className="modal-close pt-8 flex justify-end">
                         <button onClick={contractFormClick}>Edit</button>
 
-                        <button className="ml-5 pl-3"
+                        <button
+                          className="ml-5 pl-3"
                           onClick={() =>
                             laborcontractId &&
                             contractDeleteClick(laborcontractId)
@@ -614,7 +615,6 @@ console.log(contractList);
                   </div>
 
                   <div>
-
                     <ContractInput
                       label="기본급:"
                       type="text"
