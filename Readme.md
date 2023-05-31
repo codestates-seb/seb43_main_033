@@ -25,7 +25,7 @@
 ### ⚙️ Back-end
 |심재우|석원준|송준상|
 |:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
+|<img src="https://i.imgur.com/6rizOL2.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
 |[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
   
   
