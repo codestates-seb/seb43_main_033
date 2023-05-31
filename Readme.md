@@ -23,9 +23,9 @@
 <br>
 
 ### ⚙️ Back-end
-|유호균|정 솔|유소영|김영택|
-|:-:|:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
+|심재우|석원준|송준상|
+|:-:|:-:|:-:|
+|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
 |[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
   
   
@@ -38,10 +38,9 @@
 
 ## 프로젝트 설명
 ### 프로젝트 아키텍처
-<img src="https://cdn.discordapp.com/attachments/1037945125998968864/1094890785595465738/https3A2F2Fs3-us-west-2.png">
+![image](https://github.com/codestates-seb/seb43_main_033/assets/120348865/1f85e57c-2715-417f-af67-49d056ac8716)
 
 ### Deploy Tools
-<img src="https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbSfDDY%2Fbtr9dXHFiTn%2F6cyGvikwgOL8d5TRSQxTq0%2Fimg.png">
 
   <BR><BR>
 ### Collaboration Tools
@@ -55,11 +54,6 @@
   
 # 💡 Pages
 
-
-<br />![image](https://user-images.githubusercontent.com/74657430/234781680-b4f0453e-59d5-43bd-94bc-27412719f8b8.png)
-<br />![image](https://user-images.githubusercontent.com/74657430/234781806-c71028ea-5ed1-478c-8671-f477c5663a7c.png)
-<br />![image](https://user-images.githubusercontent.com/74657430/234781876-202d1cfa-326f-40a3-9736-6373ee58c9d8.png)
-<br />![image](https://user-images.githubusercontent.com/74657430/234781954-d912a2b4-18c2-4056-bddd-3390ce9ba247.png)
 
 
 <div align="center">
@@ -109,9 +103,9 @@
 
 |이름|맡은 부분|
 |---|---|
-|유호균|~~~|
-|유호균||
-|유호균||
+|심재우|~~~|
+|석원준||
+|||
   
   
 ## 🍵Team Culture
