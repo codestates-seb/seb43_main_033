@@ -97,8 +97,12 @@
 <br />[테이블 명세서](https://drive.google.com/file/d/1YY5cIBqij1XBdhOTJc_Pm_puu4e_yrMx/view?usp=drive_link)
 <br />![SEB_MAIN_33 - 테이블 명세서-1](https://github.com/codestates-seb/seb43_main_033/assets/120554681/0ce55fbc-9876-4e22-aec4-19929e2e6212)
 <br />![SEB_MAIN_33 - 테이블 명세서-2](https://github.com/codestates-seb/seb43_main_033/assets/120554681/a53fe744-c113-44b4-94ab-d073fe239fdf)
-<br />[API 명세서](https://rapil89.github.io/RapiL89.gitbhub.io/)
-
+<BR>
+[API 명세서](https://rapil89.github.io/RapiL89.gitbhub.io/)
+![스크린샷 2023-05-31 오후 5 40 55](https://github.com/codestates-seb/seb43_main_033/assets/120554681/8b299670-7a93-46b7-a571-97dc5b592cb9)
+<BR>
+[ERD]
+![SEB_MAIN_33 - ERD-1](https://github.com/codestates-seb/seb43_main_033/assets/120554681/3e8557c7-9cae-4c75-9d71-2ed4a43731ec)
 
 <BR>
   <BR>
