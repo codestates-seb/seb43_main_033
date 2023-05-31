@@ -79,7 +79,11 @@
 [개발자 체크리스트](https://www.notion.so/SEB43_PRE_030-a1a5288a9cd147fd95cea50e938eb3e2)
 <BR>
 ![234235_1](https://user-images.githubusercontent.com/74657430/234779048-14e2aa5a-336f-4c80-a671-8287790a0764.png)
-
+<BR>
+[테이블 명세서](https://drive.google.com/file/d/1YY5cIBqij1XBdhOTJc_Pm_puu4e_yrMx/view?usp=drive_link)
+![SEB_MAIN_33 - 테이블 명세서-1](https://github.com/codestates-seb/seb43_main_033/assets/120554681/0ce55fbc-9876-4e22-aec4-19929e2e6212)
+![SEB_MAIN_33 - 테이블 명세서-2](https://github.com/codestates-seb/seb43_main_033/assets/120554681/a53fe744-c113-44b4-94ab-d073fe239fdf)
+[API 명세서](https://rapil89.github.io/RapiL89.gitbhub.io/)
 
 
 <BR>
@@ -103,7 +107,7 @@
 
 |이름|맡은 부분|
 |---|---|
-|심재우|~~~|
+|심재우|회원 CRUD, OAuth 2.0, SpringSecurity|
 |석원준||
 |||
   
