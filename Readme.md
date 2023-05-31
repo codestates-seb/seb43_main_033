@@ -81,14 +81,19 @@
 
 
 ## :notebook: 사용자 요구사항 정의서
-[사용자 요구사항 정의서](https://www.notion.so/SEB43_PRE_030-db1d21687cbc417c87c97d6375ea5bf8)
+[사용자 요구사항 정의서]([https://www.notion.so/SEB43_PRE_030-db1d21687cbc417c87c97d6375ea5bf8](https://file.notion.so/f/s/913bb8a2-c50a-4980-a38a-433342b93f16/SEB_MAIN_33_-_%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD_%EC%A0%95%EC%9D%98%EC%84%9C.pdf?id=32bc812a-aeeb-4816-89f9-dc0aeb51c894&table=block&spaceId=82d63a72-8254-4cde-bf1e-b2597b7c099c&expirationTimestamp=1685608461395&signature=RE7PSbL5dW1cWlYnFWrx8rREMzd3_pwR-ZLSoYCQG9I&downloadName=SEB_MAIN_33+-+%EC%9A%94%EA%B5%AC%EC%82%AC%ED%95%AD+%EC%A0%95%EC%9D%98%EC%84%9C.pdf))
 <BR>
-![234235_2](https://user-images.githubusercontent.com/74657430/234779132-f79a3ea5-56e4-484e-96a9-137db1cff403.png)
+<br />![234235_12](https://github.com/codestates-seb/seb43_main_033/assets/74657430/f890c110-f921-4326-a0c8-4705b6541cb3)
+<br />![234235_13](https://github.com/codestates-seb/seb43_main_033/assets/74657430/a28d0c10-e918-4268-8f0b-8efa3dece016)
+<br />![234235_14](https://github.com/codestates-seb/seb43_main_033/assets/74657430/ea623518-6373-437b-85e4-96124597871b)
+
 <BR>
-[개발자 체크리스트](https://www.notion.so/SEB43_PRE_030-a1a5288a9cd147fd95cea50e938eb3e2)
+[개발자 체크리스트]([https://www.notion.so/SEB43_PRE_030-a1a5288a9cd147fd95cea50e938eb3e2](https://file.notion.so/f/s/0e3e0c0f-43bf-4ddb-9e1a-7fb9cea64b21/SEB_MAIN_33_-_%ED%8C%A8%EC%8A%A4%EC%9C%A83%EC%B0%A8.pdf?id=851be9ca-6d02-406f-ad25-1fa1bf7e1715&table=block&spaceId=82d63a72-8254-4cde-bf1e-b2597b7c099c&expirationTimestamp=1685608590251&signature=HNpf9C0GX8QeeffUPRnrTfHpq0NXt-7IUfzBcSygL4M&downloadName=SEB_MAIN_33+-+%ED%8C%A8%EC%8A%A4%EC%9C%A83%EC%B0%A8.pdf))
 <BR>
-![234235_1](https://user-images.githubusercontent.com/74657430/234779048-14e2aa5a-336f-4c80-a671-8287790a0764.png)
-<BR>
+<br />![234235_10](https://github.com/codestates-seb/seb43_main_033/assets/74657430/1ad091ba-22c2-4a8e-95ca-5d6acbd3161a)
+<br />![234235_11](https://github.com/codestates-seb/seb43_main_033/assets/74657430/7aebe6e1-ba76-4511-b27c-0834f0c3f5ea)
+
+ <br />
 [테이블 명세서](https://drive.google.com/file/d/1YY5cIBqij1XBdhOTJc_Pm_puu4e_yrMx/view?usp=drive_link)
 ![SEB_MAIN_33 - 테이블 명세서-1](https://github.com/codestates-seb/seb43_main_033/assets/120554681/0ce55fbc-9876-4e22-aec4-19929e2e6212)
 ![SEB_MAIN_33 - 테이블 명세서-2](https://github.com/codestates-seb/seb43_main_033/assets/120554681/a53fe744-c113-44b4-94ab-d073fe239fdf)
