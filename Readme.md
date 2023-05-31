@@ -14,8 +14,8 @@
 ### 🖥 Front-end
 |유호균|정 솔|유소영|김영택|
 |:-:|:-:|:-:|:-:|
-|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://i.imgur.com/FHz0HxW.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
-|[@ghrbsaod](https://github.com/ghrbsaod)|[@lyssoi](https://github.com/lyssoi)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
+|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://i.imgur.com/FHz0HxW.png" width=150>|<img src="https://user-images.githubusercontent.com/114140840/234771212-e9aa7466-7197-4d9a-8322-3849a36786a0.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
+|[@ghrbsaod](https://github.com/ghrbsaod)|[@lyssoi](https://github.com/lyssoi)|[ysycoding](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
 
   
   
@@ -99,7 +99,7 @@
 |---|---|
 |유호균|피그마, 페이지 중의 푸터,헤더, 메인 페이지 인터페이스 및 기능, 전체 기능 보수 |
 |정솔|로그인,회원가입,계좌CRUD,특이사항CRUD,급여명세서CRUD,근로자의 회사등록 및 승인|
-|유호균||
+|유소영|근로계약서 관리 CRUD, 사원정보 RUD,근무자의 캘런더 및 출퇴근,특이사항 CRUD |
 |유호균||
         
         
