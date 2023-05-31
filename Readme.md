@@ -15,7 +15,7 @@
 |유호균|정 솔|유소영|김영택|
 |:-:|:-:|:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://i.imgur.com/FHz0HxW.png" width=150>|<img src="https://user-images.githubusercontent.com/114140840/234771212-e9aa7466-7197-4d9a-8322-3849a36786a0.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
-|[@ghrbsaod](https://github.com/ghrbsaod)|[@lyssoi](https://github.com/lyssoi)|[ysycoding](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
+|[@ghrbsaod](https://github.com/ghrbsaod)|[@lyssoi](https://github.com/lyssoi)|[@ysycoding](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
 
   
   
