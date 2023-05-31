@@ -54,7 +54,16 @@
   
 # 💡 Pages
 
-
+<br />![234235_1](https://github.com/codestates-seb/seb43_main_033/assets/74657430/63232a40-24bf-43e5-9f8e-3b1268135682)
+<br />![234235_8](https://github.com/codestates-seb/seb43_main_033/assets/74657430/e901ca30-5920-4dc3-8520-1dc1e7cf396e)
+<br />![234235_9](https://github.com/codestates-seb/seb43_main_033/assets/74657430/557323f1-db48-46b2-8b34-305392ba8e48)
+<br />![234235_2](https://github.com/codestates-seb/seb43_main_033/assets/74657430/bb8591d6-3ce6-4dad-914d-2e6809de585d)
+<br />![234235_3](https://github.com/codestates-seb/seb43_main_033/assets/74657430/cec3acf9-f9cb-4680-bb89-6c03dc331a60)
+<br />![234235_4](https://github.com/codestates-seb/seb43_main_033/assets/74657430/f6b34885-3b23-4721-b3d1-76962e235879)
+<br />![234235_5](https://github.com/codestates-seb/seb43_main_033/assets/74657430/fb117af6-a0fd-402d-8f80-66888e72af59)
+<br />![234235_6](https://github.com/codestates-seb/seb43_main_033/assets/74657430/e81bb797-b101-4037-bfeb-afb936924007)
+<br />![234235_7](https://github.com/codestates-seb/seb43_main_033/assets/74657430/1d24c615-0a59-4366-be17-54934c381652)
+    
 
 <div align="center">
   
