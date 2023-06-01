@@ -20,6 +20,7 @@ public interface MemberMapper {
         return MemberDto.Response.builder()
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
+                .birthday(member.getBirthday())
                 .residentNumber(member.getResidentNumber())
                 .address(member.getAddress())
                 .name(member.getName())
