@@ -67,6 +67,7 @@ public interface MemberMapper {
                 .name(member.getName())
                 .phoneNumber(member.getPhoneNumber())
                 .email(member.getEmail())
+                .birthday(member.getBirthday())
                 .residentNumber(member.getResidentNumber())
                 .address(member.getAddress())
                 .build();
