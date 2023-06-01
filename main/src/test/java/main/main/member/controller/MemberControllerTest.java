@@ -183,7 +183,8 @@ class MemberControllerTest {
                 .name("test")
                 .phoneNumber("010-1111-1111")
                 .email("test@gmail.com")
-                .residentNumber("001111-1111111")
+                .birthday("990120")
+                .residentNumber("1111111")
                 .address("서울특별시 관악구 신림동 신림역")
                 .bank(getMemberBankToMember)
                 .companyMembers(getCompanyMemberToMember)
@@ -208,6 +209,7 @@ class MemberControllerTest {
                 .andExpect(jsonPath("$.name").value(response.getName()))
                 .andExpect(jsonPath("$.phoneNumber").value(response.getPhoneNumber()))
                 .andExpect(jsonPath("$.email").value(response.getEmail()))
+                .andExpect(jsonPath("$.birthday").value(response.getBirthday()))
                 .andExpect(jsonPath("$.residentNumber").value(response.getResidentNumber()))
                 .andExpect(jsonPath("$.address").value(response.getAddress()))
                 .andExpect(jsonPath("$.bank").isArray())
@@ -233,7 +235,8 @@ class MemberControllerTest {
                                 fieldWithPath("name").description("회원 이름"),
                                 fieldWithPath("phoneNumber").description("회원 전화번호"),
                                 fieldWithPath("email").description("회원 이메일"),
-                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
+                                fieldWithPath("birthday").description("회원 주민등록번호 앞자리"),
+                                fieldWithPath("residentNumber").description("회원 주민등록번호 뒷자리"),
                                 fieldWithPath("address").description("회원 주소"),
                                 fieldWithPath("bank[].memberBankId").description("계좌 식별 번호"),
                                 fieldWithPath("bank[].bankId").description("은행 식별 번호"),
