@@ -132,6 +132,7 @@ class MemberControllerTest {
                                         "\"phoneNumber\": \"010-1111-1111\",\n" +
                                         "\"email\": \"test@gmail.com\",\n" +
                                         "\"password\": \"1234\",\n" +
+                                        "\"birthday\": \"980120\",\n" +
                                         "\"residentNumber\": \"1111-1111\",\n" +
                                         "\"address\": \"서울특별시 관악구 신림동 신림역\"\n" +
                                         "}")
@@ -146,7 +147,8 @@ class MemberControllerTest {
                                 fieldWithPath("phoneNumber").description("회원 전화번호"),
                                 fieldWithPath("email").description("회원 이메일"),
                                 fieldWithPath("password").description("회원 비밀번호"),
-                                fieldWithPath("residentNumber").description("회원 주민등록번호"),
+                                fieldWithPath("birthday").description("회원 주민등록번호 앞자리"),
+                                fieldWithPath("residentNumber").description("회원 주민등록번호 뒷자리"),
                                 fieldWithPath("address").description("회원 주소")
                         ),
                         responseHeaders(
@@ -262,7 +264,8 @@ class MemberControllerTest {
                 .phoneNumber("010-2222-3333")
                 .email("test@gmail.com")
                 .password("1234")
-                .residentNumber("001111-1111111")
+                .birthday("990120")
+                .residentNumber("1111111")
                 .address("서울특별시 금천구 독산동 독산역")
                 .build();
 
@@ -272,6 +275,7 @@ class MemberControllerTest {
                 .phoneNumber(patch.getPhoneNumber())
                 .email(patch.getEmail())
                 .password(patch.getPassword())
+                .birthday(patch.getBirthday())
                 .residentNumber(patch.getResidentNumber())
                 .address(patch.getAddress())
                 .build();
@@ -310,8 +314,10 @@ class MemberControllerTest {
                                                         .description("회원 이메일"),
                                                 fieldWithPath("password").type(JsonFieldType.STRING)
                                                         .description("회원 비밀번호"),
+                                                fieldWithPath("birthday").type(JsonFieldType.STRING)
+                                                                .description("회원 주민등록번호 앞자리"),
                                                 fieldWithPath("residentNumber").type(JsonFieldType.STRING)
-                                                        .description("회원 주민등록번호"),
+                                                        .description("회원 주민등록번호 뒷자리"),
                                                 fieldWithPath("address").type(JsonFieldType.STRING)
                                                         .description("회원 주소")
                                         )
