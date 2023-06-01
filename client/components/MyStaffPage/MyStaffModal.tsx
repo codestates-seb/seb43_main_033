@@ -24,7 +24,7 @@ type Staff = {
   grade: string;
   team: string;
   status: string;
-  roles: null;
+  roles: string[];
 };
 
 type ContractRegistrationData = {
@@ -71,7 +71,7 @@ export default function MyStaffModal({
     }
   }, [staffList]);
 
-  const staffInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const staffInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setStaffData((prevData: Staff | null) => {
       if (prevData === null) {
@@ -83,17 +83,22 @@ export default function MyStaffModal({
       };
     });
   };
+  
 
   const [selectedTab, setSelectedTab] = useState<string>("edit");
 
   const router = useRouter();
-
   const staffEditClick = (companymemberId: number) => {
+    if (staffData !== null) {
+    const updatedData = {
+      ...staffData,
+      roles: Array.isArray(staffData.roles) ? staffData.roles : [staffData.roles],
+    };
+  
     axios
       .patch(
         `${process.env.NEXT_PUBLIC_URL}/companymembers/${companymemberId}`,
-        staffData,
-
+        updatedData,
         {
           headers: {
             "Content-Type": "application/json",
@@ -108,8 +113,9 @@ export default function MyStaffModal({
       .catch((err) => {
         console.log(err);
       });
+    }
   };
-
+  
   const staffDeleteClick = (companymemberId: number) => {
 
     axios
@@ -129,7 +135,6 @@ export default function MyStaffModal({
       });
   };
 
-  //-------------------------------------------------
   const [file, setFile] = useState<File | null>(null);
 
   const defaultRequestData: ContractRegistrationData = {
@@ -298,6 +303,7 @@ export default function MyStaffModal({
       value: staffData?.roles || "",
       onChange: staffInputChange,
       name: "roles",
+      options: ["ADMIN", "MANAGER", "MEMBER"], 
     },
   ];
 
@@ -348,7 +354,7 @@ export default function MyStaffModal({
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  {staffinformationList.map((information, index) => (
+                  {staffinformationList.map((information) => (
                     <div key={information.name}>
                       <StaffInput {...information} />
                     </div>
@@ -359,12 +365,13 @@ export default function MyStaffModal({
               <div>
                 <div className="modal-close mt-40 pt-40 flex justify-end">
                   <button
-                    className="mr-3"
+                    className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5"
                     onClick={() => staffEditClick(companymemberId)}
                   >
                     submit
                   </button>
-                  <button onClick={() => staffDeleteClick(companymemberId)}>
+                  <button className="bg-green-300 py-1 px-2 ml-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5" 
+                  onClick={() => staffDeleteClick(companymemberId)}>
                     Delete
                   </button>
                 </div>
@@ -485,7 +492,7 @@ export default function MyStaffModal({
                       />
 
                       <div className="modal-close pt-8 flex justify-end">
-                        <button
+                        <button className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5"
                           onClick={() =>
                             laborcontractId &&
                             contractEditClick(companyId, laborcontractId)
@@ -525,7 +532,7 @@ export default function MyStaffModal({
 
                     <div>
                       <div>
-                        <div className="ml-7 font-bold">기본급:</div>
+                        <div className="ml-7 font-bold">기본급</div>
                         <div className="ml-7">
                           {selectedContract.basicSalary}
                         </div>
@@ -569,10 +576,10 @@ export default function MyStaffModal({
                       </div>
 
                       <div className="modal-close pt-8 flex justify-end">
-                        <button onClick={contractFormClick}>Edit</button>
+                        <button className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5" onClick={contractFormClick}>Edit</button>
 
                         <button
-                          className="ml-5 pl-3"
+                          className="bg-green-300 py-1 px-2 ml-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5"
                           onClick={() =>
                             laborcontractId &&
                             contractDeleteClick(laborcontractId)
@@ -618,7 +625,7 @@ export default function MyStaffModal({
 
                   <div>
                     <ContractInput
-                      label="기본급:"
+                      label="기본급"
                       type="text"
                       name="basicSalary"
                       value={requestData?.basicSalary ?? ""}
@@ -676,7 +683,7 @@ export default function MyStaffModal({
                     />
 
                     <div className="modal-close pt-8 flex justify-end">
-                      <button
+                      <button className="bg-green-300 py-1 px-2 rounded-md text-white text-[13px] hover:bg-green-500 mt-5"
                         onClick={() =>
                           contractSubmitClick(companyId, companymemberId)
                         }

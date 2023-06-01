@@ -20,7 +20,7 @@ type Staff = {
   grade: string;
   team: string;
   status: string;
-  roles: null;
+  roles: string[];
 };
 
 export default function Mystaff() {
@@ -119,6 +119,7 @@ export default function Mystaff() {
               <div>이름</div>
               <div className="pl-10">부서</div>
               <div className="pl-5 pr-4">직급</div>
+              <div className="pl-5 pr-4">권한</div>
               <div className="pr-10"></div>
             </ListBox>
             {staffList && staffList.data && (
@@ -129,6 +130,7 @@ export default function Mystaff() {
                     <div>{item.name}</div>
                     <div>{item.team}</div>
                     <div>{item.grade}</div>
+                    <div>{item.roles[0]}</div>
 
                     <button
                       className="text-sm font-bold hover:bg-gray-300"

@@ -17,9 +17,9 @@ export default function ContractInput({
 }: ContractInputProps) {
   return (
     <div>
-      <div className="ml-7 pt-2 font-bold">{label}</div>
+      <div className="ml-7 pt-2 pb-2 font-bold">{label}</div>
       <input
-        className="w-40 h-5 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
+        className="w-40 ml-7 pb-2 border-b border-gray-300 focus:outline-none hover:outline-none"
         type={type}
         name={name}
         value={value}
