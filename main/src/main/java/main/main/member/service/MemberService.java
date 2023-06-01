@@ -52,7 +52,10 @@ public class MemberService {
     public Member createMember(Member member) {
         verifiyExitstEmail(member.getEmail());
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        String encryptedResidentNumber = passwordEncoder.encode(member.getResidentNumber());
+
         member.setPassword(encryptedPassword);
+        member.setResidentNumber(encryptedResidentNumber);
 
 
         return memberRepository.save(member);

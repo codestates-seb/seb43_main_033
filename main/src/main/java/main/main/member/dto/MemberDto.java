@@ -18,6 +18,7 @@ public class MemberDto {
         private String phoneNumber;
         private String email;
         private String password;
+        private String birthday;
         private String residentNumber;
         private String address;
 
@@ -44,6 +45,7 @@ public class MemberDto {
         private String name;
         private String phoneNumber;
         private String email;
+        private String birthday;
         private String residentNumber;
         private String address;
         private List<MemberBankDto.MemberBankList> bank;

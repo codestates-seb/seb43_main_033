@@ -30,6 +30,7 @@ public class Member {
     private String phoneNumber;
     private String email;
     private String password;
+    private String birthday;
     private String residentNumber;
     private String address;
 
