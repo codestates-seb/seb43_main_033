@@ -164,8 +164,8 @@ const WorkRecordTable = ({
         fetchWorkRecord();
         closeDialog();
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        alert('근로계약서를 먼저 작성해주세요')
       });
   };
   const handleEdit = (
@@ -250,6 +250,7 @@ const WorkRecordTable = ({
                 onChange={handleNoteChange}
               >
                 <option value="">선택하세요</option>
+                <option value="없음">없음</option>
                 <option value="지각">지각</option>
                 <option value="조퇴">조퇴</option>
                 <option value="결근">결근</option>
@@ -258,7 +259,6 @@ const WorkRecordTable = ({
                 <option value="야간근로">야간근로</option>
                 <option value="유급휴가">유급휴가</option>
                 <option value="무급휴가">무급휴가</option>
-                <option value="없음">없음</option>
               </select>
             </td>
           </tr>
