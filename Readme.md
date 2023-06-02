@@ -25,8 +25,8 @@
 ### ⚙️ Back-end
 |심재우|석원준|송준상|
 |:-:|:-:|:-:|
-|<img src="https://i.imgur.com/6rizOL2.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
-|[@RapiL89](https://github.com/RapiL89)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)|[@ghrbsaod](https://github.com/ghrbsaod)
+|<img src="https://i.imgur.com/6rizOL2.png" width=150>|<img src="https://i.imgur.com/VxPdMLO.png" width=150>|<img src="https://avatars.githubusercontent.com/u/74657430?v=4" width=150>|
+|[@RapiL89](https://github.com/RapiL89)|[@swj8560](https://github.com/swj8560)|[@DDunDDang](https://github.com/DDunDDang)|
   
   
   
@@ -127,7 +127,7 @@
 |---|---|
 |심재우|회원 CRUD, OAuth 2.0, SpringSecurity|
 |석원준||
-|||
+|송준상|근로계약서 CRUD, 근무 상태 CRUD, 급여 명세서 CRD, PDF제작, EMAIL 전송, S3 업로드|
   
   
 ## 🍵Team Culture
