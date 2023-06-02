@@ -33,6 +33,8 @@ public class MemberService {
                 .ifPresent(password -> findedMember.setPassword(member.getPassword()));
         Optional.ofNullable(member.getPhoneNumber())
                 .ifPresent(phoneNumber -> findedMember.setPhoneNumber(member.getPhoneNumber()));
+        Optional.ofNullable(member.getBirthday())
+                        .ifPresent(birthday -> findedMember.setBirthday(member.getBirthday()));
         Optional.ofNullable(member.getResidentNumber())
                 .ifPresent(residentNumber -> findedMember.setResidentNumber(member.getResidentNumber()));
         Optional.ofNullable(member.getAddress())
