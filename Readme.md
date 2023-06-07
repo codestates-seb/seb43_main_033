@@ -126,7 +126,7 @@
 |이름|맡은 부분|
 |---|---|
 |심재우|회원 CRUD, OAuth 2.0, SpringSecurity|
-|석원준||
+|석원준|사원 CRUD, 회사 CRUD 및 이미지 업로드, 은행 CR, 계좌 CRUD, AWS 배포(EC2, RDS, S3, CodeDeploy), Git Actions|
 |송준상|근로계약서 CRUD, 근무 상태 CRUD, 급여 명세서 CRD, PDF제작, EMAIL 전송, S3 업로드|
   
   
