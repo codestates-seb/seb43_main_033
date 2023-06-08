@@ -24,6 +24,11 @@ hs_err_pid
 replay_pid*
 
 ####
+*.pb
+*.xml
+*.properties
+*.iml
+*.lock
 *.DS_Store
 *.yml
 *.yaml
